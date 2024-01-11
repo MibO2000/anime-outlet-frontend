@@ -13,10 +13,13 @@ switch ($path) {
         require __DIR__ . '/routes/homepage.php';
         break;
     case '/admin-login':
-        require __DIR__ . '/routes/adminLogin.php';
+        require __DIR__ . '/routes/admin/admin-login.php';
         break;
     case '/admin-register':
-        require __DIR__ . '/routes/adminRegister.php';
+        require __DIR__ . '/routes/admin/admin-register.php';
+        break;
+    case '/admin-items':
+        require __DIR__ . '/routes/admin/admin-items.php';
         break;
     case '/admin-package':
         require __DIR__ . '/routes/adminPackage.php';
@@ -38,6 +41,8 @@ switch ($path) {
         break;
     case '/logout':
         session_destroy();
+        header('Location: /', true, 301);
+        break;
     case '/login':
         require __DIR__ . '/routes/login.php';
         break;

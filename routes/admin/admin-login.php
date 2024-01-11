@@ -20,6 +20,7 @@ if ($method === 'POST') {
     } else {
         $_SESSION['name'] = $result[0][0];
         $_SESSION['username'] = $result[0][1];
+        $_SESSION['role'] = ROLE_ADMIN;
         header('Location: /admin-items', true, 301);
         exit;
     }

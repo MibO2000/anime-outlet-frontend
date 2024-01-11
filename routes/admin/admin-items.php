@@ -1,5 +1,6 @@
 <?php
-if (!isset($_SESSION['name'])) {
+if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
+    session_destroy();
     header('Location: /admin-login', true, 301);
     exit;
 }

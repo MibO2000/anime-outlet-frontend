@@ -9,7 +9,7 @@ $createAdmin = "CREATE TABLE ao_admin
     admin_password varchar(100),
     email varchar(30),
     phone_number varchar(20),
-    CONSTRAINT ad_id_user UNIQUE (adminId, username)
+    CONSTRAINT ad_id_user UNIQUE (admin_id, username)
 )";
 $query = mysqli_query($connect, $createAdmin);
 if ($query) {
@@ -23,10 +23,10 @@ $createCustomer = "CREATE TABLE ao_customer
     customer_id VARCHAR(20) NOT NULL PRIMARY KEY,
     full_name VARCHAR(50),
     email VARCHAR(20),
-    username VARCHAR(20)
+    username VARCHAR(20),
     customer_password VARCHAR(100),
     phone VARCHAR(20),
-    customer_address VARCHAR(50)
+    customer_address VARCHAR(50),
     CONSTRAINT c_id_email UNIQUE (customer_id,email)
 )";
 $query = mysqli_query($connect, $createCustomer);
@@ -132,7 +132,7 @@ $createPurchase = "CREATE TABLE ao_purchase (
     admin_id VARCHAR(20),
     purchase_date DATE,
     purchase_status VARCHAR(20),
-    total_amount INT
+    total_amount INT,
     FOREIGN KEY (supplier_id) REFERENCES ao_supplier (supplier_id),
     FOREIGN KEY (admin_id) REFERENCES ao_admin (admin_id),
     CONSTRAINT pur_id UNIQUE (purchase_id)
@@ -165,7 +165,7 @@ $createOrder = "CREATE TABLE ao_order (
     customer_id VARCHAR(20),
     order_date DATE,
     order_status VARCHAR(20),
-    FOREIGN KEY customer_id REFERENCES ao_customer (customer_id),
+    FOREIGN KEY (customer_id) REFERENCES ao_customer (customer_id),
     CONSTRAINT od_id UNIQUE (order_id)
   )";
 $query = mysqli_query($connect, $createOrder);
@@ -208,7 +208,7 @@ if ($query) {
     echo "<p>Payment Table Creation Unsuccessful!</p><br>";
 }
 
-$createDeliverer = "CREATE TABLE gwsc_deliverer (
+$createDeliverer = "CREATE TABLE ao_deliverer (
     deliverer_id VARCHAR(20) NOT NULL PRIMARY KEY,
     deliverer_name VARCHAR(50),
     deliverer_user VARCHAR(20),
@@ -225,7 +225,7 @@ if ($query) {
     echo "<p>Deliverer Table Creation Unsuccessful!</p><br>";
 }
 
-$createDelivery = "CREATE TABLE gwsc_delivery (
+$createDelivery = "CREATE TABLE ao_delivery (
     delivery_id VARCHAR(20) NOT NULL PRIMARY KEY,
     deliverer_id VARCHAR(20),
     order_id VARCHAR(20),

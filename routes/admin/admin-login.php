@@ -7,7 +7,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $query = sprintf('SELECT `name`,`username`,`password` FROM ADMIN WHERE username=\'%s\'', mysqli_real_escape_string($connect, $username));
+    $query = sprintf('SELECT `fullname`,`username`,`admin_password` FROM ao_admin WHERE username=\'%s\'', mysqli_real_escape_string($connect, $username));
     $result = $connect->query($query);
     $result = $result->fetch_all();
     if (!$result) {
@@ -16,6 +16,9 @@ if ($method === 'POST') {
     } else
     if (!password_verify($password, $result[0][2])) {
         $hasError = 1;
+        print $result[0][2];
+        print " should be ";
+        print $password;
         $errorMessage = 'Incorrect password.';
     } else {
         $_SESSION['name'] = $result[0][0];

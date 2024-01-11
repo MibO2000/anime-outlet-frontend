@@ -16,9 +16,6 @@ if ($method === 'POST') {
     } else
     if (!password_verify($password, $result[0][2])) {
         $hasError = 1;
-        print $result[0][2];
-        print " should be ";
-        print $password;
         $errorMessage = 'Incorrect password.';
     } else {
         $_SESSION['name'] = $result[0][0];
@@ -139,37 +136,46 @@ if ($method === 'POST') {
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
+
+        .bg-image {
+            background-color: #9c8570;
+            background-image: url('https://images.unsplash.com/photo-1682695794947-17061dc284dd?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+        }
     </style>
 
 </head>
 
 <body>
 
-    <body class="d-flex align-items-center py-4 bg-body-tertiary">
-        <main class="form-signin w-100 m-auto">
-            <form method="POST">
-                <h1 class="h3 mb-3 fw-normal">Admin Login</h1>
+    <body class="bg-image">
+        <div class="d-flex align-items-center py-4 h-100" style="min-width:320px;max-width:520px;background-color:#f5f5f5">
+            <main class="form-signin w-100 m-auto">
+                <form method="POST">
+                    <h1 class="h3 mb-3 fw-normal">Admin Login</h1>
 
 
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingInput" autocapitalize="off" name="username" value="<?= $_POST['username'] ?? '' ?>" required>
-                    <label for="floatingInput">Username</label>
-                </div>
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingPassword" name="password" required>
-                    <label for="floatingPassword">Password</label>
-                </div>
-
-                <?php if ($hasError) { ?>
-                    <div class="my-2 alert alert-danger" role="alert">
-                        <?= $errorMessage ?>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingInput" autocapitalize="off" name="username" value="<?= $_POST['username'] ?? '' ?>" required>
+                        <label for="floatingInput">Username</label>
                     </div>
-                <?php } ?>
-                <button class="btn btn-primary w-100 py-2" type="submit">Log In</button>
-                <p class="mt-5 mb-3 text-body-secondary">&copy; <?= date("Y") ?>. All right reserved.</p>
-            </form>
-        </main>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="floatingPassword" name="password" required>
+                        <label for="floatingPassword">Password</label>
+                    </div>
 
+                    <?php if ($hasError) { ?>
+                        <div class="my-2 alert alert-danger" role="alert">
+                            <?= $errorMessage ?>
+                        </div>
+                    <?php } ?>
+                    <button class="btn btn-primary w-100 py-2" type="submit">Log In</button>
+                    <p class="mt-5 mb-3 text-body-secondary">&copy; <?= date("Y") ?>. All right reserved.</p>
+                </form>
+            </main>
+        </div>
         <script src="/js/bootstrap.bundle.min.js"></script>
     </body>
 

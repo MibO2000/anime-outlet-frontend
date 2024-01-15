@@ -15,7 +15,7 @@ require_once __DIR__ . '/helper.php';
 
 switch ($path) {
     case '/':
-        require __DIR__ . '/routes/homepage.php';
+        require __DIR__ . '/routes/customer-index.php';
         break;
 
         /* Admin */
@@ -28,31 +28,20 @@ switch ($path) {
     case '/admin-items':
         require __DIR__ . '/routes/admin/admin-items.php';
         break;
-    case '/admin-package':
-        require __DIR__ . '/routes/adminPackage.php';
+    case '/admin-item-details':
+        require __DIR__ . '/routes/admin/admin-itemdetail.php';
         break;
-    case '/admin-package-type':
-        require __DIR__ . '/routes/adminPackageType.php';
+    case '/admin-deliverer':
+        require __DIR__ . '/routes/admin/admin-deliverer.php';
         break;
-    case '/admin-pitch-type':
-        require __DIR__ . '/routes/adminPitchType.php';
+    case '/admin-order':
+        require __DIR__ . '/routes/admin/admin-order.php';
         break;
-    case '/admin-pitch':
-        require __DIR__ . '/routes/adminPitch.php';
+    case '/admin-purchase':
+        require __DIR__ . '/routes/admin/admin-purchase.php';
         break;
-    case '/admin-local':
-        require __DIR__ . '/routes/adminLocalAttraction.php';
-        break;
-    case '/admin-location-type':
-        require __DIR__ . '/routes/adminLocationType.php';
-        break;
-
-        /* Customer */
-    case '/customer-login':
-        require __DIR__ . '/routes/customer/customer-login.php';
-        break;
-    case '/customer':
-        require __DIR__ . '/routes/customer/customer-index.php';
+    case '/admin-supplier':
+        require __DIR__ . '/routes/admin/admin-supplier.php';
         break;
 
         /* Deliverer */
@@ -71,39 +60,27 @@ switch ($path) {
         require __DIR__ . '/routes/supplier/supplier-index.php';
         break;
 
+        /* Customer */
+    case '/login':
+        require __DIR__ . '/routes/customer/customer-login.php';
+        break;
+    case '/register':
+        require __DIR__ . '/routes/customer/customer-register.php';
+        break;
+    case '/items':
+        require __DIR__ . '/routes/customer/customer-item.php';
+        break;
+    case '/item-detail':
+        require __DIR__ . '/routes/customer/customer-itemdetail.php';
+        break;
+    case '/cart':
+        require __DIR__ . '/routes/customer/customer-cart.php';
+        break;
+
         /* Log Out */
     case '/logout':
         session_destroy();
         header('Location: /', true, 301);
-        break;
-
-        /* Others */
-    case '/about-us':
-        require __DIR__ . '/routes/about-us.php';
-        break;
-    case '/contact-us':
-        require __DIR__ . '/routes/contact-us.php';
-        break;
-    case '/reviews':
-        require __DIR__ . '/routes/review.php';
-        break;
-    case '/packages':
-        require __DIR__ . '/routes/packages.php';
-        break;
-    case '/package-detail':
-        require __DIR__ . '/routes/package-detail.php';
-        break;
-    case '/features':
-        require __DIR__ . '/routes/features.php';
-        break;
-    case '/pitch':
-        require __DIR__ . '/routes/pitch.php';
-        break;
-    case '/local-attraction':
-        require __DIR__ . '/routes/local-attraction.php';
-        break;
-    case '/cart':
-        require __DIR__ . '/routes/cart.php';
         break;
 
         /* Page Not Found */

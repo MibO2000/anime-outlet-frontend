@@ -4,6 +4,10 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     header('Location: /customer-login', true, 301);
     exit;
 }
+
+// please display about us, contact us with lorem ipsum
+// only category, film and brand will be in the top bar with select option which will leads to item with search bar inserted
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

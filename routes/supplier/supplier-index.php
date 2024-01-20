@@ -4,11 +4,6 @@ if (($_SESSION['role'] ?? 0) !== ROLE_SUPPLIER) {
     header('Location: /supplier-login', true, 301);
     exit;
 }
-
-// Can edit and create a new items for admin
-// create should be with pop up
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -125,7 +120,7 @@ if (($_SESSION['role'] ?? 0) !== ROLE_SUPPLIER) {
 
 <body>
     <header class="navbar bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="/">Company name</a>
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="/supplier"><?= COMPANY_NAME ?></a>
         <div class="mx-4">
             <div class="dropdown fs-6">
                 <button class="btn dropdown-toggle text-white " type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -145,38 +140,8 @@ if (($_SESSION['role'] ?? 0) !== ROLE_SUPPLIER) {
                     <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Items
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Packages
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Package Types
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Pitchs
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Pitch Types
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Local Attractions
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Local Attraction Types
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/supplier">
+                                    Home
                                 </a>
                             </li>
                         </ul>
@@ -186,57 +151,98 @@ if (($_SESSION['role'] ?? 0) !== ROLE_SUPPLIER) {
             </div>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="min-height:100vh">
-                <!-- can edit, create -->
-                <!-- the data will be added to both purchase with the status of pending -->
-                <div>
-                    <h1>Items</h1>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Item ID</th>
-                                <th>Item Name</th>
-                                <th>Category</th>
-                                <th>Film</th>
-                                <th>Brand</th>
-                                <th>Image 1</th>
-                                <th>Image 2</th>
-                                <th>Image 3</th>
-                                <th>Release date</th>
-                                <th>Item Description</th>
-                                <th>Scale</th>
-                                <th>Stock Quantity</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
+                <div class="mt-4">
+                    <!-- items -->
+                    <div>
+                        <!-- item -->
+                        <div class="mb-2 rounded border p-4" style="background-color:#f8f9fa;border-color:e3e3e3">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <div style="margin-right:25px"><small>1/1/2024</small></div>
+                                    <div style="margin-right:25px"><span class="badge text-bg-success">APPROVED</span></div>
+                                    <div style="margin-right:25px">
+                                        <p class="fw-bold">$950</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-secondary">Edit</button>
+                                </div>
+                            </div>
 
-                            $query = "select ai.item_id, ai.item_name , ac.category_name as category, af.title as film, ab.brand_name as brand, ai.item_image_1, ai.item_image_2, ai.item_image_3, ai.release_date, ai.item_description, ai.`scale`, ai.stock_quantity, ai.price from `ASSIGNMENT`.ao_item ai join `ASSIGNMENT`.ao_brand ab on ab.brand_id = ai.brand_id join `ASSIGNMENT`.ao_film af on af.film_id = ai.film_id join `ASSIGNMENT`.ao_category ac on ac.category_id = ai.category_id ";
-                            $result = mysqli_query($connect, $query);
+                            <div class="mt-2">
+                                <table class="table table-responsive bg-transparent">
+                                    <tbody>
+                                        <tr>
+                                            <td>Item 1</td>
+                                            <td>1/1/2024</td>
+                                            <td>2</td>
+                                            <td>$200</td>
+                                            <td>$400</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Item 2</td>
+                                            <td>1/1/2024</td>
+                                            <td>1</td>
+                                            <td>$250</td>
+                                            <td>$250</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Item 3</td>
+                                            <td>1/1/2024</td>
+                                            <td>1</td>
+                                            <td>$300</td>
+                                            <td>$300</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
-                            // Loop through each row and display the data
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                echo "<td>" . $row['item_id'] . "</td>";
-                                echo "<td>" . $row['item_name'] . "</td>";
-                                echo "<td>" . $row['category'] . "</td>";
-                                echo "<td>" . $row['film'] . "</td>";
-                                echo "<td>" . $row['brand'] . "</td>";
-                                echo "<td>" . $row['item_image_1'] . "</td>";
-                                echo "<td>" . $row['item_image_2'] . "</td>";
-                                echo "<td>" . $row['item_image_3'] . "</td>";
-                                echo "<td>" . $row['release_date'] . "</td>";
-                                echo "<td>" . $row['item_description'] . "</td>";
-                                echo "<td>" . $row['`scale`'] . "</td>";
-                                echo "<td>" . $row['stock_quantity'] . "</td>";
-                                echo "<td>" . $row['price'] . "</td>";
-                                echo "</tr>";
-                            }
-                            ?>
-                        </tbody>
-                    </table>
+                        <!-- item -->
+                        <div class="mb-2 rounded border p-4" style="background-color:#f8f9fa;border-color:e3e3e3">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <div style="margin-right:25px"><small>5/1/2024</small></div>
+                                    <div style="margin-right:25px"><span class="badge text-bg-primary">PENDING</span></div>
+                                    <div style="margin-right:25px">
+                                        <p class="fw-bold">$2000</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-secondary">Edit</button>
+                                </div>
+                            </div>
+
+                            <div class="mt-2">
+                                <table class="table table-responsive bg-transparent">
+                                    <tbody>
+                                        <tr>
+                                            <td>Item 5</td>
+                                            <td>5/1/2024</td>
+                                            <td>1</td>
+                                            <td>$500</td>
+                                            <td>$500</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Item 6</td>
+                                            <td>5/1/2024</td>
+                                            <td>2</td>
+                                            <td>$600</td>
+                                            <td>$1200</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Item 3</td>
+                                            <td>1/1/2024</td>
+                                            <td>1</td>
+                                            <td>$300</td>
+                                            <td>$300</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
             </main>
         </div>
     </div>

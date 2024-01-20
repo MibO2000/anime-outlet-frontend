@@ -4,6 +4,23 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     header('Location: /admin-login', true, 301);
     exit;
 }
+
+$results = [
+    [
+        'name' => 'John Doe',
+        'username' => 'johndoe',
+        'phone' => '09686968643',
+        'available_days' => 5,
+        'delivery_zones' => 4,
+    ],
+    [
+        'name' => 'John Smith',
+        'username' => 'johnsmith',
+        'phone' => '09686968645',
+        'available_days' => 2,
+        'delivery_zones' => 1,
+    ]
+];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +150,7 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
         </div>
     </header>
 
-    <main>
+    <div id="main">
         <div class="container-fluid">
             <div class="row">
                 <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
@@ -143,6 +160,11 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                                 <li class="nav-item">
                                     <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
                                         Items
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-item-details">
+                                        Item Details
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -190,21 +212,20 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>John Smith</td>
-                                    <td>johnsmith</td>
-                                    <td>09686983852</td>
-                                    <td>5</td>
-                                    <td>2</td>
+                                <tr v-for="item in items">
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.username}}</td>
+                                    <td>{{item.phone}}</td>
+                                    <td>{{item.available_days}}</td>
+                                    <td>{{item.delivery_zones}}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
-                                        <button class="btn btn-sm btn-danger" href="#">Delete</button>
+                                        <button class="btn btn-sm btn-primary" @click="selectItem(item)" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                                        <button class="btn btn-sm btn-danger" @click="selectItem(item)" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-
                 </main>
             </div>
         </div>
@@ -219,43 +240,65 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                     <div class="modal-body">
                         <div>
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" name="name">
+                            <input type="text" class="form-control" id="name" v-model="selectedItem.name">
                         </div>
                         <div>
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" name="username">
+                            <input type="text" class="form-control" id="username" v-model="selectedItem.username">
                         </div>
                         <div>
                             <label for="phone" class="form-label">Phone</label>
-                            <input type="tel" class="form-control" name="phone">
+                            <input type="tel" class="form-control" id="phone" v-model="selectedItem.phone">
                         </div>
                         <div>
                             <label for="availableDays" class="form-label">Available Days</label>
-                            <input type="number" class="form-control" name="availableDays">
+                            <input type="number" class="form-control" id="availableDays" v-model="selectedItem.available_days">
                         </div>
                         <div>
                             <label for="deliveryZones" class="form-label">Delivery Zones</label>
-                            <input type="tel" class="form-control" name="deliveryZones">
+                            <input type="tel" class="form-control" id="deliveryZones" v-model="selectedItem.delivery_zones">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" type="submit">Save</button>
+                        <button type="button" class="btn btn-primary">Save</button>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
 
-    <script src="/js/vue.min.js"></script>
+        <div class="modal fade" tabindex="-1" id="deleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Are you sure do you want to delete?</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="confirmDelete()">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/vue.min.js"></script>
     <script>
         new Vue({
-            el: 'main',
+            el: '#main',
             data: {
-                // items:
+                items: <?= json_encode($results) ?>,
+                selectedItem: {},
             },
-
+            methods: {
+                selectItem(item) {
+                    this.selectedItem = item;
+                },
+                confirmDelete() {
+                    console.log(this.selectedItem, 'has been deleted');
+                },
+            }
         })
     </script>
 </body>

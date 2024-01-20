@@ -145,6 +145,11 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-item-details">
+                                    Item Details
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-supplier">
                                     Supplier
                                 </a>

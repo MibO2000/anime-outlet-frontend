@@ -4,6 +4,15 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     header('Location: /admin-login', true, 301);
     exit;
 }
+
+$query = "select ai.item_id, ai.item_name , ac.category_name as category, af.title as film, ab.brand_name as brand, ai.item_image_1, ai.item_image_2, ai.item_image_3, ai.release_date, ai.item_description, ai.`scale`, ai.stock_quantity, ai.price from `ASSIGNMENT`.ao_item ai join `ASSIGNMENT`.ao_brand ab on ab.brand_id = ai.brand_id join `ASSIGNMENT`.ao_film af on af.film_id = ai.film_id join `ASSIGNMENT`.ao_category ac on ac.category_id = ai.category_id ";
+$result = mysqli_query($connect, $query);
+$results = [];
+// Loop through each row and display the data
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($results, $row);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +142,7 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
         </div>
     </header>
 
-    <div class="container-fluid">
+    <div id="main" class="container-fluid">
         <div class="row">
             <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
                 <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
@@ -142,6 +151,11 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
                                     Items
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-item-details">
+                                    Item Details
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -183,9 +197,9 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                                 <th>Category</th>
                                 <th>Film</th>
                                 <th>Brand</th>
-                                <th>Image 1</th>
+                                <!-- <th>Image 1</th>
                                 <th>Image 2</th>
-                                <th>Image 3</th>
+                                <th>Image 3</th> -->
                                 <th>Release date</th>
                                 <th>Item Description</th>
                                 <th>Scale</th>
@@ -194,30 +208,20 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-
-                            $query = "select ai.item_id, ai.item_name , ac.category_name as category, af.title as film, ab.brand_name as brand, ai.item_image_1, ai.item_image_2, ai.item_image_3, ai.release_date, ai.item_description, ai.`scale`, ai.stock_quantity, ai.price from `ASSIGNMENT`.ao_item ai join `ASSIGNMENT`.ao_brand ab on ab.brand_id = ai.brand_id join `ASSIGNMENT`.ao_film af on af.film_id = ai.film_id join `ASSIGNMENT`.ao_category ac on ac.category_id = ai.category_id ";
-                            $result = mysqli_query($connect, $query);
-
-                            // Loop through each row and display the data
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                // echo "<td>" . $row['item_id'] . "</td>";
-                                echo "<td>" . "<a href='/admin-item-details?id=" . $row['item_id'] . "'>" . $row['item_name'] . "</a>" . "</td>";
-                                echo "<td>" . $row['category'] . "</td>";
-                                echo "<td>" . $row['film'] . "</td>";
-                                echo "<td>" . $row['brand'] . "</td>";
-                                echo "<td>" . $row['item_image_1'] . "</td>";
-                                echo "<td>" . $row['item_image_2'] . "</td>";
-                                echo "<td>" . $row['item_image_3'] . "</td>";
-                                echo "<td>" . $row['release_date'] . "</td>";
-                                echo "<td>" . $row['item_description'] . "</td>";
-                                echo "<td>" . $row['scale'] . "</td>";
-                                echo "<td>" . $row['stock_quantity'] . "</td>";
-                                echo "<td>" . $row['price'] . "</td>";
-                                echo "</tr>";
-                            }
-                            ?>
+                            <tr v-for="item in items">
+                                <td>{{item.item_name}}</td>
+                                <td>{{item.category}}</td>
+                                <td>{{item.film}}</td>
+                                <td>{{item.brand}}</td>
+                                <!-- <td>{{item.item_image1}}</td>
+                                <td>{{item.item_image2}}</td>
+                                <td>{{item.item_image3}}</td> -->
+                                <td>{{item.release_date}}</td>
+                                <td>{{item.item_description}}</td>
+                                <td>{{item.scale}}</td>
+                                <td>{{item.stock_quantity}}</td>
+                                <td>{{item.price}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -227,6 +231,15 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     </div>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/vue.min.js"></script>
+    <script>
+        new Vue({
+            el: '#main',
+            data: {
+                items: <?= json_encode($results) ?>,
+            },
+        });
+    </script>
 </body>
 
 </html>

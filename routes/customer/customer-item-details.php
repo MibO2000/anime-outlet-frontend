@@ -11,7 +11,7 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer</title>
+    <title>Item Details</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <style>
         .bd-placeholder-img {
@@ -139,6 +139,10 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
                 flex: 1;
             }
         }
+
+        a {
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -182,64 +186,41 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     </nav>
 
     <main class="container mt-4">
-        <div>
-            <form method="GET" action="/items">
-                <div>
-                    <input type="search" class="form-control" placeholder="Search" name="search">
-                </div>
-                <div class="mt-2 mb-2">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </div>
-            </form>
-        </div>
+        <div class="row">
+            <div class="col-5">
+                <img style="width:100%;height:auto;" src="https://images.unsplash.com/photo-1705609397754-2b98f8197811?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D" alt="">
+            </div>
+            <div class="col-1">
+                <img style="padding-bottom:5px;width:100%;height:auto;" src="https://images.unsplash.com/photo-1705609397754-2b98f8197811?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D" alt="">
+                <img style="padding-bottom:5px;width:100%;height:auto;" src="https://images.unsplash.com/photo-1705609397754-2b98f8197811?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D" alt="">
+                <img style="padding-bottom:5px;width:100%;height:auto;" src="https://images.unsplash.com/photo-1705609397754-2b98f8197811?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D" alt="">
+            </div>
+            <div class="col-6">
+                <h4>Andrei J Castanha (2023)</h4>
 
-        <div class="d-flex flex-row">
-            <div>
-                <img src="https://images.unsplash.com/photo-1705642373439-27963d4b9908?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8">
-            </div>
-            <div class="m-2">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi explicabo aperiam, cum consectetur fuga sed ab assumenda, inventore esse adipisci veniam itaque facere provident pariatur. Vero sed minima architecto voluptatibus.
-                </p>
-            </div>
-        </div>
-        <div class="d-flex flex-row mt-4">
-            <div>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi explicabo aperiam, cum consectetur fuga sed ab assumenda, inventore esse adipisci veniam itaque facere provident pariatur. Vero sed minima architecto voluptatibus.
-                </p>
-            </div>
-            <div class="m-2">
-                <img src="https://images.unsplash.com/photo-1705642373439-27963d4b9908?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8">
-            </div>
-        </div>
+                <table class="table table-borderless">
+                    <tr>
+                        <td>Category</td>
+                        <td><span class="badge text-bg-primary">Category 1</span></td>
+                    </tr>
+                    <tr>
+                        <td>Flim</td>
+                        <td><span class="badge text-bg-warning">Flim 1</span></td>
+                    </tr>
+                    <tr>
+                        <td>Brand</td>
+                        <td><span class="badge text-bg-secondary">Brand 1</span></td>
+                    </tr>
+                </table>
 
+                <h5>$ 2500</h5>
+            </div>
+        </div>
         <div class="mt-4">
-            <h2>Contact Us</h2>
-
-            <form method="POST">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" name="description" rows="5"></textarea>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div style="margin-top:20px;display:flex;align-items:center;justify-content:center;width:100%">
-                            <button class="btn btn-primary" type="submit">Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
+            <h5>Description</h5>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt temporibus similique pariatur rem autem dolorem fugit aliquid repudiandae iusto, perspiciatis distinctio ut quibusdam laborum veniam possimus! Magnam tempora dolorum sit. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sapiente quia similique, facilis, perspiciatis tempore eligendi suscipit nostrum distinctio harum, expedita eum et. Incidunt odit voluptate corrupti aliquam est commodi soluta.</p>
         </div>
-
+        <div class="p-5"></div>
     </main>
 
     <footer class="container py-5">

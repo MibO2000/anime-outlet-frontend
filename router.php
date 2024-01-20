@@ -78,8 +78,8 @@ switch ($path) {
     case '/items':
         require __DIR__ . '/routes/customer/customer-item.php';
         break;
-    case '/item-detail':
-        require __DIR__ . '/routes/customer/customer-itemdetail.php';
+    case '/item-details':
+        require __DIR__ . '/routes/customer/customer-item-details.php';
         break;
     case '/cart':
         require __DIR__ . '/routes/customer/customer-cart.php';

@@ -87,8 +87,20 @@ switch ($path) {
 
         /* Log Out */
     case '/logout':
+        $redirect = '/';
+        switch ($_SESSION['role'] ?? 0) {
+            case ROLE_ADMIN:
+                $redirect = '/admin-login';
+                break;
+            case ROLE_DELIVERER:
+                $redirect = '/deliverer-login';
+                break;
+            case ROLE_SUPPLIER:
+                $redirect = '/supplier-login';
+                break;
+        }
         session_destroy();
-        header('Location: /', true, 301);
+        header('Location: ' . $redirect, true, 301);
         break;
 
         /* Page Not Found */

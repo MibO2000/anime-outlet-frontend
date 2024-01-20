@@ -21,7 +21,7 @@ if ($method === 'POST') {
         $_SESSION['name'] = $result[0][0];
         $_SESSION['username'] = $result[0][1];
         $_SESSION['role'] = ROLE_CUSTOMER;
-        header('Location: /customer', true, 301);
+        header('Location: /', true, 301);
         exit;
     }
 }

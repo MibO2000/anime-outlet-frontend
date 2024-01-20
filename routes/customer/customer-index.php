@@ -1,7 +1,7 @@
 <?php
 if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     session_destroy();
-    header('Location: /customer-login', true, 301);
+    header('Location: /login', true, 301);
     exit;
 }
 

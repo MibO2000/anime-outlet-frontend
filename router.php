@@ -2,6 +2,8 @@
 
 session_start();
 
+define('COMPANY_NAME', 'MibO');
+
 define('ROLE_ADMIN', 1);
 define('ROLE_CUSTOMER', 2);
 define('ROLE_DELIVERER', 3);
@@ -15,7 +17,7 @@ require_once __DIR__ . '/helper.php';
 
 switch ($path) {
     case '/':
-        require __DIR__ . '/routes/customer-index.php';
+        require __DIR__ . '/routes/customer/customer-index.php';
         break;
 
         /* Admin */
@@ -29,13 +31,19 @@ switch ($path) {
         require __DIR__ . '/routes/admin/admin-items.php';
         break;
     case '/admin-item-details':
-        require __DIR__ . '/routes/admin/admin-itemdetail.php';
+        require __DIR__ . '/routes/admin/admin-item-details.php';
         break;
     case '/admin-deliverer':
         require __DIR__ . '/routes/admin/admin-deliverer.php';
         break;
+    case '/admin-create-deliverer':
+        require __DIR__ . '/routes/admin/admin-create-deliverer.php';
+        break;
     case '/admin-order':
         require __DIR__ . '/routes/admin/admin-order.php';
+        break;
+    case '/admin-order-details':
+        require __DIR__ . '/routes/admin/admin-order-details.php';
         break;
     case '/admin-purchase':
         require __DIR__ . '/routes/admin/admin-purchase.php';

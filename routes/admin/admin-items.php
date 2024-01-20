@@ -120,7 +120,7 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
 
 <body>
     <header class="navbar bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="/">Company name</a>
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="/admin-items"><?= COMPANY_NAME ?></a>
         <div class="mx-4">
             <div class="dropdown fs-6">
                 <button class="btn dropdown-toggle text-white " type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -145,33 +145,23 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Packages
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-supplier">
+                                    Supplier
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Package Types
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-deliverer">
+                                    Deliverer
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Pitchs
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-order">
+                                    Order
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Pitch Types
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Local Attractions
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
-                                    Local Attraction Types
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-purchase">
+                                    Purchase
                                 </a>
                             </li>
                         </ul>
@@ -185,10 +175,10 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
 
                 <div>
                     <h1>Items</h1>
-                    <table>
+                    <table class="table table-responsive table-hover table-striped">
                         <thead>
                             <tr>
-                                <th>Item ID</th>
+                                <!-- <th>Item ID</th> -->
                                 <th>Item Name</th>
                                 <th>Category</th>
                                 <th>Film</th>
@@ -212,8 +202,8 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                             // Loop through each row and display the data
                             while ($row = mysqli_fetch_assoc($result)) {
                                 echo "<tr>";
-                                echo "<td>" . $row['item_id'] . "</td>";
-                                echo "<td>" . $row['item_name'] . "</td>";
+                                // echo "<td>" . $row['item_id'] . "</td>";
+                                echo "<td>" . "<a href='/admin-item-details?id=" . $row['item_id'] . "'>" . $row['item_name'] . "</a>" . "</td>";
                                 echo "<td>" . $row['category'] . "</td>";
                                 echo "<td>" . $row['film'] . "</td>";
                                 echo "<td>" . $row['brand'] . "</td>";
@@ -222,7 +212,7 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                                 echo "<td>" . $row['item_image_3'] . "</td>";
                                 echo "<td>" . $row['release_date'] . "</td>";
                                 echo "<td>" . $row['item_description'] . "</td>";
-                                echo "<td>" . $row['`scale`'] . "</td>";
+                                echo "<td>" . $row['scale'] . "</td>";
                                 echo "<td>" . $row['stock_quantity'] . "</td>";
                                 echo "<td>" . $row['price'] . "</td>";
                                 echo "</tr>";

@@ -171,30 +171,93 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
             </div>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="min-height:100vh">
+
                 <div>
-                    <h1>Order</h1>
+                    <h1>Film</h1>
                     <table class="table table-responsive table-hover table-striped">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Customer Name</th>
-                                <th>Order Date</th>
-                                <th>Order Status</th>
+                                <th>Film ID</th>
+                                <th>Title</th>
+                                <th>Film Image</th>
+                                <th>Release Date</th>
+                                <th>Description</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
 
-                            $query = "select ao.order_id, ac.full_name, ao.order_date, ao.order_status from `ASSIGNMENT`.ao_order ao join `ASSIGNMENT`.ao_customer ac on ao.customer_id = ac.customer_id order by ao.order_date desc";
+                            $query = "SELECT * from ASSIGNMENT.ao_film";
                             $result = mysqli_query($connect, $query);
 
                             // Loop through each row and display the data
                             while ($row = mysqli_fetch_assoc($result)) {
                                 echo "<tr>";
-                                echo "<td>" . $row['order_id'] . "</td>";
-                                echo "<td>" . "<a href='/admin-order-details?id=" . $row['order_id'] . "'>" . $row['full_name'] . "</a></td>";
-                                echo "<td>" . $row['order_date'] . "</td>";
-                                echo "<td>" . $row['order_status'] . "</td>";
+                                echo "<td>" . $row['film_id'] . "</td>";
+                                echo "<td>" . $row['title'] . "</td>";
+                                echo "<td>" . $row['film_image'] . "</td>";
+                                echo "<td>" . $row['release_date'] . "</td>";
+                                echo "<td>" . $row['film_description'] . "</td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h1>Category</h1>
+                    <table class="table table-responsive table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Category ID</th>
+                                <th>Category Nam</th>
+                                <th>Category Image</th>
+                                <th>Category Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+
+                            $query = "SELECT * from ASSIGNMENT.ao_category";
+                            $result = mysqli_query($connect, $query);
+
+                            // Loop through each row and display the data
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo "<tr>";
+                                echo "<td>" . $row['category_id'] . "</td>";
+                                echo "<td>" . $row['category_name'] . "</td>";
+                                echo "<td>" . $row['category_image'] . "</td>";
+                                echo "<td>" . $row['category_description'] . "</td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h1>Brand</h1>
+                    <table class="table table-responsive table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Brand ID</th>
+                                <th>Brand Nam</th>
+                                <th>Brand Image</th>
+                                <th>Brand Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+
+                            $query = "SELECT * from ASSIGNMENT.ao_brand";
+                            $result = mysqli_query($connect, $query);
+
+                            // Loop through each row and display the data
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo "<tr>";
+                                echo "<td>" . $row['brand_id'] . "</td>";
+                                echo "<td>" . $row['brand_name'] . "</td>";
+                                echo "<td>" . $row['brand_image'] . "</td>";
+                                echo "<td>" . $row['brand_description'] . "</td>";
                                 echo "</tr>";
                             }
                             ?>

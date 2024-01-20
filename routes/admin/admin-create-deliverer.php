@@ -11,7 +11,7 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Order</title>
+    <title>Admin Create Deliverer</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <style>
         .bd-placeholder-img {
@@ -172,34 +172,40 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="min-height:100vh">
                 <div>
-                    <h1>Order</h1>
-                    <table class="table table-responsive table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Customer Name</th>
-                                <th>Order Date</th>
-                                <th>Order Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
+                    <h1>Create Deliverer</h1>
 
-                            $query = "select ao.order_id, ac.full_name, ao.order_date, ao.order_status from `ASSIGNMENT`.ao_order ao join `ASSIGNMENT`.ao_customer ac on ao.customer_id = ac.customer_id order by ao.order_date desc";
-                            $result = mysqli_query($connect, $query);
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" name="name">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" name="phone">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" name="username">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" name="password">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="availableDays" class="form-label">Available Days</label>
+                                <input type="number" class="form-control" name="availableDays">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="delieveryZone" class="form-label">Delivery Zone</label>
+                                <input type="text" class="form-control" name="delieveryZone">
+                            </div>
+                        </div>
 
-                            // Loop through each row and display the data
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                echo "<td>" . $row['order_id'] . "</td>";
-                                echo "<td>" . "<a href='/admin-order-details?id=" . $row['order_id'] . "'>" . $row['full_name'] . "</a></td>";
-                                echo "<td>" . $row['order_date'] . "</td>";
-                                echo "<td>" . $row['order_status'] . "</td>";
-                                echo "</tr>";
-                            }
-                            ?>
-                        </tbody>
-                    </table>
+                        <div style="margin-top:20px;display:flex;align-items:center;justify-content:center;width:100%">
+                            <button class="btn btn-primary" type="submit">Create</button>
+                        </div>
+                    </form>
                 </div>
 
             </main>

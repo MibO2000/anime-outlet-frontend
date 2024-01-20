@@ -1,7 +1,7 @@
 <?php
 if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     session_destroy();
-    header('Location: /customer-login', true, 301);
+    header('Location: /login', true, 301);
     exit;
 }
 ?>
@@ -213,7 +213,13 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
                     </tr>
                 </table>
 
-                <h5>$ 2500</h5>
+                <div class="d-flex align-items-center justify-content-between pt-4">
+                    <h5>$ 2500</h5>
+
+                    <button class="btn  btn-primary">
+                        Add to cart
+                    </button>
+                </div>
             </div>
         </div>
         <div class="mt-4">

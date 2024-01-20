@@ -172,7 +172,14 @@ if ($method === 'POST') {
                             <?= $errorMessage ?>
                         </div>
                     <?php } ?>
-                    <button class="btn btn-primary w-100 py-2" type="submit">Log In</button>
+                    <div class="mb-1">
+                        <button class="btn btn-primary w-100 py-2" type="submit">Log In</button>
+                    </div>
+                    <div>
+                        <a href="/register" class="btn btn-outline-primary w-100 py-2" type="button">
+                            Register
+                        </a>
+                    </div>
                     <p class="mt-5 mb-3 text-body-secondary">&copy; <?= date("Y") ?>. All right reserved.</p>
                 </form>
             </main>

@@ -6,10 +6,9 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
 }
 
 $itemid = $_GET['id'];
-echo $itemsql = sprintf("SELECT * FROM ao_item where item_id = '%s'", mysqli_real_escape_string($connect, $itemid));
+$itemsql = sprintf("SELECT * FROM ao_item where item_id = '%s'", mysqli_real_escape_string($connect, $itemid));
 $result = $connect->query($itemsql);
 $result = $result->fetch_all();
-print_r($result);
 $item = $result[0];
 $filmid = $item['2'];
 $categoryid = $item['1'];
@@ -28,44 +27,20 @@ $category = $result[0];
 $brandquery = sprintf("SELECT * FROM ao_brand where brand_id = '%s'", mysqli_real_escape_string($connect, $brandid));
 $result = $connect->query($brandquery);
 $result = $result->fetch_all();
-$brandid = $result[0];
+$brand = $result[0];
 
-if (isset($_POST['btncart'])) {
-    $orderdetailid = AutoID('ao_order_detail', 'order_detail_id', 'OD', 4);
-    $quantity = $_POST['quantity'];
-    if ($quantity > $item['stock_quantity']) {
-        $hasError = 1;
-        $errorMessage = 'Item stock not enough';
-        header('Location: /item-details?id=' . $itemid);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_SESSION['__cart'])) {
+        $_SESSION['__cart'] = [];
     }
-    $check = sprintf("SELECT * from `ASSIGNMENT`.ao_order_detail aod join `ASSIGNMENT`.ao_order aoo on aoo.order_id  = aod.order_id  where item_id = '%s' and customer_id = '%s' and order_status = 'PENDING'", mysqli_real_escape_string($connect, $itemid), mysqli_real_escape_string($connect, $cid));
-    $result = $connect->query($brandquery);
-    $result = $result->fetch_all();
-    if ($result) {
-        $hasError = 1;
-        $errorMessage = 'Item already in cart';
-        header('Location: /item-details?id=' . $itemid);
+    $id = $_POST['item_id'];
+    $name = $_POST['item_name'];
+    $price = $_POST['item_price'];
+    $image = $_POST['item_image'];
+    if (!key_exists($id, $_SESSION['__cart'])) {
+        $_SESSION['__cart'][$id] = ['id' => $id, 'name' => $name, 'price' => $price, 'image' => $image, 'quantity' => 0];
     }
-
-    $ordersql = sprintf("SELECT * from ao_order where customer_id = '%s' and order_status = 'PENDING'", mysqli_real_escape_string($connect, $cid));
-    $result = $connect->query($brandquery);
-    $result = $result->fetch_all();
-    if ($result) {
-        $orderid = $result[0]['order_id'];
-    } else {
-        $orderid = AutoID('ao_order', 'order_id', 'O', 4);
-        $orderstatus = 'PENDING';
-        $query = sprintf("INSERT INTO ao_order(order_id, customer_id, order_status)
-        VALUES ('%s','%s','%s')", mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $cid), mysqli_real_escape_string($connect, $orderstatus));
-        $connect->query($query);
-    }
-    $unitprice = $item['price'];
-    $subtotal = $unitprice * $quantity;
-    $query = sprintf("INSERT INTO ao_order_detail(order_detail_id, order_id, item_id, quantity, unit_price, sub_total)
-        VALUES ('%s','%s','%s','%s','%s','%s')", mysqli_real_escape_string($connect, $orderdetailid), mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $itemid), mysqli_real_escape_string($connect, $quantity), mysqli_real_escape_string($connect, $unitprice), mysqli_real_escape_string($connect, $subtotal));
-    $connect->query($query);
-    // SUCCESS
-    header('Location: /item-details?id=' . $itemid);
+    $_SESSION['__cart'][$id]['quantity'] += 1;
 }
 ?>
 <!DOCTYPE html>
@@ -251,47 +226,53 @@ if (isset($_POST['btncart'])) {
     <main class="container mt-4">
         <div class="row">
             <div class="col-5">
-                <img style="width:100%;height:auto;" src="https://images.unsplash.com/photo-1705609397754-2b98f8197811?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D" alt="">
+                <?php if ($item[5]) { ?>
+                    <img style="width:100%;height:auto;" src="<?= $item[5] ?>" alt="">
+                <?php } ?>
             </div>
             <div class="col-1">
-                <img style="padding-bottom:5px;width:100%;height:auto;" src="https://images.unsplash.com/photo-1705609397754-2b98f8197811?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D" alt="">
-                <img style="padding-bottom:5px;width:100%;height:auto;" src="https://images.unsplash.com/photo-1705609397754-2b98f8197811?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D" alt="">
-                <img style="padding-bottom:5px;width:100%;height:auto;" src="https://images.unsplash.com/photo-1705609397754-2b98f8197811?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D" alt="">
+                <?php if ($item[6]) { ?>
+                    <img style="padding-bottom:5px;width:100%;height:auto;" src="<?= $item[6] ?>" alt="">
+                <?php } ?>
+                <?php if ($item[7]) { ?>
+                    <img style="padding-bottom:5px;width:100%;height:auto;" src="<?= $item[7] ?>" alt="">
+                <?php } ?>
             </div>
             <div class="col-6">
-                <h4>Andrei J Castanha (2023)</h4>
+                <h4><?= $item[4] ?></h4>
 
                 <table class="table table-borderless">
                     <tr>
                         <td>Category</td>
-                        <td><span class="badge text-bg-primary">Category 1</span></td>
+                        <td><span class="badge text-bg-primary"><?= $category[1] ?></span></td>
                     </tr>
                     <tr>
                         <td>Flim</td>
-                        <td><span class="badge text-bg-warning">Flim 1</span></td>
+                        <td><span class="badge text-bg-warning"><?= $film[1] ?></span></td>
                     </tr>
                     <tr>
                         <td>Brand</td>
-                        <td><span class="badge text-bg-secondary">Brand 1</span></td>
+                        <td><span class="badge text-bg-secondary"><?= $brand[1] ?></span></td>
                     </tr>
                 </table>
 
                 <div class="d-flex align-items-center justify-content-between pt-4">
-                    <h5>$ 2500</h5>
-
-                    <button class="btn  btn-primary">
-                        Add to cart
-                    </button>
+                    <h5>$ <?= $item[12] ?></h5>
+                    <form method="POST">
+                        <input type="hidden" name="item_id" value="<?= $item[0] ?>">
+                        <input type="hidden" name="item_name" value="<?= $item[4] ?>">
+                        <input type="hidden" name="item_price" value="<?= $item[12] ?>">
+                        <input type="hidden" name="item_image" value="<?= $item[5] ?>">
+                        <button class="btn  btn-primary">
+                            Add to cart
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
         <div class="mt-4">
             <h5>Description</h5>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt temporibus similique pariatur rem autem
-                dolorem fugit aliquid repudiandae iusto, perspiciatis distinctio ut quibusdam laborum veniam possimus!
-                Magnam tempora dolorum sit. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sapiente quia
-                similique, facilis, perspiciatis tempore eligendi suscipit nostrum distinctio harum, expedita eum et.
-                Incidunt odit voluptate corrupti aliquam est commodi soluta.</p>
+            <p><?= $item[9] ?></p>
         </div>
         <div class="p-5"></div>
     </main>
@@ -324,6 +305,12 @@ if (isset($_POST['btncart'])) {
     </footer>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <script>
+        console.log('Item', <?= json_encode($item) ?>);
+        console.log('Film', <?= json_encode($film) ?>);
+        console.log('Category', <?= json_encode($category) ?>);
+        console.log('Brand', <?= json_encode($brand) ?>);
+    </script>
 </body>
 
 </html>

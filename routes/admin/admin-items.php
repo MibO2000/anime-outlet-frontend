@@ -13,6 +13,223 @@ while ($row = mysqli_fetch_assoc($result)) {
     array_push($results, $row);
 }
 
+if (isset($_POST['btn-item-save'])) {
+    $iid = AutoID('ao_item', 'item_id', 'I', 4);
+
+    $ftitle = $_POST['title'];
+    $film = sprintf("SELECT film_id FROM ao_film where title = '%s'", mysqli_real_escape_string($connect, $ftitle));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+
+    $ifilm = $result[0][0];
+
+    $cname = $_POST['category'];
+    $category = sprintf("SELECT category_id FROM ao_category where category_name = '%s'", mysqli_real_escape_string($connect, $cname));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+
+    $icategory = $result[0][0];
+
+    $bname = $_POST['brand'];
+    $category = sprintf("SELECT brand_id FROM ao_brand where brand_name = '%s'", mysqli_real_escape_string($connect, $bname));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+
+    $ibrand = $result[0][0];
+
+    $iname = $_POST['name'];
+    // not sure wrong or right?
+    $bimg = "images/" . $_FILES['iimage1']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-items');
+    } else {
+        $image1 = uniqid() . "-" . $_FILES['iimage1']['name'];
+        move_uploaded_file($_FILES['iimage1']['tmp_name'], "images/" . $image);
+    }
+    // not sure wrong or right?
+    $bimg = "images/" . $_FILES['iimage2']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-items');
+    } else {
+        $image2 = uniqid() . "-" . $_FILES['iimage2']['name'];
+        move_uploaded_file($_FILES['iimage2']['tmp_name'], "images/" . $image);
+    }
+    // not sure wrong or right?
+    $bimg = "images/" . $_FILES['iimage3']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-items');
+    } else {
+        $image3 = uniqid() . "-" . $_FILES['iimage3']['name'];
+        move_uploaded_file($_FILES['iimage3']['tmp_name'], "images/" . $image);
+    }
+
+    $idate = $_POST['releasedate'];
+    $idesc = $_POST['description'];
+    $iscale = $_POST['scale'];
+    $istock = $_POST['stock'];
+    $iprice = $_POST['price'];
+
+    $checkquery = sprintf("SELECT * from ao_item where item_name = '%s'", mysqli_real_escape_string($connect, $iname));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Item Name already exist.';
+    } else {
+        $query = sprintf("INSERT INTO ao_item(item_id, category_id, film_id, brand_id, item_name, item_image_1, item_image_2, item_image_3, release_date, item_description, scale, stock_quantity, price)
+        VALUES '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'", mysqli_real_escape_string($connect, $iid), mysqli_real_escape_string($connect, $ifilm), mysqli_real_escape_string($connect, $icategory), mysqli_real_escape_string($connect, $ibrand), mysqli_real_escape_string($connect, $iname), mysqli_real_escape_string($connect, $image1), mysqli_real_escape_string($connect, $image2), mysqli_real_escape_string($connect, $image3), mysqli_real_escape_string($connect, $idate), mysqli_real_escape_string($connect, $idesc), mysqli_real_escape_string($connect, $iscale), mysqli_real_escape_string($connect, $istock), mysqli_real_escape_string($connect, $iprice));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-items');
+    }
+}
+
+if (isset($_POST['btn-item-update'])) {
+    $item_id = $_POST['id'];
+
+    $check_query = sprintf("SELECT * FROM ao_item WHERE item_id = '%s'", mysqli_real_escape_string($connect, $item_id));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'Item ID does not exist.';
+        header('Location: /admin-items');
+    }
+
+    $ftitle = $_POST['title'];
+    $film = sprintf("SELECT film_id FROM ao_film where title = '%s'", mysqli_real_escape_string($connect, $ftitle));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+
+    $ifilm = $result[0][0];
+
+    $cname = $_POST['category'];
+    $category = sprintf("SELECT category_id FROM ao_category where category_name = '%s'", mysqli_real_escape_string($connect, $cname));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+
+    $icategory = $result[0][0];
+
+    $bname = $_POST['brand'];
+    $category = sprintf("SELECT brand_id FROM ao_brand where brand_name = '%s'", mysqli_real_escape_string($connect, $bname));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+
+    $ibrand = $result[0][0];
+
+    $iname = $_POST['name'];
+    // not sure wrong or right?
+    $bimg = "images/" . $_FILES['iimage1']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-items');
+    } else {
+        $image1 = uniqid() . "-" . $_FILES['iimage1']['name'];
+        move_uploaded_file($_FILES['iimage1']['tmp_name'], "images/" . $image);
+    }
+    // not sure wrong or right?
+    $bimg = "images/" . $_FILES['iimage2']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-items');
+    } else {
+        $image2 = uniqid() . "-" . $_FILES['iimage2']['name'];
+        move_uploaded_file($_FILES['iimage2']['tmp_name'], "images/" . $image);
+    }
+    // not sure wrong or right?
+    $bimg = "images/" . $_FILES['iimage3']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-items');
+    } else {
+        $image3 = uniqid() . "-" . $_FILES['iimage3']['name'];
+        move_uploaded_file($_FILES['iimage3']['tmp_name'], "images/" . $image);
+    }
+
+    $idate = $_POST['releasedate'];
+    $idesc = $_POST['description'];
+    $iscale = $_POST['scale'];
+    $istock = $_POST['stock'];
+    $iprice = $_POST['price'];
+
+    $checkquery = sprintf("SELECT * from ao_item where item_name = '%s' AND item_id != '%s'", mysqli_real_escape_string($connect, $iname), mysqli_real_escape_string($connect, $item_id));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Item Name already exist.';
+    } else {
+        $update_query = sprintf(
+            "UPDATE ao_item
+            SET film_id = '%s',
+                category_id = '%s',
+                brand_id = '%s',
+                item_name = '%s',
+                item_image_1 = '%s',
+                item_image_2 = '%s',
+                item_image_3 = '%s',
+                release_date = '%s',
+                item_description = '%s',
+                scale = '%s',
+                stock_quantity = '%s',
+                price = '%s'
+            WHERE item_id = '%s'",
+            mysqli_real_escape_string($connect, $ifilm),
+            mysqli_real_escape_string($connect, $icategory),
+            mysqli_real_escape_string($connect, $ibrand),
+            mysqli_real_escape_string($connect, $iname),
+            mysqli_real_escape_string($connect, $image1),
+            mysqli_real_escape_string($connect, $image2),
+            mysqli_real_escape_string($connect, $image3),
+            mysqli_real_escape_string($connect, $idate),
+            mysqli_real_escape_string($connect, $idesc),
+            mysqli_real_escape_string($connect, $iscale),
+            mysqli_real_escape_string($connect, $istock),
+            mysqli_real_escape_string($connect, $iprice),
+            mysqli_real_escape_string($connect, $item_id)
+        );
+
+        $connect->query($update_query);
+        // SUCCESS
+        header('Location: /admin-items');
+    }
+}
+
+if (isset($_POST['btn-item-delete'])) {
+    $item_id = $_POST['id'];
+
+    $check_query = sprintf("SELECT * FROM ao_item WHERE item_id = '%s'", mysqli_real_escape_string($connect, $item_id));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'Item ID does not exist.';
+        header('Location: /admin-items');
+    } else {
+        $delete_query = sprintf("DELETE FROM ao_item WHERE item_id = '%s'", mysqli_real_escape_string($connect, $item_id));
+        $connect->query($delete_query);
+
+        // SUCCESS
+        header('Location: /admin-items');
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

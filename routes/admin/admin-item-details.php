@@ -4,6 +4,329 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     header('Location: /admin-login', true, 301);
     exit;
 }
+if (isset($_POST['btn-film-save'])) {
+    $fid = AutoID('ao_film', 'film_id', 'F', 4);
+    $ftitle = $_POST['fname'];
+    $freleasedate = $_POST['freleasedate'];
+    $fdesc = $_POST['fdescription'];
+
+    // not sure wrong or right?
+    $fimg = "images/" . $_FILES['fimage']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-item-details');
+    } else {
+        $image = uniqid() . "-" . $_FILES['cimage']['name'];
+        move_uploaded_file($_FILES['fimage']['tmp_name'], "images/" . $image);
+    }
+
+    $checkquery = sprintf("SELECT * from ao_film where title = '%s'", mysqli_real_escape_string($connect, $ftitle));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Title already exist.';
+    } else {
+        $query = sprintf("INSERT INTO ao_film(film_id, title, film_image, release_date, film_description)
+        VALUES '%s','%s','%s','%s','%s'", mysqli_real_escape_string($connect, $fid), mysqli_real_escape_string($connect, $ftitle), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $freleasedate), mysqli_real_escape_string($connect, $fdesc));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+
+if (isset($_POST['btn-category-save'])) {
+    $cid = AutoID('ao_category', 'category_id', 'C', 4);
+    $cname = $_POST['cname'];
+    $cdesc = $_POST['cdescription'];
+
+    // not sure wrong or right?
+    $cimg = "images/" . $_FILES['cimage']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-item-details');
+    } else {
+        $image = uniqid() . "-" . $_FILES['cimage']['name'];
+        move_uploaded_file($_FILES['cimage']['tmp_name'], "images/" . $image);
+    }
+
+    $checkquery = sprintf("SELECT * from ao_category where category_name = '%s'", mysqli_real_escape_string($connect, $cname));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Name already exist.';
+    } else {
+        $query = sprintf("INSERT INTO ao_category(category_id, category_name, category_image, category_description)
+        VALUES '%s','%s','%s','%s'", mysqli_real_escape_string($connect, $cid), mysqli_real_escape_string($connect, $cname), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $cdesc));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+
+if (isset($_POST['btn-brand-save'])) {
+    $bid = AutoID('ao_brand', 'brand_id', 'B', 4);
+    $bname = $_POST['bname'];
+    $bdesc = $_POST['bdescription'];
+
+    // not sure wrong or right?
+    $bimg = "images/" . $_FILES['bimage']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-item-details');
+    } else {
+        $image = uniqid() . "-" . $_FILES['bimage']['name'];
+        move_uploaded_file($_FILES['bimage']['tmp_name'], "images/" . $image);
+    }
+
+    $checkquery = sprintf("SELECT * from ao_brand where brand_name = '%s'", mysqli_real_escape_string($connect, $bname));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Name already exist.';
+    } else {
+        $query = sprintf("INSERT INTO ao_brand(brand_id, brand_name, brand_image, brand_description)
+        VALUES '%s','%s','%s','%s'", mysqli_real_escape_string($connect, $bid), mysqli_real_escape_string($connect, $bname), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $bdesc));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+
+// update
+
+if (isset($_POST['btn-film-update'])) {
+    $fid = $_POST['film_id'];
+
+    $check_query = sprintf("SELECT * FROM ao_film WHERE film_id = '%s'", mysqli_real_escape_string($connect, $fid));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'Film ID does not exist.';
+        header('Location: /admin-item-details');
+    }
+
+    $ftitle = $_POST['fname'];
+    $freleasedate = $_POST['freleasedate'];
+    $fdesc = $_POST['fdescription'];
+
+    // not sure wrong or right?
+    $fimg = "images/" . $_FILES['fimage']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-item-details');
+    } else {
+        $image = uniqid() . "-" . $_FILES['cimage']['name'];
+        move_uploaded_file($_FILES['fimage']['tmp_name'], "images/" . $image);
+    }
+
+    $checkquery = sprintf("SELECT * from ao_film where title = '%s' and film_id = '%s'", mysqli_real_escape_string($connect, $ftitle), mysqli_real_escape_string($connect, $fid));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Title already exist.';
+    } else {
+        $update_query = sprintf(
+            "UPDATE ao_film
+            SET title = '%s',
+                film_image = '%s',
+                release_date = '%s',
+                film_description = '%s'
+            WHERE film_id = '%s'",
+            mysqli_real_escape_string($connect, $ftitle),
+            mysqli_real_escape_string($connect, $image),
+            mysqli_real_escape_string($connect, $freleasedate),
+            mysqli_real_escape_string($connect, $fdesc),
+            mysqli_real_escape_string($connect, $fid)
+        );
+
+        $connect->query($update_query);
+
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+
+if (isset($_POST['btn-category-update'])) {
+    $cid = $_POST['category_id'];
+
+    $check_query = sprintf("SELECT * FROM ao_category WHERE category_id = '%s'", mysqli_real_escape_string($connect, $cid));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'Category ID does not exist.';
+        header('Location: /admin-item-details');
+    }
+
+    $cname = $_POST['cname'];
+    $cdesc = $_POST['cdescription'];
+
+    $cimg = "images/" . $_FILES['cimage']['name'];
+    $imageType = pathinfo($cimg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-item-details');
+    } else {
+        $image = uniqid() . "-" . $_FILES['cimage']['name'];
+        move_uploaded_file($_FILES['cimage']['tmp_name'], "images/" . $image);
+    }
+
+    $check_query = sprintf("SELECT * FROM ao_category WHERE category_name = '%s' AND category_id != '%s'", mysqli_real_escape_string($connect, $cname), mysqli_real_escape_string($connect, $cid));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Category name already exists.';
+    } else {
+        $update_query = sprintf(
+            "UPDATE ao_category
+            SET category_name = '%s',
+                category_image = '%s',
+                category_description = '%s'
+            WHERE category_id = '%s'",
+            mysqli_real_escape_string($connect, $cname),
+            mysqli_real_escape_string($connect, $image),
+            mysqli_real_escape_string($connect, $cdesc),
+            mysqli_real_escape_string($connect, $cid)
+        );
+
+        $connect->query($update_query);
+
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+
+if (isset($_POST['btn-brand-update'])) {
+    $bid = $_POST['brand_id'];
+
+    $check_query = sprintf("SELECT * FROM ao_brand WHERE brand_id = '%s'", mysqli_real_escape_string($connect, $bid));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'Brand ID does not exist.';
+        header('Location: /admin-item-details');
+    }
+
+    $bname = $_POST['bname'];
+    $bdesc = $_POST['bdescription'];
+
+    $bimg = "images/" . $_FILES['bimage']['name'];
+    $imageType = pathinfo($bimg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-item-details');
+    } else {
+        $image = uniqid() . "-" . $_FILES['bimage']['name'];
+        move_uploaded_file($_FILES['bimage']['tmp_name'], "images/" . $image);
+    }
+
+    $check_query = sprintf("SELECT * FROM ao_brand WHERE brand_name = '%s' AND brand_id != '%s'", mysqli_real_escape_string($connect, $bname), mysqli_real_escape_string($connect, $bid));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Brand name already exists.';
+    } else {
+        $update_query = sprintf(
+            "UPDATE ao_brand
+            SET brand_name = '%s',
+                brand_image = '%s',
+                brand_description = '%s'
+            WHERE brand_id = '%s'",
+            mysqli_real_escape_string($connect, $bname),
+            mysqli_real_escape_string($connect, $image),
+            mysqli_real_escape_string($connect, $bdesc),
+            mysqli_real_escape_string($connect, $bid)
+        );
+
+        $connect->query($update_query);
+
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+
+// delete
+if (isset($_POST['btn-film-delete'])) {
+    $fid = $_POST['film_id'];
+
+    $check_query = sprintf("SELECT * FROM ao_film WHERE film_id = '%s'", mysqli_real_escape_string($connect, $fid));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'Film ID does not exist.';
+        header('Location: /admin-item-details');
+    } else {
+        $delete_query = sprintf("DELETE FROM ao_film WHERE film_id = '%s'", mysqli_real_escape_string($connect, $fid));
+        $connect->query($delete_query);
+
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+if (isset($_POST['btn-category-delete'])) {
+    $cid = $_POST['category_id'];
+
+    $check_query = sprintf("SELECT * FROM ao_category WHERE category_id = '%s'", mysqli_real_escape_string($connect, $cid));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'Category ID does not exist.';
+        header('Location: /admin-item-details');
+    } else {
+        $delete_query = sprintf("DELETE FROM ao_category WHERE category_id = '%s'", mysqli_real_escape_string($connect, $cid));
+        $connect->query($delete_query);
+
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+if (isset($_POST['btn-brand-delete'])) {
+    $bid = $_POST['brand_id'];
+
+    $check_query = sprintf("SELECT * FROM ao_brand WHERE brand_id = '%s'", mysqli_real_escape_string($connect, $bid));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'Brand ID does not exist.';
+        header('Location: /admin-item-details');
+    } else {
+        $delete_query = sprintf("DELETE FROM ao_brand WHERE brand_id = '%s'", mysqli_real_escape_string($connect, $bid));
+        $connect->query($delete_query);
+
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

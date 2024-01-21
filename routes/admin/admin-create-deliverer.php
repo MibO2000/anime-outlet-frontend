@@ -4,6 +4,97 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     header('Location: /admin-login', true, 301);
     exit;
 }
+if (isset($_POST['btn-deliverer-post'])) {
+    $did = AutoID('ao_deliverer', 'deliverer_id', 'DR', 4);
+    $dname = $_POST['name'];
+    $dphone = $_POST['phone'];
+    $duser = $_POST['username'];
+    $dpass = $_POST['password'];
+    $davail = $_POST['availableDays'];
+    $dzone = $_POST['delieveryZone'];
+
+    $checkquery = sprintf("SELECT * from ao_deliverer where deliverer_user = '%s'", mysqli_real_escape_string($connect, $duser));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Username already exist.';
+    } else {
+        $query = sprintf("INSERT INTO ao_deliverer(deliverer_id, deliverer_name, deliverer_user, deliverer_password, phone, available_days, delivery_zone)
+        VALUES '%s','%s','%s','%s','%s','%s','%s'", mysqli_real_escape_string($connect, $did), mysqli_real_escape_string($connect, $dname), mysqli_real_escape_string($connect, $duser), password_hash($dpass, PASSWORD_BCRYPT), mysqli_real_escape_string($connect, $dphone), mysqli_real_escape_string($connect, $davail), mysqli_real_escape_string($connect, $dzone));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-deliverer');
+    }
+}
+
+if (isset($_POST['btn-deliverer-update'])) {
+    $did = $_POST['id'];
+
+    $checkquery = sprintf("SELECT * FROM ao_delivery where deliverer_id = '$%s'", mysqli_real_escape_string($connect, $did));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'ID does not exist.';
+        header('Location: /admin-developer');
+    }
+
+    $dname = $_POST['name'];
+    $dphone = $_POST['phone'];
+    $duser = $_POST['username'];
+    $dpass = $_POST['password'];
+    $davail = $_POST['availableDays'];
+    $dzone = $_POST['delieveryZone'];
+
+    $checkquery = sprintf("SELECT * from ao_deliverer where deliverer_user = '%s' and deliverer_id != '%s'", mysqli_real_escape_string($connect, $duser), mysqli_real_escape_string($connect, $did));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Username already exist.';
+    } else {
+        $query = sprintf(
+            "UPDATE ao_deliverer
+        SET deliverer_name = '%s',
+            deliverer_user = '%s',
+            deliverer_password = '%s',
+            phone = '%s',
+            available_days = '%s',
+            delivery_zone = '%s'
+        WHERE deliverer_id = '%s'",
+            mysqli_real_escape_string($connect, $dname),
+            mysqli_real_escape_string($connect, $duser),
+            password_hash($dpass, PASSWORD_BCRYPT),
+            mysqli_real_escape_string($connect, $dphone),
+            mysqli_real_escape_string($connect, $davail),
+            mysqli_real_escape_string($connect, $dzone),
+            mysqli_real_escape_string($connect, $did)
+        );
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-deliverer');
+    }
+}
+if (isset($_POST['btn-delivery-delete'])) {
+    $delivery_id = $_POST['delivery_id'];
+
+    $check_query = sprintf("SELECT * FROM ao_delivery WHERE delivery_id = '%s'", mysqli_real_escape_string($connect, $delivery_id));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'Delivery ID does not exist.';
+        header('Location: /admin-deliveries');
+    } else {
+        $delete_query = sprintf("DELETE FROM ao_delivery WHERE delivery_id = '%s'", mysqli_real_escape_string($connect, $delivery_id));
+        $connect->query($delete_query);
+
+        // SUCCESS
+        header('Location: /admin-deliveries');
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

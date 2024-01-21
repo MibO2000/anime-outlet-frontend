@@ -4,6 +4,27 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     header('Location: /login', true, 301);
     exit;
 }
+$films = [];
+$categories = [];
+$brands = [];
+
+$query = "SELECT * from ASSIGNMENT.ao_film";
+$result = mysqli_query($connect, $query);
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($films, $row);
+}
+
+$query = "SELECT * from ASSIGNMENT.ao_category";
+$result = mysqli_query($connect, $query);
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($categories, $row);
+}
+
+$query = "SELECT * from ASSIGNMENT.ao_brand";
+$result = mysqli_query($connect, $query);
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($brands, $row);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -189,56 +210,35 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
         <div class="row">
             <div class="col-md-4">
                 <div>
-                    <h5>Flim</h5>
+                    <h5>Film</h5>
                     <ul>
-                        <li>
-                            <a href="#">Flim 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Flim 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Flim 3</a>
-                        </li>
-                        <li>
-                            <a href="#">Flim 4</a>
-                        </li>
+                        <?php foreach ($films as $film) : ?>
+                            <li>
+                                <a href="?film_id=<?= $film['film_id'] ?>"><?= $film['title'] ?></a>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
                 <hr>
                 <div>
                     <h5>Category</h5>
                     <ul>
-                        <li>
-                            <a href="#">Category 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Category 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Category 3</a>
-                        </li>
-                        <li>
-                            <a href="#">Category 4</a>
-                        </li>
+                        <?php foreach ($categories as $category) : ?>
+                            <li>
+                                <a href="?category_id=<?= $category['category_id'] ?>"><?= $category['category_name'] ?></a>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
                 <hr>
                 <div>
                     <h5>Brand</h5>
                     <ul>
-                        <li>
-                            <a href="#">Brand 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Brand 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Brand 3</a>
-                        </li>
-                        <li>
-                            <a href="#">Brand 4</a>
-                        </li>
+                        <?php foreach ($brands as $brand) : ?>
+                            <li>
+                                <a href="?brand_id=<?= $brand['brand_id'] ?>"><?= $brand['brand_name'] ?></a>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
             </div>

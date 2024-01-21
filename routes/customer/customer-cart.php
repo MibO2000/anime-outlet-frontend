@@ -39,19 +39,19 @@ if (isset($_POST['btndelete'])) {
 if (isset($_POST['btncheckout'])) {
     // from section
     $itemidlist = array();
-
+    $cid = $_SESSION['customer_id'];
     $orderid = AutoID('ao_order', 'order_id', 'O', 4);
     $orderstatus = 'PENDING';
     $query = sprintf("INSERT INTO ao_order(order_id, customer_id, order_status, order_date)
         VALUES ('%s','%s','%s', NOW())", mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $cid), mysqli_real_escape_string($connect, $orderstatus));
     $connect->query($query);
-    foreach ($itemidlist as $itemid) {
+    foreach ($itemidlist as $cartItem) {
         $orderdetailid = AutoID('ao_order', 'order_id', 'O', 4);
 
         // from section
-        $quantity = 12;
+        $quantity = $cartItem['quantity'];
 
-        $itemsql = sprintf("SELECT * FROM ao_item where item_id = '%s'", mysqli_real_escape_string($connect, $itemid));
+        $itemsql = sprintf("SELECT * FROM ao_item where item_id = '%s'", mysqli_real_escape_string($connect, $cartItem['id']));
         $result = $connect->query($itemsql);
         $result = $result->fetch_all();
         $item = $result[0];
@@ -73,8 +73,10 @@ if (isset($_POST['btncheckout'])) {
         VALUES ('%s','%s','%s', NOW())", mysqli_real_escape_string($connect, $paymentid), mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $paymentMethod));
     $connect->query($paymentquery);
 
-    $orderquery = sprintf("UPDATE ao_order SET order_status = 'SUCCESS', order_date = NOW(), delieverer_id = '%s' WHERE order_id = '%s'", mysqli_real_escape_string($connect, $delivererid), mysqli_real_escape_string($connect, $orderid));
+    $orderquery = sprintf("UPDATE ao_order SET order_status = 'SUCCESS', order_date = NOW() WHERE order_id = '%s'", mysqli_real_escape_string($connect, $orderid));
     $connect->query($orderquery);
+
+    $_SESSION['__cart'] = [];
 }
 
 ?>
@@ -374,9 +376,19 @@ if (isset($_POST['btncheckout'])) {
                     });
                 },
                 checkout() {
+                    if (!this.paymentMethod) {
+                        return alert('Choose payment method!!');
+                    }
+                    if (!this.deliverer) {
+                        return alert('Choose deliverer!!');
+                    }
                     let formData = new FormData();
                     formData.append('btncheckout', 1);
-                    alert('Checkout');
+                    formData.append('paymentmethod', this.paymentMethod);
+                    formData.append('deliverer', this.deliverer);
+                    axios.post('', formData).then(res => {
+                        location.reload();
+                    })
                 },
             },
             computed: {

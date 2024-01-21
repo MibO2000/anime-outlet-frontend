@@ -46,8 +46,8 @@ if (isset($_POST['btn-item-save'])) {
         $hasError = 1;
         $errorMessage = 'Item Name already exist.';
     } else {
-        $query = sprintf("INSERT INTO ao_item(item_id, category_id, film_id, brand_id, item_name, item_image_1, item_image_2, item_image_3, release_date, item_description, scale, stock_quantity, price)
-        VALUES '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'", mysqli_real_escape_string($connect, $iid), mysqli_real_escape_string($connect, $ifilm), mysqli_real_escape_string($connect, $icategory), mysqli_real_escape_string($connect, $ibrand), mysqli_real_escape_string($connect, $iname), mysqli_real_escape_string($connect, $image1), mysqli_real_escape_string($connect, $image2), mysqli_real_escape_string($connect, $image3), mysqli_real_escape_string($connect, $idate), mysqli_real_escape_string($connect, $idesc), mysqli_real_escape_string($connect, $iscale), mysqli_real_escape_string($connect, $istock), mysqli_real_escape_string($connect, $iprice));
+        $query = sprintf("INSERT INTO ao_item(item_id, film_id, category_id, brand_id, item_name, item_image_1, item_image_2, item_image_3, release_date, item_description, scale, stock_quantity, price)
+        VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", mysqli_real_escape_string($connect, $iid), mysqli_real_escape_string($connect, $ifilm), mysqli_real_escape_string($connect, $icategory), mysqli_real_escape_string($connect, $ibrand), mysqli_real_escape_string($connect, $iname), $image1, $image2, mysqli_real_escape_string($connect, $image3), mysqli_real_escape_string($connect, $idate), mysqli_real_escape_string($connect, $idesc), mysqli_real_escape_string($connect, $iscale), mysqli_real_escape_string($connect, $istock), mysqli_real_escape_string($connect, $iprice));
         $connect->query($query);
         // SUCCESS
         header('Location: /admin-items', true, 301);
@@ -68,21 +68,21 @@ if (isset($_POST['btn-item-update'])) {
 
     $ftitle = $_POST['title'];
     $film = sprintf("SELECT film_id FROM ao_film where title = '%s'", mysqli_real_escape_string($connect, $ftitle));
-    $result = $connect->query($query);
+    $result = $connect->query($film);
     $result = $result->fetch_all();
 
     $ifilm = $result[0][0];
 
     $cname = $_POST['category'];
     $category = sprintf("SELECT category_id FROM ao_category where category_name = '%s'", mysqli_real_escape_string($connect, $cname));
-    $result = $connect->query($query);
+    $result = $connect->query($category);
     $result = $result->fetch_all();
 
     $icategory = $result[0][0];
 
     $bname = $_POST['brand'];
-    $category = sprintf("SELECT brand_id FROM ao_brand where brand_name = '%s'", mysqli_real_escape_string($connect, $bname));
-    $result = $connect->query($query);
+    $brand = sprintf("SELECT brand_id FROM ao_brand where brand_name = '%s'", mysqli_real_escape_string($connect, $bname));
+    $result = $connect->query($brand);
     $result = $result->fetch_all();
 
     $ibrand = $result[0][0];
@@ -99,7 +99,7 @@ if (isset($_POST['btn-item-update'])) {
     $iprice = $_POST['price'];
 
     $checkquery = sprintf("SELECT * from ao_item where item_name = '%s' AND item_id != '%s'", mysqli_real_escape_string($connect, $iname), mysqli_real_escape_string($connect, $item_id));
-    $result = $connect->query($query);
+    $result = $connect->query($checkquery);
     $result = $result->fetch_all();
     if ($result) {
         $hasError = 1;
@@ -436,7 +436,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </div>
                             <div class="col-6">
                                 <label for="release_date" class="form-label">Release Date</label>
-                                <input type="datetime" class="form-control" id="release_date" v-model="selectedItem.release_date">
+                                <input type="date" class="form-control" id="release_date" v-model="selectedItem.release_date">
                             </div>
                             <div class="col-6">
                                 <label for="scale" class="form-label">Scale</label>
@@ -491,9 +491,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                         brand: '',
                         category: '',
                         item_description: '',
-                        image_1: '',
-                        image_2: '',
-                        image_3: '',
+                        item_image_1: '',
+                        item_image_2: '',
+                        item_image_3: '',
                         item_name: '',
                         price: '',
                         release_date: '',
@@ -506,7 +506,10 @@ while ($row = mysqli_fetch_assoc($result)) {
                     this.selectedItem = item;
                 },
                 confirmDelete() {
-                    // 
+                    let formData = new FormData();
+                    formData.append('btn-item-delete', 1);
+                    formData.append('id', this.selectedItem.item_id);
+                    axios.post('', formData).then(() => location.reload());
                 },
                 submitCreateOrEditModal() {
                     if (this.title === 'Create') {
@@ -516,21 +519,33 @@ while ($row = mysqli_fetch_assoc($result)) {
                         formData.append('category', this.selectedItem.category);
                         formData.append('brand', this.selectedItem.brand);
                         formData.append('name', this.selectedItem.item_name);
-                        formData.append('image1', this.selectedItem.image_1);
-                        formData.append('image2', this.selectedItem.image_2);
-                        formData.append('image3', this.selectedItem.image_3);
+                        formData.append('image1', this.selectedItem.item_image_1);
+                        formData.append('image2', this.selectedItem.item_image_2);
+                        formData.append('image3', this.selectedItem.item_image_3);
                         formData.append('releasedate', this.selectedItem.release_date);
                         formData.append('description', this.selectedItem.item_description);
                         formData.append('scale', this.selectedItem.scale);
                         formData.append('stock', this.selectedItem.stock_quantity);
                         formData.append('price', this.selectedItem.price);
-                        axios.post('', formData).then((res) => {
-                            console.log(res)
-                            // document.querySelector('#editModal .btn-close').click();
-                        }).catch((err) => {
-                            console.error(err);
-                        });
-                    } else {}
+                        axios.post('', formData).then((res) => location.reload());
+                    } else {
+                        let formData = new FormData()
+                        formData.append('btn-item-update', 1);
+                        formData.append('id', this.selectedItem.item_id);
+                        formData.append('title', this.selectedItem.film);
+                        formData.append('category', this.selectedItem.category);
+                        formData.append('brand', this.selectedItem.brand);
+                        formData.append('name', this.selectedItem.item_name);
+                        formData.append('image1', this.selectedItem.item_image_1);
+                        formData.append('image2', this.selectedItem.item_image_2);
+                        formData.append('image3', this.selectedItem.item_image_3);
+                        formData.append('releasedate', this.selectedItem.release_date);
+                        formData.append('description', this.selectedItem.item_description);
+                        formData.append('scale', this.selectedItem.scale);
+                        formData.append('stock', this.selectedItem.stock_quantity);
+                        formData.append('price', this.selectedItem.price);
+                        axios.post('', formData).then((res) => location.reload());
+                    }
                 },
             }
         });

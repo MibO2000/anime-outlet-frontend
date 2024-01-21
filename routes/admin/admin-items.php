@@ -5,14 +5,6 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     exit;
 }
 
-$query = "select ai.item_id, ai.item_name , ac.category_name as category, af.title as film, ab.brand_name as brand, ai.item_image_1, ai.item_image_2, ai.item_image_3, ai.release_date, ai.item_description, ai.`scale`, ai.stock_quantity, ai.price from `ASSIGNMENT`.ao_item ai join `ASSIGNMENT`.ao_brand ab on ab.brand_id = ai.brand_id join `ASSIGNMENT`.ao_film af on af.film_id = ai.film_id join `ASSIGNMENT`.ao_category ac on ac.category_id = ai.category_id ";
-$result = mysqli_query($connect, $query);
-$results = [];
-// Loop through each row and display the data
-while ($row = mysqli_fetch_assoc($result)) {
-    array_push($results, $row);
-}
-
 if (isset($_POST['btn-item-save'])) {
     $iid = AutoID('ao_item', 'item_id', 'I', 4);
 
@@ -44,7 +36,7 @@ if (isset($_POST['btn-item-save'])) {
     if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
         $hasError = 1;
         $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items');
+        header('Location: /admin-items', true, 301);
     } else {
         $image1 = uniqid() . "-" . $_FILES['iimage1']['name'];
         move_uploaded_file($_FILES['iimage1']['tmp_name'], "images/" . $image);
@@ -55,7 +47,7 @@ if (isset($_POST['btn-item-save'])) {
     if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
         $hasError = 1;
         $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items');
+        header('Location: /admin-items', true, 301);
     } else {
         $image2 = uniqid() . "-" . $_FILES['iimage2']['name'];
         move_uploaded_file($_FILES['iimage2']['tmp_name'], "images/" . $image);
@@ -66,7 +58,7 @@ if (isset($_POST['btn-item-save'])) {
     if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
         $hasError = 1;
         $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items');
+        header('Location: /admin-items', true, 301);
     } else {
         $image3 = uniqid() . "-" . $_FILES['iimage3']['name'];
         move_uploaded_file($_FILES['iimage3']['tmp_name'], "images/" . $image);
@@ -89,10 +81,9 @@ if (isset($_POST['btn-item-save'])) {
         VALUES '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'", mysqli_real_escape_string($connect, $iid), mysqli_real_escape_string($connect, $ifilm), mysqli_real_escape_string($connect, $icategory), mysqli_real_escape_string($connect, $ibrand), mysqli_real_escape_string($connect, $iname), mysqli_real_escape_string($connect, $image1), mysqli_real_escape_string($connect, $image2), mysqli_real_escape_string($connect, $image3), mysqli_real_escape_string($connect, $idate), mysqli_real_escape_string($connect, $idesc), mysqli_real_escape_string($connect, $iscale), mysqli_real_escape_string($connect, $istock), mysqli_real_escape_string($connect, $iprice));
         $connect->query($query);
         // SUCCESS
-        header('Location: /admin-items');
+        header('Location: /admin-items', true, 301);
     }
-}
-
+} else
 if (isset($_POST['btn-item-update'])) {
     $item_id = $_POST['id'];
 
@@ -103,7 +94,7 @@ if (isset($_POST['btn-item-update'])) {
     if (!$result) {
         $hasError = 1;
         $errorMessage = 'Item ID does not exist.';
-        header('Location: /admin-items');
+        header('Location: /admin-items', true, 301);
     }
 
     $ftitle = $_POST['title'];
@@ -134,7 +125,7 @@ if (isset($_POST['btn-item-update'])) {
     if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
         $hasError = 1;
         $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items');
+        header('Location: /admin-items', true, 301);
     } else {
         $image1 = uniqid() . "-" . $_FILES['iimage1']['name'];
         move_uploaded_file($_FILES['iimage1']['tmp_name'], "images/" . $image);
@@ -145,7 +136,7 @@ if (isset($_POST['btn-item-update'])) {
     if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
         $hasError = 1;
         $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items');
+        header('Location: /admin-items', true, 301);
     } else {
         $image2 = uniqid() . "-" . $_FILES['iimage2']['name'];
         move_uploaded_file($_FILES['iimage2']['tmp_name'], "images/" . $image);
@@ -156,7 +147,7 @@ if (isset($_POST['btn-item-update'])) {
     if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
         $hasError = 1;
         $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items');
+        header('Location: /admin-items', true, 301);
     } else {
         $image3 = uniqid() . "-" . $_FILES['iimage3']['name'];
         move_uploaded_file($_FILES['iimage3']['tmp_name'], "images/" . $image);
@@ -207,10 +198,9 @@ if (isset($_POST['btn-item-update'])) {
 
         $connect->query($update_query);
         // SUCCESS
-        header('Location: /admin-items');
+        header('Location: /admin-items', true, 301);
     }
-}
-
+} else
 if (isset($_POST['btn-item-delete'])) {
     $item_id = $_POST['id'];
 
@@ -221,14 +211,23 @@ if (isset($_POST['btn-item-delete'])) {
     if (!$result) {
         $hasError = 1;
         $errorMessage = 'Item ID does not exist.';
-        header('Location: /admin-items');
+        header('Location: /admin-items', true, 301);
     } else {
         $delete_query = sprintf("DELETE FROM ao_item WHERE item_id = '%s'", mysqli_real_escape_string($connect, $item_id));
         $connect->query($delete_query);
 
         // SUCCESS
-        header('Location: /admin-items');
+        header('Location: /admin-items', true, 301);
     }
+}
+
+$results = [];
+$query = "select ai.item_id, ai.item_name , ac.category_name as category, af.title as film, ab.brand_name as brand, ai.item_image_1, ai.item_image_2, ai.item_image_3, ai.release_date, ai.item_description, ai.`scale`, ai.stock_quantity, ai.price from `ASSIGNMENT`.ao_item ai join `ASSIGNMENT`.ao_brand ab on ab.brand_id = ai.brand_id join `ASSIGNMENT`.ao_film af on af.film_id = ai.film_id join `ASSIGNMENT`.ao_category ac on ac.category_id = ai.category_id ";
+$result = mysqli_query($connect, $query);
+
+// Loop through each row and display the data
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($results, $row);
 }
 ?>
 <!DOCTYPE html>
@@ -405,7 +404,10 @@ if (isset($_POST['btn-item-delete'])) {
                 <!-- can cru no delete-->
 
                 <div>
-                    <h1>Items</h1>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1>Items</h1>
+                        <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal" data-bs-target="#editModal">Create</button>
+                    </div>
                     <table class="table table-responsive table-hover table-striped">
                         <thead>
                             <tr>
@@ -422,6 +424,7 @@ if (isset($_POST['btn-item-delete'])) {
                                 <th>Scale</th>
                                 <th>Stock Quantity</th>
                                 <th>Price</th>
+                                <th>Option</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -438,23 +441,128 @@ if (isset($_POST['btn-item-delete'])) {
                                 <td>{{item.scale}}</td>
                                 <td>{{item.stock_quantity}}</td>
                                 <td>{{item.price}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" @click="selectItem(item)" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                                    <button class="btn btn-danger btn-sm" @click="selectItem(item)" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-
             </main>
+
+            <div class="modal modal-lg fade" tabindex="-1" id="editModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{title}}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body row">
+                            <div class="col-6">
+                                <label for="brand" class="form-label">Brand</label>
+                                <input type="text" class="form-control" id="brand" v-model="selectedItem.brand">
+                            </div>
+                            <div class="col-6">
+                                <label for="category" class="form-label">Category</label>
+                                <input type="text" class="form-control" id="category" v-model="selectedItem.category">
+                            </div>
+                            <div class="col-6">
+                                <label for="film" class="form-label">Film</label>
+                                <input type="text" class="form-control" id="film" v-model="selectedItem.film">
+                            </div>
+                            <div class="col-6">
+                                <label for="item_description" class="form-label">Item Description</label>
+                                <input type="text" class="form-control" id="item_description" v-model="selectedItem.item_description">
+                            </div>
+                            <div class="col-6">
+                                <label for="item_image_1" class="form-label">Image 1</label>
+                                <input type="url" class="form-control" id="item_image_1" v-model="selectedItem.item_image_1">
+                            </div>
+                            <div class="col-6">
+                                <label for="item_image_2" class="form-label">Image 2</label>
+                                <input type="url" class="form-control" id="item_image_2" v-model="selectedItem.item_image_2">
+                            </div>
+                            <div class="col-6">
+                                <label for="item_image_3" class="form-label">Image 3</label>
+                                <input type="url" class="form-control" id="item_image_3" v-model="selectedItem.item_image_3">
+                            </div>
+                            <div class="col-6">
+                                <label for="item_name" class="form-label">Item Name</label>
+                                <input type="text" class="form-control" id="item_name" v-model="selectedItem.item_name">
+                            </div>
+                            <div class="col-6">
+                                <label for="price" class="form-label">Price</label>
+                                <input type="text" class="form-control" id="price" v-model="selectedItem.price">
+                            </div>
+                            <div class="col-6">
+                                <label for="release_date" class="form-label">Release Date</label>
+                                <input type="datetime" class="form-control" id="release_date" v-model="selectedItem.release_date">
+                            </div>
+                            <div class="col-6">
+                                <label for="scale" class="form-label">Scale</label>
+                                <input type="text" class="form-control" id="scale" v-model="selectedItem.scale">
+                            </div>
+                            <div class="col-6">
+                                <label for="stock_quantity" class="form-label">Stock Quantity</label>
+                                <input type="text" class="form-control" id="stock_quantity" v-model="selectedItem.stock_quantity">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" @click="submitCreateOrEditModal()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" tabindex="-1" id="deleteModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Are you sure do you want to delete?</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="confirmDelete()">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <!-- <script src="/js/vue.min.js"></script> -->
+    <script src="/js/axios.min.js"></script>
     <script>
         new Vue({
             el: '#main',
             data: {
+                title: '',
                 items: <?= json_encode($results) ?>,
+                selectedItem: {},
             },
+            methods: {
+                createItem() {
+                    this.title = 'Create';
+                    this.selectedItem = {};
+                },
+                selectItem(item) {
+                    this.title = 'Edit';
+                    this.selectedItem = item;
+                },
+                confirmDelete() {
+                    // 
+                },
+                submitCreateOrEditModal() {
+                    if (this.title === 'Create') {} else {}
+
+                    // document.querySelector('#editModal .btn-close').click();
+
+                },
+            }
         });
     </script>
 </body>

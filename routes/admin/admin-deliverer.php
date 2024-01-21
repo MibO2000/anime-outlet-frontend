@@ -284,6 +284,7 @@ $results = [
 
     <script src="/js/bootstrap.bundle.min.js"></script>
     <script src="/js/vue.min.js"></script>
+    <script src="/js/axios.min.js"></script>
     <script>
         new Vue({
             el: '#main',

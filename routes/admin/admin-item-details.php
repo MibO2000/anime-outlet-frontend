@@ -9,18 +9,7 @@ if (isset($_POST['btn-film-save'])) {
     $ftitle = $_POST['fname'];
     $freleasedate = $_POST['freleasedate'];
     $fdesc = $_POST['fdescription'];
-
-    // not sure wrong or right?
-    $fimg = "images/" . $_FILES['fimage']['name'];
-    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-item-details');
-    } else {
-        $image = uniqid() . "-" . $_FILES['cimage']['name'];
-        move_uploaded_file($_FILES['fimage']['tmp_name'], "images/" . $image);
-    }
+    $image = $_POST['fimage'];
 
     $checkquery = sprintf("SELECT * from ao_film where title = '%s'", mysqli_real_escape_string($connect, $ftitle));
     $result = $connect->query($query);
@@ -41,18 +30,7 @@ if (isset($_POST['btn-category-save'])) {
     $cid = AutoID('ao_category', 'category_id', 'C', 4);
     $cname = $_POST['cname'];
     $cdesc = $_POST['cdescription'];
-
-    // not sure wrong or right?
-    $cimg = "images/" . $_FILES['cimage']['name'];
-    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-item-details');
-    } else {
-        $image = uniqid() . "-" . $_FILES['cimage']['name'];
-        move_uploaded_file($_FILES['cimage']['tmp_name'], "images/" . $image);
-    }
+    $image = $_POST['cimage'];
 
     $checkquery = sprintf("SELECT * from ao_category where category_name = '%s'", mysqli_real_escape_string($connect, $cname));
     $result = $connect->query($query);
@@ -73,18 +51,7 @@ if (isset($_POST['btn-brand-save'])) {
     $bid = AutoID('ao_brand', 'brand_id', 'B', 4);
     $bname = $_POST['bname'];
     $bdesc = $_POST['bdescription'];
-
-    // not sure wrong or right?
-    $bimg = "images/" . $_FILES['bimage']['name'];
-    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-item-details');
-    } else {
-        $image = uniqid() . "-" . $_FILES['bimage']['name'];
-        move_uploaded_file($_FILES['bimage']['tmp_name'], "images/" . $image);
-    }
+    $image = $_POST['bimage'];
 
     $checkquery = sprintf("SELECT * from ao_brand where brand_name = '%s'", mysqli_real_escape_string($connect, $bname));
     $result = $connect->query($query);
@@ -119,18 +86,7 @@ if (isset($_POST['btn-film-update'])) {
     $ftitle = $_POST['fname'];
     $freleasedate = $_POST['freleasedate'];
     $fdesc = $_POST['fdescription'];
-
-    // not sure wrong or right?
-    $fimg = "images/" . $_FILES['fimage']['name'];
-    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-item-details');
-    } else {
-        $image = uniqid() . "-" . $_FILES['cimage']['name'];
-        move_uploaded_file($_FILES['fimage']['tmp_name'], "images/" . $image);
-    }
+    $image = $_POST['fimage'];
 
     $checkquery = sprintf("SELECT * from ao_film where title = '%s' and film_id = '%s'", mysqli_real_escape_string($connect, $ftitle), mysqli_real_escape_string($connect, $fid));
     $result = $connect->query($query);
@@ -175,17 +131,7 @@ if (isset($_POST['btn-category-update'])) {
 
     $cname = $_POST['cname'];
     $cdesc = $_POST['cdescription'];
-
-    $cimg = "images/" . $_FILES['cimage']['name'];
-    $imageType = pathinfo($cimg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-item-details');
-    } else {
-        $image = uniqid() . "-" . $_FILES['cimage']['name'];
-        move_uploaded_file($_FILES['cimage']['tmp_name'], "images/" . $image);
-    }
+    $image = $_POST['cimage'];
 
     $check_query = sprintf("SELECT * FROM ao_category WHERE category_name = '%s' AND category_id != '%s'", mysqli_real_escape_string($connect, $cname), mysqli_real_escape_string($connect, $cid));
     $result = $connect->query($check_query);
@@ -228,17 +174,7 @@ if (isset($_POST['btn-brand-update'])) {
 
     $bname = $_POST['bname'];
     $bdesc = $_POST['bdescription'];
-
-    $bimg = "images/" . $_FILES['bimage']['name'];
-    $imageType = pathinfo($bimg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-item-details');
-    } else {
-        $image = uniqid() . "-" . $_FILES['bimage']['name'];
-        move_uploaded_file($_FILES['bimage']['tmp_name'], "images/" . $image);
-    }
+    $image = $_POST['bimage'];
 
     $check_query = sprintf("SELECT * FROM ao_brand WHERE brand_name = '%s' AND brand_id != '%s'", mysqli_real_escape_string($connect, $bname), mysqli_real_escape_string($connect, $bid));
     $result = $connect->query($check_query);

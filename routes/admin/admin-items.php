@@ -30,39 +30,9 @@ if (isset($_POST['btn-item-save'])) {
     $ibrand = $result[0][0];
 
     $iname = $_POST['name'];
-    // not sure wrong or right?
-    $bimg = "images/" . $_FILES['iimage1']['name'];
-    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items', true, 301);
-    } else {
-        $image1 = uniqid() . "-" . $_FILES['iimage1']['name'];
-        move_uploaded_file($_FILES['iimage1']['tmp_name'], "images/" . $image);
-    }
-    // not sure wrong or right?
-    $bimg = "images/" . $_FILES['iimage2']['name'];
-    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items', true, 301);
-    } else {
-        $image2 = uniqid() . "-" . $_FILES['iimage2']['name'];
-        move_uploaded_file($_FILES['iimage2']['tmp_name'], "images/" . $image);
-    }
-    // not sure wrong or right?
-    $bimg = "images/" . $_FILES['iimage3']['name'];
-    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items', true, 301);
-    } else {
-        $image3 = uniqid() . "-" . $_FILES['iimage3']['name'];
-        move_uploaded_file($_FILES['iimage3']['tmp_name'], "images/" . $image);
-    }
+    $image1 = $_POST['image1'];
+    $image2 = $_POST['image2'];
+    $image3 = $_POST['image3'];
 
     $idate = $_POST['releasedate'];
     $idesc = $_POST['description'];
@@ -119,39 +89,9 @@ if (isset($_POST['btn-item-update'])) {
     $ibrand = $result[0][0];
 
     $iname = $_POST['name'];
-    // not sure wrong or right?
-    $bimg = "images/" . $_FILES['iimage1']['name'];
-    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items', true, 301);
-    } else {
-        $image1 = uniqid() . "-" . $_FILES['iimage1']['name'];
-        move_uploaded_file($_FILES['iimage1']['tmp_name'], "images/" . $image);
-    }
-    // not sure wrong or right?
-    $bimg = "images/" . $_FILES['iimage2']['name'];
-    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items', true, 301);
-    } else {
-        $image2 = uniqid() . "-" . $_FILES['iimage2']['name'];
-        move_uploaded_file($_FILES['iimage2']['tmp_name'], "images/" . $image);
-    }
-    // not sure wrong or right?
-    $bimg = "images/" . $_FILES['iimage3']['name'];
-    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
-    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
-        $hasError = 1;
-        $errorMessage = 'Wrong image type.';
-        header('Location: /admin-items', true, 301);
-    } else {
-        $image3 = uniqid() . "-" . $_FILES['iimage3']['name'];
-        move_uploaded_file($_FILES['iimage3']['tmp_name'], "images/" . $image);
-    }
+    $image1 = $_POST['image1'];
+    $image2 = $_POST['image2'];
+    $image3 = $_POST['image3'];
 
     $idate = $_POST['releasedate'];
     $idesc = $_POST['description'];

@@ -4,6 +4,74 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     header('Location: /admin-login', true, 301);
     exit;
 }
+
+if ($method === 'POST') {
+    $sid = AutoID('ao_supplier', 'supplier_id', 'S', 4);
+    $sname = $_POST['name'];
+    $sphone = $_POST['phone'];
+    $suser = $_POST['username'];
+    $spass = $_POST['password'];
+    $semail = $_POST['email'];
+
+    $checkquery = sprintf("SELECT * from ao_supplier where supplier_user = '%s'", mysqli_real_escape_string($connect, $suser));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Username already exist.';
+    } else {
+        $query = sprintf("INSERT INTO ao_supplier(supplier_id, supplier_name, supplier_user, supplier_password, phone, email)
+        VALUES '%s','%s','%s','%s','%s','%s'", mysqli_real_escape_string($connect, $sid), mysqli_real_escape_string($connect, $sname), mysqli_real_escape_string($connect, $suser), password_hash($spass, PASSWORD_BCRYPT), mysqli_real_escape_string($connect, $sphone), mysqli_real_escape_string($connect, $semail));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-supplier');
+    }
+}
+if ($method === 'PUT') {
+    $sid = $_POST['id'];
+
+    $checkquery = sprintf("SELECT * FROM ao_supplier WHERE supplier_id = '%s'", mysqli_real_escape_string($connect, $sid));
+    $result = $connect->query($checkquery);
+    $result = $result->fetch_all();
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'ID does not exist.';
+        header('Location: /admin-supplier');
+    }
+
+    $sname = $_POST['name'];
+    $sphone = $_POST['phone'];
+    $suser = $_POST['username'];
+    $spass = $_POST['password'];
+    $semail = $_POST['email'];
+
+    $checkquery = sprintf("SELECT * FROM ao_supplier WHERE supplier_user = '%s' AND supplier_id != '%s'", mysqli_real_escape_string($connect, $suser), mysqli_real_escape_string($connect, $sid));
+    $result = $connect->query($checkquery);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Username already exists.';
+    } else {
+        $query = sprintf(
+            "UPDATE ao_supplier
+            SET supplier_name = '%s',
+                supplier_user = '%s',
+                supplier_password = '%s',
+                phone = '%s',
+                email = '%s'
+            WHERE supplier_id = '%s'",
+            mysqli_real_escape_string($connect, $sname),
+            mysqli_real_escape_string($connect, $suser),
+            password_hash($spass, PASSWORD_BCRYPT),
+            mysqli_real_escape_string($connect, $sphone),
+            mysqli_real_escape_string($connect, $semail),
+            mysqli_real_escape_string($connect, $sid)
+        );
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-supplier');
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

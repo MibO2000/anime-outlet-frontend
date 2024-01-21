@@ -6,7 +6,23 @@ if (($_SESSION['role'] ?? 0) !== ROLE_DELIVERER) {
 }
 
 //  can only view delivery items and edit them for the status
-
+if ($method === 'POST') {
+    $option = $_POST['option'];
+    // OPTIONS are ACCEPT and DECLINE
+    $trackcode = $_POST['trackcode'];
+    $checkquery = sprintf("SELECT * from ao_delivery where tracking_code = '%s'", mysqli_real_escape_string($connect, $trackcode));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $query = sprintf("UPDATE ao_delivery SET delivery_status = '%s' where tracking_code='%s'", mysqli_real_escape_string($connect, $option), mysqli_real_escape_string($connect, $trackcode));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /deliverer');
+    } else {
+        $hasError = 1;
+        $errorMessage = 'Tracking code not exist.';
+    }
+}
 
 ?>
 <!DOCTYPE html>

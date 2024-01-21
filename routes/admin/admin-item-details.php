@@ -4,6 +4,104 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     header('Location: /admin-login', true, 301);
     exit;
 }
+
+if (isset($_POST['btn-film-save'])) {
+    $fid = AutoID('ao_film', 'film_id', 'F', 4);
+    $ftitle = $_POST['fname'];
+    $freleasedate = $_POST['freleasedate'];
+    $fdesc = $_POST['fdescription'];
+
+    // not sure wrong or right?
+    $fimg = "images/" . $_FILES['fimage']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-item-details');
+    } else {
+        $image = uniqid() . "-" . $_FILES['cimage']['name'];
+        move_uploaded_file($_FILES['fimage']['tmp_name'], "images/" . $image);
+    }
+
+    $checkquery = sprintf("SELECT * from ao_film where title = '%s'", mysqli_real_escape_string($connect, $ftitle));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Title already exist.';
+    } else {
+        $query = sprintf("INSERT INTO ao_film(film_id, title, film_image, release_date, film_description)
+        VALUES '%s','%s','%s','%s','%s'", mysqli_real_escape_string($connect, $fid), mysqli_real_escape_string($connect, $ftitle), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $freleasedate), mysqli_real_escape_string($connect, $fdesc));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+
+if (isset($_POST['btn-category-save'])) {
+    $cid = AutoID('ao_category', 'category_id', 'C', 4);
+    $cname = $_POST['cname'];
+    $cdesc = $_POST['cdescription'];
+
+    // not sure wrong or right?
+    $cimg = "images/" . $_FILES['cimage']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-item-details');
+    } else {
+        $image = uniqid() . "-" . $_FILES['cimage']['name'];
+        move_uploaded_file($_FILES['cimage']['tmp_name'], "images/" . $image);
+    }
+
+    $checkquery = sprintf("SELECT * from ao_category where category_name = '%s'", mysqli_real_escape_string($connect, $cname));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Name already exist.';
+    } else {
+        $query = sprintf("INSERT INTO ao_category(category_id, category_name, category_image, category_description)
+        VALUES '%s','%s','%s','%s'", mysqli_real_escape_string($connect, $cid), mysqli_real_escape_string($connect, $cname), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $cdesc));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+
+if (isset($_POST['btn-brand-save'])) {
+    $bid = AutoID('ao_brand', 'brand_id', 'B', 4);
+    $bname = $_POST['bname'];
+    $bdesc = $_POST['bdescription'];
+
+    // not sure wrong or right?
+    $bimg = "images/" . $_FILES['bimage']['name'];
+    $imageType = pathinfo($limg, PATHINFO_EXTENSION);
+    if ($imageType != 'jpg' && $imageType != 'jpeg' && $imageType != 'png') {
+        $hasError = 1;
+        $errorMessage = 'Wrong image type.';
+        header('Location: /admin-item-details');
+    } else {
+        $image = uniqid() . "-" . $_FILES['bimage']['name'];
+        move_uploaded_file($_FILES['bimage']['tmp_name'], "images/" . $image);
+    }
+
+    $checkquery = sprintf("SELECT * from ao_brand where brand_name = '%s'", mysqli_real_escape_string($connect, $bname));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Name already exist.';
+    } else {
+        $query = sprintf("INSERT INTO ao_brand(brand_id, brand_name, brand_image, brand_description)
+        VALUES '%s','%s','%s','%s'", mysqli_real_escape_string($connect, $bid), mysqli_real_escape_string($connect, $bname), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $bdesc));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-item-details');
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

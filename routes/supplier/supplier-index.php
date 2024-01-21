@@ -4,6 +4,23 @@ if (($_SESSION['role'] ?? 0) !== ROLE_SUPPLIER) {
     header('Location: /supplier-login', true, 301);
     exit;
 }
+if ($method === 'POST') {
+    $option = $_POST['option'];
+    // OPTIONS are ACCEPT and DECLINE
+    $pid = $_POST['id'];
+    $checkquery = sprintf("SELECT * from ao_purchase where purchase_id = '%s'", mysqli_real_escape_string($connect, $pid));
+    $result = $connect->query($query);
+    $result = $result->fetch_all();
+    if ($result) {
+        $query = sprintf("UPDATE ao_purchase SET purchase_status = '%s' where purchase_id='%s'", mysqli_real_escape_string($connect, $option), mysqli_real_escape_string($connect, $pid));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /supplier');
+    } else {
+        $hasError = 1;
+        $errorMessage = 'Purchase ID not exist.';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -159,7 +176,8 @@ if (($_SESSION['role'] ?? 0) !== ROLE_SUPPLIER) {
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex">
                                     <div style="margin-right:25px"><small>1/1/2024</small></div>
-                                    <div style="margin-right:25px"><span class="badge text-bg-success">APPROVED</span></div>
+                                    <div style="margin-right:25px"><span class="badge text-bg-success">APPROVED</span>
+                                    </div>
                                     <div style="margin-right:25px">
                                         <p class="fw-bold">$950</p>
                                     </div>
@@ -203,7 +221,8 @@ if (($_SESSION['role'] ?? 0) !== ROLE_SUPPLIER) {
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex">
                                     <div style="margin-right:25px"><small>5/1/2024</small></div>
-                                    <div style="margin-right:25px"><span class="badge text-bg-primary">PENDING</span></div>
+                                    <div style="margin-right:25px"><span class="badge text-bg-primary">PENDING</span>
+                                    </div>
                                     <div style="margin-right:25px">
                                         <p class="fw-bold">$2000</p>
                                     </div>

@@ -10,21 +10,20 @@ if (isset($_POST['btn-item-save'])) {
 
     $ftitle = $_POST['title'];
     $film = sprintf("SELECT film_id FROM ao_film where title = '%s'", mysqli_real_escape_string($connect, $ftitle));
-    $result = $connect->query($query);
+    $result = $connect->query($film);
     $result = $result->fetch_all();
-
     $ifilm = $result[0][0];
 
     $cname = $_POST['category'];
     $category = sprintf("SELECT category_id FROM ao_category where category_name = '%s'", mysqli_real_escape_string($connect, $cname));
-    $result = $connect->query($query);
+    $result = $connect->query($category);
     $result = $result->fetch_all();
 
     $icategory = $result[0][0];
 
     $bname = $_POST['brand'];
-    $category = sprintf("SELECT brand_id FROM ao_brand where brand_name = '%s'", mysqli_real_escape_string($connect, $bname));
-    $result = $connect->query($query);
+    $brand = sprintf("SELECT brand_id FROM ao_brand where brand_name = '%s'", mysqli_real_escape_string($connect, $bname));
+    $result = $connect->query($brand);
     $result = $result->fetch_all();
 
     $ibrand = $result[0][0];
@@ -41,7 +40,7 @@ if (isset($_POST['btn-item-save'])) {
     $iprice = $_POST['price'];
 
     $checkquery = sprintf("SELECT * from ao_item where item_name = '%s'", mysqli_real_escape_string($connect, $iname));
-    $result = $connect->query($query);
+    $result = $connect->query($checkquery);
     $result = $result->fetch_all();
     if ($result) {
         $hasError = 1;
@@ -487,7 +486,20 @@ while ($row = mysqli_fetch_assoc($result)) {
             methods: {
                 createItem() {
                     this.title = 'Create';
-                    this.selectedItem = {};
+                    this.selectedItem = {
+                        film: '',
+                        brand: '',
+                        category: '',
+                        item_description: '',
+                        image_1: '',
+                        image_2: '',
+                        image_3: '',
+                        item_name: '',
+                        price: '',
+                        release_date: '',
+                        scale: '',
+                        stock_quantity: '',
+                    };
                 },
                 selectItem(item) {
                     this.title = 'Edit';
@@ -497,10 +509,28 @@ while ($row = mysqli_fetch_assoc($result)) {
                     // 
                 },
                 submitCreateOrEditModal() {
-                    if (this.title === 'Create') {} else {}
-
-                    // document.querySelector('#editModal .btn-close').click();
-
+                    if (this.title === 'Create') {
+                        let formData = new FormData()
+                        formData.append('btn-item-save', 1);
+                        formData.append('title', this.selectedItem.film);
+                        formData.append('category', this.selectedItem.category);
+                        formData.append('brand', this.selectedItem.brand);
+                        formData.append('name', this.selectedItem.item_name);
+                        formData.append('image1', this.selectedItem.image_1);
+                        formData.append('image2', this.selectedItem.image_2);
+                        formData.append('image3', this.selectedItem.image_3);
+                        formData.append('releasedate', this.selectedItem.release_date);
+                        formData.append('description', this.selectedItem.item_description);
+                        formData.append('scale', this.selectedItem.scale);
+                        formData.append('stock', this.selectedItem.stock_quantity);
+                        formData.append('price', this.selectedItem.price);
+                        axios.post('', formData).then((res) => {
+                            console.log(res)
+                            // document.querySelector('#editModal .btn-close').click();
+                        }).catch((err) => {
+                            console.error(err);
+                        });
+                    } else {}
                 },
             }
         });

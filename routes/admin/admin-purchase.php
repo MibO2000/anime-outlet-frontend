@@ -4,6 +4,12 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     header('Location: /admin-login', true, 301);
     exit;
 }
+$results = [];
+$query = "select ap.purchase_id, as2.supplier_name, aa.fullname, ap.purchase_date, ap.purchase_status, ap.total_amount from `ASSIGNMENT`.ao_purchase ap join `ASSIGNMENT`.ao_supplier as2 on as2.supplier_id = ap.supplier_id left join `ASSIGNMENT`.ao_admin aa on aa.admin_id = ap.admin_id";
+$result = mysqli_query($connect, $query);
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($results, $row);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +139,7 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
         </div>
     </header>
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="main">
         <div class="row">
             <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
                 <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
@@ -190,23 +196,14 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-
-                            $query = "select ap.purchase_id, as2.supplier_name, aa.fullname, ap.purchase_date, ap.purchase_status, ap.total_amount from `ASSIGNMENT`.ao_purchase ap join `ASSIGNMENT`.ao_supplier as2 on as2.supplier_id = ap.supplier_id left join `ASSIGNMENT`.ao_admin aa on aa.admin_id = ap.admin_id";
-                            $result = mysqli_query($connect, $query);
-
-                            // Loop through each row and display the data
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                echo "<td>" . $row['purchase_id'] . "</td>";
-                                echo "<td>" . $row['supplier_name'] . "</td>";
-                                echo "<td>" . $row['fullname'] . "</td>";
-                                echo "<td>" . $row['purchase_date'] . "</td>";
-                                echo "<td>" . $row['purchase_status'] . "</td>";
-                                echo "<td>" . $row['total_amount'] . "</td>";
-                                echo "</tr>";
-                            }
-                            ?>
+                            <tr v-for="item in items">
+                                <td>{{item.purchase_id}}</td>
+                                <td>{{item.supplier_name}}</td>
+                                <td>{{item.fullname}}</td>
+                                <td>{{item.purchase_date}}</td>
+                                <td>{{item.purchase_status}}</td>
+                                <td>{{item.total_amount}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -216,6 +213,15 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     </div>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/vue.min.js"></script>
+    <script>
+        new Vue({
+            el: '#main',
+            data: {
+                items: <?= json_encode($results) ?>,
+            },
+        });
+    </script>
 </body>
 
 </html>

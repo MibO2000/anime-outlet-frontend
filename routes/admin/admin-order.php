@@ -4,6 +4,12 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     header('Location: /admin-login', true, 301);
     exit;
 }
+$results = [];
+$query = "select ao.order_id, ac.full_name, ao.order_date, ao.order_status from `ASSIGNMENT`.ao_order ao join `ASSIGNMENT`.ao_customer ac on ao.customer_id = ac.customer_id order by ao.order_date desc";
+$result = mysqli_query($connect, $query);
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($results, $row);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +139,7 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
         </div>
     </header>
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="main">
         <div class="row">
             <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
                 <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
@@ -188,21 +194,12 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-
-                            $query = "select ao.order_id, ac.full_name, ao.order_date, ao.order_status from `ASSIGNMENT`.ao_order ao join `ASSIGNMENT`.ao_customer ac on ao.customer_id = ac.customer_id order by ao.order_date desc";
-                            $result = mysqli_query($connect, $query);
-
-                            // Loop through each row and display the data
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                echo "<td>" . $row['order_id'] . "</td>";
-                                echo "<td>" . "<a href='/admin-order-details?id=" . $row['order_id'] . "'>" . $row['full_name'] . "</a></td>";
-                                echo "<td>" . $row['order_date'] . "</td>";
-                                echo "<td>" . $row['order_status'] . "</td>";
-                                echo "</tr>";
-                            }
-                            ?>
+                            <tr v-for="item in items">
+                                <td>{{item.order_id}}</td>
+                                <td><a :href="'/admin-order-details?id='+item.order_id">{{item.full_name}}</a></td>
+                                <td>{{item.order_date}}</td>
+                                <td>{{item.order_status}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -212,6 +209,15 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     </div>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/vue.min.js"></script>
+    <script>
+        new Vue({
+            el: '#main',
+            data: {
+                items: <?= json_encode($results) ?>,
+            },
+        });
+    </script>
 </body>
 
 </html>

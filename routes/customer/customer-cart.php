@@ -35,22 +35,35 @@ function getDelivererId($connect, $deliverername)
 }
 
 if (isset($_POST['btndelete'])) {
-    $orderid = $_POST['orderid'];
-
-    $ordersql = sprintf("SELECT * from ao_order where order_id = '%s'", mysqli_real_escape_string($connect, $orderdetail['order_id']));
-
-    $result = $connect->query($ordersql);
-    $result = $result->fetch_all();
-
-    $order = $result[0];
-
-    $orderdetaildelete = sprintf("DELETE FROM ao_order_detail where order_id = '%s'", mysqli_real_escape_string($connect, $orderid));
-    $connect->query($orderdetaildelete);
-    $orderdelete = sprintf("DELETE FROM ao_order where order_id = '%s'", mysqli_real_escape_string($connect, $orderid));
-    $connect->query($orderdelete);
 }
 if (isset($_POST['btncheckout'])) {
-    $orderid = $_POST['orderid'];
+    // from section
+    $itemidlist = array();
+
+    $orderid = AutoID('ao_order', 'order_id', 'O', 4);
+    $orderstatus = 'PENDING';
+    $query = sprintf("INSERT INTO ao_order(order_id, customer_id, order_status, order_date)
+        VALUES ('%s','%s','%s', NOW())", mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $cid), mysqli_real_escape_string($connect, $orderstatus));
+    $connect->query($query);
+    foreach ($itemidlist as $itemid) {
+        $orderdetailid = AutoID('ao_order', 'order_id', 'O', 4);
+
+        // from section
+        $quantity = 12;
+
+        $itemsql = sprintf("SELECT * FROM ao_item where item_id = '%s'", mysqli_real_escape_string($connect, $itemid));
+        $result = $connect->query($itemsql);
+        $result = $result->fetch_all();
+        $item = $result[0];
+
+        $unitprice = $item[12];
+
+        $subtotal = $unitprice * $quantity;
+        $query = sprintf("INSERT INTO ao_order_detail(order_detail_id, order_id, item_id, quantity, unit_price, sub_total)
+        VALUES ('%s','%s','%s','%s','%s','%s')", mysqli_real_escape_string($connect, $orderdetailid), mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $itemid), mysqli_real_escape_string($connect, $quantity), mysqli_real_escape_string($connect, $unitprice), mysqli_real_escape_string($connect, $subtotal));
+        $connect->query($query);
+    }
+
     $paymentMethod = $_POST['paymentmethod'];
     $deliverername = $_POST['deliverer'];
     $delivererid = getDelivererId($connect, $deliverername);

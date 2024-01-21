@@ -14,14 +14,14 @@ if (isset($_POST['btn-supplier-save'])) {
     $semail = $_POST['email'];
 
     $checkquery = sprintf("SELECT * from ao_supplier where supplier_user = '%s'", mysqli_real_escape_string($connect, $suser));
-    $result = $connect->query($query);
+    $result = $connect->query($checkquery);
     $result = $result->fetch_all();
     if ($result) {
         $hasError = 1;
         $errorMessage = 'Username already exist.';
     } else {
         $query = sprintf("INSERT INTO ao_supplier(supplier_id, supplier_name, supplier_user, supplier_password, phone, email)
-        VALUES '%s','%s','%s','%s','%s','%s'", mysqli_real_escape_string($connect, $sid), mysqli_real_escape_string($connect, $sname), mysqli_real_escape_string($connect, $suser), password_hash($spass, PASSWORD_BCRYPT), mysqli_real_escape_string($connect, $sphone), mysqli_real_escape_string($connect, $semail));
+        VALUES ('%s','%s','%s','%s','%s','%s')", mysqli_real_escape_string($connect, $sid), mysqli_real_escape_string($connect, $sname), mysqli_real_escape_string($connect, $suser), password_hash($spass, PASSWORD_BCRYPT), mysqli_real_escape_string($connect, $sphone), mysqli_real_escape_string($connect, $semail));
         $connect->query($query);
         // SUCCESS
         header('Location: /admin-supplier');
@@ -45,32 +45,24 @@ if (isset($_POST['btn-supplier-update'])) {
     $spass = $_POST['password'];
     $semail = $_POST['email'];
 
-    $checkquery = sprintf("SELECT * FROM ao_supplier WHERE supplier_user = '%s' AND supplier_id != '%s'", mysqli_real_escape_string($connect, $suser), mysqli_real_escape_string($connect, $sid));
-    $result = $connect->query($checkquery);
-    $result = $result->fetch_all();
-    if ($result) {
-        $hasError = 1;
-        $errorMessage = 'Username already exists.';
-    } else {
-        $query = sprintf(
-            "UPDATE ao_supplier
+    $query = sprintf(
+        "UPDATE ao_supplier
             SET supplier_name = '%s',
                 supplier_user = '%s',
                 supplier_password = '%s',
                 phone = '%s',
                 email = '%s'
             WHERE supplier_id = '%s'",
-            mysqli_real_escape_string($connect, $sname),
-            mysqli_real_escape_string($connect, $suser),
-            password_hash($spass, PASSWORD_BCRYPT),
-            mysqli_real_escape_string($connect, $sphone),
-            mysqli_real_escape_string($connect, $semail),
-            mysqli_real_escape_string($connect, $sid)
-        );
-        $connect->query($query);
-        // SUCCESS
-        header('Location: /admin-supplier');
-    }
+        mysqli_real_escape_string($connect, $sname),
+        mysqli_real_escape_string($connect, $suser),
+        password_hash($spass, PASSWORD_BCRYPT),
+        mysqli_real_escape_string($connect, $sphone),
+        mysqli_real_escape_string($connect, $semail),
+        mysqli_real_escape_string($connect, $sid)
+    );
+    $connect->query($query);
+    // SUCCESS
+    header('Location: /admin-supplier');
 }
 if (isset($_POST['btn-supplier-delete'])) {
     $sid = $_POST['id'];
@@ -92,6 +84,12 @@ if (isset($_POST['btn-supplier-delete'])) {
     }
 }
 
+$results = [];
+$query = "select supplier_id, supplier_name, supplier_user, supplier_password, email, phone  from `ASSIGNMENT`.ao_supplier as2";
+$result = mysqli_query($connect, $query);
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($results, $row);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -221,7 +219,7 @@ if (isset($_POST['btn-supplier-delete'])) {
         </div>
     </header>
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="main">
         <div class="row">
             <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
                 <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
@@ -264,10 +262,12 @@ if (isset($_POST['btn-supplier-delete'])) {
             </div>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="min-height:100vh">
-                <!-- can cru no delete-->
 
                 <div>
-                    <h1>Supplier</h1>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1>Supplier</h1>
+                        <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal" data-bs-target="#editModal">Create</button>
+                    </div>
                     <table class="table table-responsive table-hover table-striped">
                         <thead>
                             <tr>
@@ -276,34 +276,140 @@ if (isset($_POST['btn-supplier-delete'])) {
                                 <th>Supplier user</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Option</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-
-                            $query = "select supplier_id, supplier_name, supplier_user, supplier_password, email, phone  from `ASSIGNMENT`.ao_supplier as2";
-                            $result = mysqli_query($connect, $query);
-
-                            // Loop through each row and display the data
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                echo "<td>" . $row['supplier_id'] . "</td>";
-                                echo "<td>" . $row['supplier_name'] . "</td>";
-                                echo "<td>" . $row['supplier_user'] . "</td>";
-                                echo "<td>" . $row['email'] . "</td>";
-                                echo "<td>" . $row['phone'] . "</td>";
-                                echo "</tr>";
-                            }
-                            ?>
+                            <tr v-for="item in items">
+                                <td>{{item.supplier_id}}</td>
+                                <td>{{item.supplier_name}}</td>
+                                <td>{{item.supplier_user}}</td>
+                                <td>{{item.email}}</td>
+                                <td>{{item.phone}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" @click="selectItem(item)" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                                    <button class="btn btn-danger btn-sm" @click="selectItem(item)" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-
             </main>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="editModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{title}}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" v-model="selectedItem.supplier_name">
+                        </div>
+                        <div>
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" v-model="selectedItem.phone">
+                        </div>
+                        <div>
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" v-model="selectedItem.email">
+                        </div>
+                        <div>
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" v-model="selectedItem.supplier_user">
+                        </div>
+                        <div>
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" v-model="selectedItem.supplier_password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" @click="submitCreateOrEditModal()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="deleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Are you sure do you want to delete?</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="confirmDelete()">Confirm</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="/js/vue.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <script>
+        new Vue({
+            el: '#main',
+            data: {
+                title: '',
+                items: <?= json_encode($results) ?>,
+                selectedItem: {},
+            },
+            methods: {
+                createItem() {
+                    this.title = 'Create';
+                    this.selectedItem = {
+                        supplier_name: '',
+                        supplier_user: '',
+                        supplier_password: '',
+                        phone: '',
+                        email: '',
+                    };
+                },
+                selectItem(item) {
+                    this.title = 'Edit';
+                    this.selectedItem = {
+                        ...item,
+                        supplier_password: '',
+                    };
+                },
+                confirmDelete() {
+                    let formData = new FormData();
+                    formData.append('btn-supplier-delete', 1);
+                    formData.append('id', this.selectedItem.supplier_id);
+                    axios.post('', formData).then(() => location.reload());
+                },
+                submitCreateOrEditModal() {
+                    if (this.title === 'Create') {
+                        let formData = new FormData()
+                        formData.append('btn-supplier-save', 1);
+                        formData.append('name', this.selectedItem.supplier_name);
+                        formData.append('phone', this.selectedItem.phone);
+                        formData.append('username', this.selectedItem.supplier_user);
+                        formData.append('password', this.selectedItem.supplier_password);
+                        formData.append('email', this.selectedItem.email);
+                        axios.post('', formData).then((res) => location.reload());
+                    } else {
+                        let formData = new FormData()
+                        formData.append('btn-supplier-update', 1);
+                        formData.append('id', this.selectedItem.supplier_id);
+                        formData.append('name', this.selectedItem.supplier_name);
+                        formData.append('phone', this.selectedItem.phone);
+                        formData.append('username', this.selectedItem.supplier_user);
+                        formData.append('password', this.selectedItem.supplier_password);
+                        formData.append('email', this.selectedItem.email);
+                        axios.post('', formData) //.then((res) => location.reload());
+                    }
+                },
+            }
+        });
+    </script>
 </body>
 
 </html>

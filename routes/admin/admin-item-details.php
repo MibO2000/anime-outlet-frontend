@@ -199,7 +199,6 @@ if (isset($_POST['btn-film-delete'])) {
     } else {
         $delete_query = sprintf("DELETE FROM ao_film WHERE film_id = '%s'", mysqli_real_escape_string($connect, $fid));
         $connect->query($delete_query);
-
         // SUCCESS
         header('Location: /admin-item-details');
     }
@@ -654,8 +653,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     </div>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
-    <!-- <script src="/js/vue.min.js"></script> -->
+    <script src="/js/vue.min.js"></script>
     <script src="/js/axios.min.js"></script>
     <script>
         new Vue({
@@ -678,7 +676,24 @@ while ($row = mysqli_fetch_assoc($result)) {
                     };
                     this.selectedType = type;
                 },
-                confirmDelete() {},
+                confirmDelete() {
+                    let formData = new FormData();
+                    switch (this.selectedType) {
+                        case 'FILM':
+                            formData.append('btn-film-delete', 1);
+                            formData.append('film_id', this.selectedItem.film_id);
+                            break;
+                        case 'CATEGORY':
+                            formData.append('btn-category-delete', 1);
+                            formData.append('category_id', this.selectedItem.category_id);
+                            break;
+                        case 'BRAND':
+                            formData.append('btn-brand-delete', 1);
+                            formData.append('brand_id', this.selectedItem.brand_id);
+                            break;
+                    }
+                    axios.post('', formData).then(() => location.reload());
+                },
                 submitCreateOrEditFilm() {
                     if (this.selectedType === '') {
                         let data = new FormData();

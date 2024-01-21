@@ -4,9 +4,25 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     header('Location: /login', true, 301);
     exit;
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_SESSION['__cart'])) {
+        $_SESSION['__cart'] = [];
+    }
+    $id = $_POST['item_id'];
+    $name = $_POST['item_name'];
+    $price = $_POST['item_price'];
+    $image = $_POST['item_image'];
+    if (!key_exists($id, $_SESSION['__cart'])) {
+        $_SESSION['__cart'][$id] = ['id' => $id, 'name' => $name, 'price' => $price, 'image' => $image, 'quantity' => 0];
+    }
+    $_SESSION['__cart'][$id]['quantity'] += 1;
+}
+
 $films = [];
 $categories = [];
 $brands = [];
+$results = [];
 
 $query = "SELECT * from ASSIGNMENT.ao_film";
 $result = mysqli_query($connect, $query);
@@ -24,6 +40,35 @@ $query = "SELECT * from ASSIGNMENT.ao_brand";
 $result = mysqli_query($connect, $query);
 while ($row = mysqli_fetch_assoc($result)) {
     array_push($brands, $row);
+}
+
+if (isset($_GET['film_id'])) {
+    $fid = $_GET['film_id'];
+    $query = sprintf("select ai.item_id, ai.item_name , ac.category_name as category, af.title as film, ab.brand_name as brand, ai.item_image_1, ai.item_image_2, ai.item_image_3, ai.release_date, ai.item_description, ai.`scale`, ai.stock_quantity, ai.price from `ASSIGNMENT`.ao_item ai join `ASSIGNMENT`.ao_brand ab on ab.brand_id = ai.brand_id join `ASSIGNMENT`.ao_film af on af.film_id = ai.film_id join `ASSIGNMENT`.ao_category ac on ac.category_id = ai.category_id WHERE ai.film_id = '%s'", $fid);
+    $result = mysqli_query($connect, $query);
+    while ($row = mysqli_fetch_assoc($result)) {
+        array_push($results, $row);
+    }
+} else if (isset($_GET['category_id'])) {
+    $cid = $_GET['category_id'];
+    $query = sprintf("select ai.item_id, ai.item_name , ac.category_name as category, af.title as film, ab.brand_name as brand, ai.item_image_1, ai.item_image_2, ai.item_image_3, ai.release_date, ai.item_description, ai.`scale`, ai.stock_quantity, ai.price from `ASSIGNMENT`.ao_item ai join `ASSIGNMENT`.ao_brand ab on ab.brand_id = ai.brand_id join `ASSIGNMENT`.ao_film af on af.film_id = ai.film_id join `ASSIGNMENT`.ao_category ac on ac.category_id = ai.category_id WHERE ai.category_id = '%s'", $cid);
+    $result = mysqli_query($connect, $query);
+    while ($row = mysqli_fetch_assoc($result)) {
+        array_push($results, $row);
+    }
+} else if (isset($_GET['bard_id'])) {
+    $bid = $_GET['brand_id'];
+    $query = sprintf("select ai.item_id, ai.item_name , ac.category_name as category, af.title as film, ab.brand_name as brand, ai.item_image_1, ai.item_image_2, ai.item_image_3, ai.release_date, ai.item_description, ai.`scale`, ai.stock_quantity, ai.price from `ASSIGNMENT`.ao_item ai join `ASSIGNMENT`.ao_brand ab on ab.brand_id = ai.brand_id join `ASSIGNMENT`.ao_film af on af.film_id = ai.film_id join `ASSIGNMENT`.ao_category ac on ac.category_id = ai.category_id WHERE ai.brand_id = '%s'", $bid);
+    $result = mysqli_query($connect, $query);
+    while ($row = mysqli_fetch_assoc($result)) {
+        array_push($results, $row);
+    }
+} else {
+    $query = "select ai.item_id, ai.item_name , ac.category_name as category, af.title as film, ab.brand_name as brand, ai.item_image_1, ai.item_image_2, ai.item_image_3, ai.release_date, ai.item_description, ai.`scale`, ai.stock_quantity, ai.price from `ASSIGNMENT`.ao_item ai join `ASSIGNMENT`.ao_brand ab on ab.brand_id = ai.brand_id join `ASSIGNMENT`.ao_film af on af.film_id = ai.film_id join `ASSIGNMENT`.ao_category ac on ac.category_id = ai.category_id";
+    $result = mysqli_query($connect, $query);
+    while ($row = mysqli_fetch_assoc($result)) {
+        array_push($results, $row);
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -255,80 +300,41 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </form>
 
                 <!-- items -->
-                <div class="row">
-                    <div class="col-md-3">
-                        <img style="width:100%;height:auto;" src="https://images.unsplash.com/photo-1705609397754-2b98f8197811?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D" alt="">
-                    </div>
-                    <div class="col-md-5">
-                        <p>
-                            <a href="/item-details?id=1">
-                                <span class="fw-bold">Andrei J Castanha</span>
-                            </a>
-                            <small>(2023)</small>
-                        </p>
-                        <div>
-                            <span class="badge text-bg-primary">Flim 1</span>
-                            <span class="badge text-bg-warning">Category 1</span>
-                            <span class="badge text-bg-secondary">Brand 1</span>
+                <?php foreach ($results as $item) : ?>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <?php if ($item['item_image_1']) : ?>
+                                <img style="width:100%;height:auto;" src="<?= $item['item_image_1'] ?>" alt="">
+                            <?php endif; ?>
+                        </div>
+                        <div class="col-md-5">
+                            <p>
+                                <a href="/item-details?id=1">
+                                    <span class="fw-bold"><?= $item['item_name'] ?></span>
+                                </a>
+                                <small>(<?= $item['release_date'] ?>)</small>
+                            </p>
+                            <div>
+                                <span class="badge text-bg-primary"><?= $item['film'] ?></span>
+                                <span class="badge text-bg-warning"><?= $item['category'] ?></span>
+                                <span class="badge text-bg-secondary"><?= $item['brand'] ?></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="fw-bold text-end">$ <?= $item['price'] ?></p>
+                            <form method="POST">
+                                <input type="hidden" name="item_id" value="<?= $item['item_id'] ?>">
+                                <input type="hidden" name="item_name" value="<?= $item['item_name'] ?>">
+                                <input type="hidden" name="item_price" value="<?= $item['price'] ?>">
+                                <input type="hidden" name="item_image" value="<?= $item['item_image_1'] ?>">
+                                <button class=" float-end btn btn-outline-primary" type="submit">
+                                    Cart
+                                </button>
+                            </form>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <p class="fw-bold text-end">$ 2500</p>
-                        <button class=" float-end btn btn-outline-primary">
-                            Cart
-                        </button>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-md-3">
-                        <img style="width:100%;height:auto;" src="https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D" alt="">
-                    </div>
-                    <div class="col-md-5">
-                        <p>
-                            <a href="/item-details?id=2">
-                                <span class="fw-bold">NEOM</span>
-                            </a>
-                            <small>(2016)</small>
-                        </p>
-                        <div>
-                            <span class="badge text-bg-primary">Flim 2</span>
-                            <span class="badge text-bg-warning">Category 1</span>
-                            <span class="badge text-bg-secondary">Brand 4</span>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <p class="fw-bold text-end">$ 3500</p>
-                        <button class=" float-end btn btn-outline-primary">
-                            Cart
-                        </button>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-md-3">
-                        <img style="width:100%;height:auto;" src="https://images.unsplash.com/photo-1698051300591-8c8bb88e9851?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyM3x8fGVufDB8fHx8fA%3D%3D" alt="">
-                    </div>
-                    <div class="col-md-5">
-                        <p>
-                            <a href="/item-details?id=3">
-                                <span class="fw-bold">Annie Spratt</span>
-                            </a>
-                            <small>(2016)</small>
-                        </p>
-                        <div>
-                            <span class="badge text-bg-primary">Flim 4</span>
-                            <span class="badge text-bg-warning">Category 3</span>
-                            <span class="badge text-bg-secondary">Brand 2</span>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <p class="fw-bold text-end">$ 4500</p>
-                        <button class=" float-end btn btn-outline-primary">
-                            Cart
-                        </button>
-                    </div>
-                </div>
+                    <hr>
+                <?php endforeach; ?>
             </div>
         </div>
     </main>

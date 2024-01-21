@@ -4,6 +4,8 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     header('Location: /login', true, 301);
     exit;
 }
+
+$cartItems = array_values($_SESSION['__cart'] ?? []);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -185,83 +187,66 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
         </div>
     </nav>
 
-    <form method="POST">
-        <main class="container mt-4">
-            <h2>Cart</h2>
+    <main class="container mt-4" id="main">
+        <h2>Cart</h2>
 
-            <div>
-                <!-- item -->
+        <div>
+            <!-- item -->
+            <div v-for="(cart,i) in cartItems">
                 <div class="row">
                     <div class="col-md-3">
-                        <img style="width:100%;height:auto;" src="https://images.unsplash.com/photo-1705609397754-2b98f8197811?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D" alt="">
+                        <img v-if="cart.image" style="width:100%;height:auto;" :src="cart.image" alt="">
                     </div>
                     <div class="col-md-5">
-                        <p><span class="fw-bold">Andrei J Castanha</span></p>
-                        <p><span class="fw-bold">$ 2500</span></p>
+                        <p><span class="fw-bold">{{cart.name}}</span></p>
+                        <p><span class="fw-bold">$ {{cart.price}}</span></p>
                     </div>
                     <div class="col-md-2">
-                        <input class="form-control w-50" value="2" type="number">
+                        <input class="form-control w-50" v-model="cart.quantity" type="number">
                     </div>
                     <div class="col-md-2">
-                        <p class="fw-bold text-end">$ 5000</p>
+                        <p class="fw-bold text-end">$ {{calcuateTotal(cart)}}</p>
                     </div>
                 </div>
-
-                <hr>
-
-                <!-- item -->
-                <div class="row">
-                    <div class="col-md-3">
-                        <img style="width:100%;height:auto;" src="https://images.unsplash.com/photo-1705609397754-2b98f8197811?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D" alt="">
-                    </div>
-                    <div class="col-md-5">
-                        <p><span class="fw-bold">Andrei J Castanha</span></p>
-                        <p><span class="fw-bold">$ 2000</span></p>
-                    </div>
-                    <div class="col-md-2">
-                        <input class="form-control w-50" value="1" type="number">
-                    </div>
-                    <div class="col-md-2">
-                        <p class="fw-bold text-end">$ 2000</p>
-                    </div>
-                </div>
+                <hr v-if="i+1!==cartItems.length">
             </div>
 
-            <hr>
+        </div>
 
-            <div>
-                <h5 class="text-end">Total: $ 7000</h5>
+        <hr>
+
+        <div>
+            <h5 class="text-end">Total: $ {{totalAmount}}</h5>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <select class="form-select" name="deliveryMethod">
+                    <option selected>Delivery Method</option>
+                    <option value="1">One</option>
+                    <option value="2">Three</option>
+                </select>
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col-6">
-                    <select class="form-select" name="deliveryMethod">
-                        <option selected>Delivery Method</option>
-                        <option value="1">One</option>
-                        <option value="2">Three</option>
-                    </select>
-                </div>
+        <div class="row mt-3">
+            <div class="col-6">
+                <select class="form-select" name="paymentMethod">
+                    <option selected>Payment Method</option>
+                    <option value="1">Cash on delivery</option>
+                    <option value="2">Banking</option>
+                </select>
             </div>
+        </div>
 
-            <div class="row mt-3">
-                <div class="col-6">
-                    <select class="form-select" name="paymentMethod">
-                        <option selected>Payment Method</option>
-                        <option value="1">Cash on delivery</option>
-                        <option value="2">Banking</option>
-                    </select>
-                </div>
-            </div>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-lg btn-primary">
+                Checkout
+            </button>
+        </div>
 
-            <div class="d-flex justify-content-end">
-                <button class="btn btn-lg btn-primary">
-                    Checkout
-                </button>
-            </div>
-
-            <div class="p-5"></div>
-        </main>
-    </form>
+        <div class="p-5"></div>
+    </main>
 
     <footer class="container py-5">
         <div class="row">
@@ -291,6 +276,29 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     </footer>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/vue.min.js"></script>
+    <script>
+        new Vue({
+            el: '#main',
+            data: {
+                cartItems: <?= json_encode($cartItems) ?>,
+            },
+            methods: {
+                calcuateTotal(item) {
+                    return item.price * item.quantity;
+                },
+            },
+            computed: {
+                totalAmount() {
+                    let total = 0;
+                    this.cartItems.forEach(item => {
+                        total += this.calcuateTotal(item);
+                    });
+                    return total;
+                }
+            }
+        })
+    </script>
 </body>
 
 </html>

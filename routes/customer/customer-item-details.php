@@ -15,19 +15,23 @@ $itemid = trim($itemid, "'");
 $itemsql = sprintf("SELECT * FROM ao_item where item_id = '%s'", mysqli_real_escape_string($connect, $itemid));
 $result = $connect->query($itemsql);
 $result = $result->fetch_all();
+print_r($result);
 $item = $result[0];
+$filmid = $item['2'];
+$categoryid = $item['1'];
+$brandid = $item['3'];
 
-$filmquery = sprintf("SELECT * FROM ao_film where film_id = '%s'", mysqli_real_escape_string($connect, $item['film_id']));
+$filmquery = sprintf("SELECT * FROM ao_film where film_id = '%s'", mysqli_real_escape_string($connect, $filmid));
 $result = $connect->query($filmquery);
 $result = $result->fetch_all();
 $film = $result[0];
 
-$categoryquery = sprintf("SELECT * FROM ao_category where category_id = '%s'", mysqli_real_escape_string($connect, $item['category_id']));
+$categoryquery = sprintf("SELECT * FROM ao_category where category_id = '%s'", mysqli_real_escape_string($connect, $categoryid));
 $result = $connect->query($categoryquery);
 $result = $result->fetch_all();
 $category = $result[0];
 
-$brandquery = sprintf("SELECT * FROM ao_brand where brand_id = '%s'", mysqli_real_escape_string($connect, $item['brand_id']));
+$brandquery = sprintf("SELECT * FROM ao_brand where brand_id = '%s'", mysqli_real_escape_string($connect, $brandid));
 $result = $connect->query($brandquery);
 $result = $result->fetch_all();
 $brandid = $result[0];

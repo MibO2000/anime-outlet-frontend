@@ -350,8 +350,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     </div>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
-    <!-- <script src="/js/vue.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <script src="/js/vue.min.js"></script>
     <script src="/js/axios.min.js"></script>
     <script>
         new Vue({

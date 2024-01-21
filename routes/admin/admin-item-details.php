@@ -12,20 +12,21 @@ if (isset($_POST['btn-film-save'])) {
     $image = $_POST['fimage'];
 
     $checkquery = sprintf("SELECT * from ao_film where title = '%s'", mysqli_real_escape_string($connect, $ftitle));
-    $result = $connect->query($query);
+    $result = $connect->query($checkquery);
     $result = $result->fetch_all();
     if ($result) {
         $hasError = 1;
         $errorMessage = 'Title already exist.';
+        echo $errorMessage;
+        die;
     } else {
         $query = sprintf("INSERT INTO ao_film(film_id, title, film_image, release_date, film_description)
-        VALUES '%s','%s','%s','%s','%s'", mysqli_real_escape_string($connect, $fid), mysqli_real_escape_string($connect, $ftitle), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $freleasedate), mysqli_real_escape_string($connect, $fdesc));
+        VALUES ('%s','%s','%s','%s','%s')", mysqli_real_escape_string($connect, $fid), mysqli_real_escape_string($connect, $ftitle), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $freleasedate), mysqli_real_escape_string($connect, $fdesc));
         $connect->query($query);
         // SUCCESS
         header('Location: /admin-item-details');
     }
 }
-
 if (isset($_POST['btn-category-save'])) {
     $cid = AutoID('ao_category', 'category_id', 'C', 4);
     $cname = $_POST['cname'];
@@ -33,20 +34,21 @@ if (isset($_POST['btn-category-save'])) {
     $image = $_POST['cimage'];
 
     $checkquery = sprintf("SELECT * from ao_category where category_name = '%s'", mysqli_real_escape_string($connect, $cname));
-    $result = $connect->query($query);
+    $result = $connect->query($checkquery);
     $result = $result->fetch_all();
     if ($result) {
         $hasError = 1;
         $errorMessage = 'Name already exist.';
+        echo $errorMessage;
+        die;
     } else {
-        $query = sprintf("INSERT INTO ao_category(category_id, category_name, category_image, category_description)
-        VALUES '%s','%s','%s','%s'", mysqli_real_escape_string($connect, $cid), mysqli_real_escape_string($connect, $cname), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $cdesc));
+        echo  $query = sprintf("INSERT INTO ao_category(category_id, category_name, category_image, category_description)
+        VALUES ('%s','%s','%s','%s')", mysqli_real_escape_string($connect, $cid), mysqli_real_escape_string($connect, $cname), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $cdesc));
         $connect->query($query);
         // SUCCESS
         header('Location: /admin-item-details');
     }
 }
-
 if (isset($_POST['btn-brand-save'])) {
     $bid = AutoID('ao_brand', 'brand_id', 'B', 4);
     $bname = $_POST['bname'];
@@ -54,14 +56,16 @@ if (isset($_POST['btn-brand-save'])) {
     $image = $_POST['bimage'];
 
     $checkquery = sprintf("SELECT * from ao_brand where brand_name = '%s'", mysqli_real_escape_string($connect, $bname));
-    $result = $connect->query($query);
+    $result = $connect->query($checkquery);
     $result = $result->fetch_all();
     if ($result) {
         $hasError = 1;
         $errorMessage = 'Name already exist.';
+        echo $errorMessage;
+        die;
     } else {
         $query = sprintf("INSERT INTO ao_brand(brand_id, brand_name, brand_image, brand_description)
-        VALUES '%s','%s','%s','%s'", mysqli_real_escape_string($connect, $bid), mysqli_real_escape_string($connect, $bname), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $bdesc));
+        VALUES ('%s','%s','%s','%s')", mysqli_real_escape_string($connect, $bid), mysqli_real_escape_string($connect, $bname), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $bdesc));
         $connect->query($query);
         // SUCCESS
         header('Location: /admin-item-details');
@@ -69,7 +73,6 @@ if (isset($_POST['btn-brand-save'])) {
 }
 
 // update
-
 if (isset($_POST['btn-film-update'])) {
     $fid = $_POST['film_id'];
 
@@ -80,7 +83,8 @@ if (isset($_POST['btn-film-update'])) {
     if (!$result) {
         $hasError = 1;
         $errorMessage = 'Film ID does not exist.';
-        header('Location: /admin-item-details');
+        echo $errorMessage;
+        die;
     }
 
     $ftitle = $_POST['fname'];
@@ -88,32 +92,24 @@ if (isset($_POST['btn-film-update'])) {
     $fdesc = $_POST['fdescription'];
     $image = $_POST['fimage'];
 
-    $checkquery = sprintf("SELECT * from ao_film where title = '%s' and film_id = '%s'", mysqli_real_escape_string($connect, $ftitle), mysqli_real_escape_string($connect, $fid));
-    $result = $connect->query($query);
-    $result = $result->fetch_all();
-    if ($result) {
-        $hasError = 1;
-        $errorMessage = 'Title already exist.';
-    } else {
-        $update_query = sprintf(
-            "UPDATE ao_film
+    $update_query = sprintf(
+        "UPDATE ao_film
             SET title = '%s',
                 film_image = '%s',
                 release_date = '%s',
                 film_description = '%s'
             WHERE film_id = '%s'",
-            mysqli_real_escape_string($connect, $ftitle),
-            mysqli_real_escape_string($connect, $image),
-            mysqli_real_escape_string($connect, $freleasedate),
-            mysqli_real_escape_string($connect, $fdesc),
-            mysqli_real_escape_string($connect, $fid)
-        );
+        mysqli_real_escape_string($connect, $ftitle),
+        mysqli_real_escape_string($connect, $image),
+        mysqli_real_escape_string($connect, $freleasedate),
+        mysqli_real_escape_string($connect, $fdesc),
+        mysqli_real_escape_string($connect, $fid)
+    );
 
-        $connect->query($update_query);
+    $connect->query($update_query);
 
-        // SUCCESS
-        header('Location: /admin-item-details');
-    }
+    // SUCCESS
+    header('Location: /admin-item-details');
 }
 
 if (isset($_POST['btn-category-update'])) {
@@ -126,37 +122,30 @@ if (isset($_POST['btn-category-update'])) {
     if (!$result) {
         $hasError = 1;
         $errorMessage = 'Category ID does not exist.';
-        header('Location: /admin-item-details');
+        echo $errorMessage;
+        die;
     }
 
     $cname = $_POST['cname'];
     $cdesc = $_POST['cdescription'];
     $image = $_POST['cimage'];
 
-    $check_query = sprintf("SELECT * FROM ao_category WHERE category_name = '%s' AND category_id != '%s'", mysqli_real_escape_string($connect, $cname), mysqli_real_escape_string($connect, $cid));
-    $result = $connect->query($check_query);
-    $result = $result->fetch_all();
-    if ($result) {
-        $hasError = 1;
-        $errorMessage = 'Category name already exists.';
-    } else {
-        $update_query = sprintf(
-            "UPDATE ao_category
+    $update_query = sprintf(
+        "UPDATE ao_category
             SET category_name = '%s',
                 category_image = '%s',
                 category_description = '%s'
             WHERE category_id = '%s'",
-            mysqli_real_escape_string($connect, $cname),
-            mysqli_real_escape_string($connect, $image),
-            mysqli_real_escape_string($connect, $cdesc),
-            mysqli_real_escape_string($connect, $cid)
-        );
+        mysqli_real_escape_string($connect, $cname),
+        mysqli_real_escape_string($connect, $image),
+        mysqli_real_escape_string($connect, $cdesc),
+        mysqli_real_escape_string($connect, $cid)
+    );
 
-        $connect->query($update_query);
+    $connect->query($update_query);
 
-        // SUCCESS
-        header('Location: /admin-item-details');
-    }
+    // SUCCESS
+    header('Location: /admin-item-details');
 }
 
 if (isset($_POST['btn-brand-update'])) {
@@ -169,37 +158,30 @@ if (isset($_POST['btn-brand-update'])) {
     if (!$result) {
         $hasError = 1;
         $errorMessage = 'Brand ID does not exist.';
-        header('Location: /admin-item-details');
+        echo $errorMessage;
+        die;
     }
 
     $bname = $_POST['bname'];
     $bdesc = $_POST['bdescription'];
     $image = $_POST['bimage'];
 
-    $check_query = sprintf("SELECT * FROM ao_brand WHERE brand_name = '%s' AND brand_id != '%s'", mysqli_real_escape_string($connect, $bname), mysqli_real_escape_string($connect, $bid));
-    $result = $connect->query($check_query);
-    $result = $result->fetch_all();
-    if ($result) {
-        $hasError = 1;
-        $errorMessage = 'Brand name already exists.';
-    } else {
-        $update_query = sprintf(
-            "UPDATE ao_brand
+    $update_query = sprintf(
+        "UPDATE ao_brand
             SET brand_name = '%s',
                 brand_image = '%s',
                 brand_description = '%s'
             WHERE brand_id = '%s'",
-            mysqli_real_escape_string($connect, $bname),
-            mysqli_real_escape_string($connect, $image),
-            mysqli_real_escape_string($connect, $bdesc),
-            mysqli_real_escape_string($connect, $bid)
-        );
+        mysqli_real_escape_string($connect, $bname),
+        mysqli_real_escape_string($connect, $image),
+        mysqli_real_escape_string($connect, $bdesc),
+        mysqli_real_escape_string($connect, $bid)
+    );
 
-        $connect->query($update_query);
+    $connect->query($update_query);
 
-        // SUCCESS
-        header('Location: /admin-item-details');
-    }
+    // SUCCESS
+    header('Location: /admin-item-details');
 }
 
 // delete
@@ -261,7 +243,27 @@ if (isset($_POST['btn-brand-delete'])) {
     }
 }
 
+$films = [];
+$categories = [];
+$brands = [];
 
+$query = "SELECT * from ASSIGNMENT.ao_film";
+$result = mysqli_query($connect, $query);
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($films, $row);
+}
+
+$query = "SELECT * from ASSIGNMENT.ao_category";
+$result = mysqli_query($connect, $query);
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($categories, $row);
+}
+
+$query = "SELECT * from ASSIGNMENT.ao_brand";
+$result = mysqli_query($connect, $query);
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($brands, $row);
+}
 
 ?>
 <!DOCTYPE html>
@@ -392,7 +394,7 @@ if (isset($_POST['btn-brand-delete'])) {
         </div>
     </header>
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="main">
         <div class="row">
             <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
                 <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
@@ -435,9 +437,11 @@ if (isset($_POST['btn-brand-delete'])) {
             </div>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="min-height:100vh">
-
                 <div>
-                    <h1>Film</h1>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1>Film</h1>
+                        <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal" data-bs-target="#editFilmModal">Create</button>
+                    </div>
                     <table class="table table-responsive table-hover table-striped">
                         <thead>
                             <tr>
@@ -446,30 +450,30 @@ if (isset($_POST['btn-brand-delete'])) {
                                 <th>Film Image</th>
                                 <th>Release Date</th>
                                 <th>Description</th>
+                                <th>Option</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-
-                            $query = "SELECT * from ASSIGNMENT.ao_film";
-                            $result = mysqli_query($connect, $query);
-
-                            // Loop through each row and display the data
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                echo "<td>" . $row['film_id'] . "</td>";
-                                echo "<td>" . $row['title'] . "</td>";
-                                echo "<td>" . $row['film_image'] . "</td>";
-                                echo "<td>" . $row['release_date'] . "</td>";
-                                echo "<td>" . $row['film_description'] . "</td>";
-                                echo "</tr>";
-                            }
-                            ?>
+                            <tr v-for="film in films">
+                                <td>{{film.film_id}}</td>
+                                <td>{{film.title}}</td>
+                                <td>{{film.film_image}}</td>
+                                <td>{{film.release_date}}</td>
+                                <td>{{film.film_description}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" @click="selectItem(film,'FILM')" data-bs-toggle="modal" data-bs-target="#editFilmModal">Edit</button>
+                                    <button class="btn btn-danger btn-sm" @click="selectItem(film,'FILM')" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
+                <br>
                 <div>
-                    <h1>Category</h1>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1>Category</h1>
+                        <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal" data-bs-target="#editCategoryModal">Create</button>
+                    </div>
                     <table class="table table-responsive table-hover table-striped">
                         <thead>
                             <tr>
@@ -477,63 +481,264 @@ if (isset($_POST['btn-brand-delete'])) {
                                 <th>Category Nam</th>
                                 <th>Category Image</th>
                                 <th>Category Description</th>
+                                <th>Option</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-
-                            $query = "SELECT * from ASSIGNMENT.ao_category";
-                            $result = mysqli_query($connect, $query);
-
-                            // Loop through each row and display the data
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                echo "<td>" . $row['category_id'] . "</td>";
-                                echo "<td>" . $row['category_name'] . "</td>";
-                                echo "<td>" . $row['category_image'] . "</td>";
-                                echo "<td>" . $row['category_description'] . "</td>";
-                                echo "</tr>";
-                            }
-                            ?>
+                            <tr v-for="category in categories">
+                                <td>{{category.category_id}}</td>
+                                <td>{{category.category_name}}</td>
+                                <td>{{category.category_image}}</td>
+                                <td>{{category.category_description}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" @click="selectItem(category,'CATEGORY')" data-bs-toggle="modal" data-bs-target="#editCategoryModal">Edit</button>
+                                    <button class="btn btn-danger btn-sm" @click="selectItem(category,'CATEGORY')" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
+                <br>
                 <div>
-                    <h1>Brand</h1>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1>Brand</h1>
+                        <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal" data-bs-target="#editBrandModal">Create</button>
+                    </div>
                     <table class="table table-responsive table-hover table-striped">
                         <thead>
                             <tr>
                                 <th>Brand ID</th>
-                                <th>Brand Nam</th>
+                                <th>Brand Name</th>
                                 <th>Brand Image</th>
                                 <th>Brand Description</th>
+                                <th>Option</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-
-                            $query = "SELECT * from ASSIGNMENT.ao_brand";
-                            $result = mysqli_query($connect, $query);
-
-                            // Loop through each row and display the data
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                echo "<td>" . $row['brand_id'] . "</td>";
-                                echo "<td>" . $row['brand_name'] . "</td>";
-                                echo "<td>" . $row['brand_image'] . "</td>";
-                                echo "<td>" . $row['brand_description'] . "</td>";
-                                echo "</tr>";
-                            }
-                            ?>
+                            <tr v-for="brand in brands">
+                                <td>{{brand.brand_id}}</td>
+                                <td>{{brand.brand_name}}</td>
+                                <td>{{brand.brand_image}}</td>
+                                <td>{{brand.brand_description}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" @click="selectItem(brand,'BRAND')" data-bs-toggle="modal" data-bs-target="#editBrandModal">Edit</button>
+                                    <button class="btn btn-danger btn-sm" @click="selectItem(brand,'BRAND')" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-
             </main>
+        </div>
+
+        <div class="modal modal-lg fade" tabindex="-1" id="editFilmModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Film</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" v-model="selectedItem.title" />
+                        </div>
+                        <div>
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="category" v-model="selectedItem.film_description" />
+                        </div>
+                        <div>
+                            <label for="image" class="form-label">Image</label>
+                            <input type="url" class="form-control" id="image" v-model="selectedItem.film_image" />
+                        </div>
+                        <div>
+                            <label for="release_date" class="form-label">Released Date</label>
+                            <input type="date" class="form-control" id="release_date" v-model="selectedItem.release_date" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="button" class="btn btn-primary" @click="submitCreateOrEditFilm()">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal modal-lg fade" tabindex="-1" id="editCategoryModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Category</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" v-model="selectedItem.category_name" />
+                        </div>
+                        <div>
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="category" v-model="selectedItem.category_description" />
+                        </div>
+                        <div>
+                            <label for="image" class="form-label">Image</label>
+                            <input type="url" class="form-control" id="image" v-model="selectedItem.category_image" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="button" class="btn btn-primary" @click="submitCreateOrEditCategory()">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal modal-lg fade" tabindex="-1" id="editBrandModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Brand</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="title" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="title" v-model="selectedItem.brand_name" />
+                        </div>
+                        <div>
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="category" v-model="selectedItem.brand_description" />
+                        </div>
+                        <div>
+                            <label for="image" class="form-label">Image</label>
+                            <input type="url" class="form-control" id="image" v-model="selectedItem.brand_image" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="button" class="btn btn-primary" @click="submitCreateOrEditBrand()">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="deleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Are you sure do you want to delete?</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="confirmDelete()">
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <!-- <script src="/js/vue.min.js"></script> -->
+    <script src="/js/axios.min.js"></script>
+    <script>
+        new Vue({
+            el: '#main',
+            data: {
+                films: <?= json_encode($films) ?>,
+                categories: <?= json_encode($categories) ?>,
+                brands: <?= json_encode($brands) ?>,
+                selectedItem: {},
+                selectedType: '',
+            },
+            methods: {
+                createItem() {
+                    this.selectedItem = {};
+                    this.selectedType = ''
+                },
+                selectItem(item, type) {
+                    this.selectedItem = {
+                        ...item
+                    };
+                    this.selectedType = type;
+                },
+                confirmDelete() {},
+                submitCreateOrEditFilm() {
+                    if (this.selectedType === '') {
+                        let data = new FormData();
+                        data.append('btn-film-save', 1);
+                        data.append('fname', this.selectedItem.title);
+                        data.append('freleasedate', this.selectedItem.release_date);
+                        data.append('fdescription', this.selectedItem.film_description);
+                        data.append('fimage', this.selectedItem.film_image);
+                        axios.post('', data).then((res) => location.reload());
+                    } else {
+                        let data = new FormData();
+                        data.append('btn-film-update', 1);
+                        data.append('film_id', this.selectedItem.film_id);
+                        data.append('fname', this.selectedItem.title);
+                        data.append('freleasedate', this.selectedItem.release_date);
+                        data.append('fdescription', this.selectedItem.film_description);
+                        data.append('fimage', this.selectedItem.film_image);
+                        axios.post('', data).then((res) => location.reload());
+                    }
+                },
+                submitCreateOrEditCategory() {
+                    if (this.selectedType === '') {
+                        let data = new FormData();
+                        data.append('btn-category-save', 1);
+                        data.append('cname', this.selectedItem.category_name);
+                        data.append('cdescription', this.selectedItem.category_description);
+                        data.append('cimage', this.selectedItem.category_image);
+                        axios.post('', data).then((res) => location.reload());
+                    } else {
+                        let data = new FormData();
+                        data.append('btn-category-update', 1);
+                        data.append('category_id', this.selectedItem.category_id);
+                        data.append('cname', this.selectedItem.category_name);
+                        data.append('cdescription', this.selectedItem.category_description);
+                        data.append('cimage', this.selectedItem.category_image);
+                        axios.post('', data).then((res) => location.reload());
+                    }
+                },
+                submitCreateOrEditBrand() {
+                    if (this.selectedType === '') {
+                        let data = new FormData();
+                        data.append('btn-brand-save', 1);
+                        data.append('bname', this.selectedItem.brand_name);
+                        data.append('bdescription', this.selectedItem.brand_description);
+                        data.append('bimage', this.selectedItem.brand_image);
+                        axios.post('', data).then((res) => location.reload());
+                    } else {
+                        let data = new FormData();
+                        data.append('btn-brand-update', 1);
+                        data.append('brand_id', this.selectedItem.brand_id);
+                        data.append('bname', this.selectedItem.brand_name);
+                        data.append('bdescription', this.selectedItem.brand_description);
+                        data.append('bimage', this.selectedItem.brand_image);
+                        axios.post('', data).then((res) => location.reload());
+                    }
+                },
+            },
+
+        });
+    </script>
 </body>
 
 </html>

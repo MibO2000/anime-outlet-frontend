@@ -4,6 +4,30 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     header('Location: /login', true, 301);
     exit;
 }
+
+function getFilmList($connect)
+{
+    $film = sprintf("SELECT title FROM ao_film order by title");
+    $result = $connect->query($film);
+    $result = $result->fetch_all();
+    return $result;
+}
+
+function getBrandList($connect)
+{
+    $brand = sprintf("SELECT brand_name FROM ao_brand order by brand_name");
+    $result = $connect->query($brand);
+    $result = $result->fetch_all();
+    return $result;
+}
+
+function getCategoryList($connect)
+{
+    $category = sprintf("SELECT category_name FROM ao_category order by category_name");
+    $result = $connect->query($category);
+    $result = $result->fetch_all();
+    return $result;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -199,14 +223,18 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
             </div>
             <div class="m-2">
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi explicabo aperiam, cum consectetur fuga sed ab assumenda, inventore esse adipisci veniam itaque facere provident pariatur. Vero sed minima architecto voluptatibus.
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi explicabo aperiam, cum consectetur
+                    fuga sed ab assumenda, inventore esse adipisci veniam itaque facere provident pariatur. Vero sed
+                    minima architecto voluptatibus.
                 </p>
             </div>
         </div>
         <div class="d-flex flex-row mt-4">
             <div>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi explicabo aperiam, cum consectetur fuga sed ab assumenda, inventore esse adipisci veniam itaque facere provident pariatur. Vero sed minima architecto voluptatibus.
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi explicabo aperiam, cum consectetur
+                    fuga sed ab assumenda, inventore esse adipisci veniam itaque facere provident pariatur. Vero sed
+                    minima architecto voluptatibus.
                 </p>
             </div>
             <div class="m-2">

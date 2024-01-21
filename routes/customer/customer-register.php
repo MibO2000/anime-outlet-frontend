@@ -131,7 +131,7 @@ if ($method === 'POST') {
 
         .bg-image {
             background-color: #9c8570;
-            background-image: url('https://images.unsplash.com/photo-1682695794947-17061dc284dd?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-image: url("https://scontent.frgn10-1.fna.fbcdn.net/v/t39.30808-6/273155904_4734687413251344_7966014691114622296_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=783fdb&_nc_ohc=IPvROW28ErsAX_Zw9Z-&_nc_ht=scontent.frgn10-1.fna&oh=00_AfBGsxKVUPFYVpgv32_VQ67_-ZnmD96rFKmd0VoDH58HYQ&oe=65B24185");
             background-repeat: no-repeat;
             background-position: center center;
             background-size: cover;

@@ -56,7 +56,7 @@ if (isset($_GET['film_id'])) {
     while ($row = mysqli_fetch_assoc($result)) {
         array_push($results, $row);
     }
-} else if (isset($_GET['bard_id'])) {
+} else if (isset($_GET['brand_id'])) {
     $bid = $_GET['brand_id'];
     $query = sprintf("select ai.item_id, ai.item_name , ac.category_name as category, af.title as film, ab.brand_name as brand, ai.item_image_1, ai.item_image_2, ai.item_image_3, ai.release_date, ai.item_description, ai.`scale`, ai.stock_quantity, ai.price from `ASSIGNMENT`.ao_item ai join `ASSIGNMENT`.ao_brand ab on ab.brand_id = ai.brand_id join `ASSIGNMENT`.ao_film af on af.film_id = ai.film_id join `ASSIGNMENT`.ao_category ac on ac.category_id = ai.category_id WHERE ai.brand_id = '%s'", $bid);
     $result = mysqli_query($connect, $query);

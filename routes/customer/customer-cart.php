@@ -6,6 +6,52 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
 }
 
 $cartItems = array_values($_SESSION['__cart'] ?? []);
+
+
+$paymentMethods = array("cash on delivery", "visa", "mastercard", "kpay", "wavepay");
+
+$delivererquery = sprintf("SELECT deliverer_name from ao_deliverer order by deliverer_id");
+$result = $connect->query($delivererquery);;
+$deliverers = $result->fetch_all();
+
+function getDelivererId($connect, $deliverername)
+{
+    $delivererquery = sprintf("SELECT deliverer_id from ao_deliverer where deliverer_name = '%s'", mysqli_real_escape_string($connect, $deliverername));
+    $result = $connect->query($delivererquery);;
+    $result = $result->fetch_all();
+    return $result[0][0];
+}
+
+if (isset($_POST['btndelete'])) {
+    $orderid = $_POST['orderid'];
+
+    $ordersql = sprintf("SELECT * from ao_order where order_id = '%s'", mysqli_real_escape_string($connect, $orderdetail['order_id']));
+
+    $result = $connect->query($ordersql);
+    $result = $result->fetch_all();
+
+    $order = $result[0];
+
+    $orderdetaildelete = sprintf("DELETE FROM ao_order_detail where order_id = '%s'", mysqli_real_escape_string($connect, $orderid));
+    $connect->query($orderdetaildelete);
+    $orderdelete = sprintf("DELETE FROM ao_order where order_id = '%s'", mysqli_real_escape_string($connect, $orderid));
+    $connect->query($orderdelete);
+}
+if (isset($_POST['btncheckout'])) {
+    $orderid = $_POST['orderid'];
+    $paymentMethod = $_POST['paymentmethod'];
+    $deliverername = $_POST['deliverer'];
+    $delivererid = getDelivererId($connect, $deliverername);
+    $paymentid = AutoID('ao_payment', 'payment_id', 'P', 4);
+
+    $paymentquery = sprintf("INSERT INTO ao_payment (payment_id, order_id, payment_method, payment_date)
+        VALUES ('%s','%s','%s', NOW())", mysqli_real_escape_string($connect, $paymentid), mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $paymentMethod));
+    $connect->query($paymentquery);
+
+    $orderquery = sprintf("UPDATE ao_order SET order_status = 'SUCCESS', order_date = NOW(), delieverer_id = '%s' WHERE order_id = '%s'", mysqli_real_escape_string($connect, $delivererid), mysqli_real_escape_string($connect, $orderid));
+    $connect->query($orderquery);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

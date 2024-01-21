@@ -4,23 +4,105 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     header('Location: /admin-login', true, 301);
     exit;
 }
+if (isset($_POST['btn-deliverer-post'])) {
+    $did = AutoID('ao_deliverer', 'deliverer_id', 'DR', 4);
+    $dname = $_POST['name'];
+    $dphone = $_POST['phone'];
+    $duser = $_POST['username'];
+    $dpass = $_POST['password'];
+    $davail = $_POST['availableDays'];
+    $dzone = $_POST['delieveryZone'];
 
-$results = [
-    [
-        'name' => 'John Doe',
-        'username' => 'johndoe',
-        'phone' => '09686968643',
-        'available_days' => 5,
-        'delivery_zones' => 4,
-    ],
-    [
-        'name' => 'John Smith',
-        'username' => 'johnsmith',
-        'phone' => '09686968645',
-        'available_days' => 2,
-        'delivery_zones' => 1,
-    ]
-];
+    $checkquery = sprintf("SELECT * from ao_deliverer where deliverer_user = '%s'", mysqli_real_escape_string($connect, $duser));
+    $result = $connect->query($checkquery);
+    $result = $result->fetch_all();
+    if ($result) {
+        $hasError = 1;
+        $errorMessage = 'Username already exist.';
+    } else {
+        $query = sprintf("INSERT INTO ao_deliverer(deliverer_id, deliverer_name, deliverer_user, deliverer_password, phone, available_days, delivery_zone)
+        VALUES ('%s','%s','%s','%s','%s','%s','%s')", mysqli_real_escape_string($connect, $did), mysqli_real_escape_string($connect, $dname), mysqli_real_escape_string($connect, $duser), password_hash($dpass, PASSWORD_BCRYPT), mysqli_real_escape_string($connect, $dphone), mysqli_real_escape_string($connect, $davail), mysqli_real_escape_string($connect, $dzone));
+        $connect->query($query);
+        // SUCCESS
+        header('Location: /admin-deliverer');
+    }
+}
+
+if (isset($_POST['btn-deliverer-update'])) {
+    $did = $_POST['id'];
+
+    $checkquery = sprintf("SELECT * FROM ao_delivery where deliverer_id = '%s'", mysqli_real_escape_string($connect, $did));
+    $result = $connect->query($checkquery);
+    $result = $result->fetch_all();
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'ID does not exist.';
+        header('Location: /admin-deliverer');
+    } else {
+
+        $dname = $_POST['name'];
+        $dphone = $_POST['phone'];
+        $duser = $_POST['username'];
+        $dpass = $_POST['password'];
+        $davail = $_POST['availableDays'];
+        $dzone = $_POST['delieveryZone'];
+
+        $checkquery = sprintf("SELECT * from ao_deliverer where deliverer_user = '%s' and deliverer_id != '%s'", mysqli_real_escape_string($connect, $duser), mysqli_real_escape_string($connect, $did));
+        $result = $connect->query($checkquery);
+        $result = $result->fetch_all();
+        if ($result) {
+            $hasError = 1;
+            $errorMessage = 'Username already exist.';
+        } else {
+            $query = sprintf(
+                "UPDATE ao_deliverer
+        SET deliverer_name = '%s',
+            deliverer_user = '%s',
+            deliverer_password = '%s',
+            phone = '%s',
+            available_days = '%s',
+            delivery_zone = '%s'
+        WHERE deliverer_id = '%s'",
+                mysqli_real_escape_string($connect, $dname),
+                mysqli_real_escape_string($connect, $duser),
+                password_hash($dpass, PASSWORD_BCRYPT),
+                mysqli_real_escape_string($connect, $dphone),
+                mysqli_real_escape_string($connect, $davail),
+                mysqli_real_escape_string($connect, $dzone),
+                mysqli_real_escape_string($connect, $did)
+            );
+            $connect->query($query);
+            // SUCCESS
+            header('Location: /admin-deliverer');
+        }
+    }
+}
+if (isset($_POST['btn-deliverer-delete'])) {
+    $deliverer_id = $_POST['id'];
+
+    $check_query = sprintf("SELECT * FROM ao_deliverer WHERE deliverer_id = '%s'", mysqli_real_escape_string($connect, $deliverer_id));
+    $result = $connect->query($check_query);
+    $result = $result->fetch_all();
+
+    if (!$result) {
+        $hasError = 1;
+        $errorMessage = 'Deliverer ID does not exist.';
+        header('Location: /admin-deliverer');
+    } else {
+        $delete_query = sprintf("DELETE FROM ao_deliverer WHERE deliverer_id = '%s'", mysqli_real_escape_string($connect, $deliverer_id));
+        $connect->query($delete_query);
+
+        // SUCCESS
+        header('Location: /admin-deliverer');
+    }
+}
+
+$results = [];
+$query = "select ad.deliverer_id, ad.deliverer_name , ad.deliverer_user, ad.phone, ad.available_days, ad.delivery_zone from `ASSIGNMENT`.ao_deliverer ad";
+$result = mysqli_query($connect, $query);
+while ($row = mysqli_fetch_assoc($result)) {
+    array_push($results, $row);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -197,7 +279,7 @@ $results = [
                     <div>
                         <h1>Deliverer</h1>
                         <div class="float float-end">
-                            <a class="btn  btn-primary" href="/admin-create-deliverer">Create</a>
+                            <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal" data-bs-target="#editModal">Create</button>
 
                         </div>
                         <table class="table table-responsive table-hover table-striped">
@@ -207,17 +289,17 @@ $results = [
                                     <th>Username</th>
                                     <th>Phone</th>
                                     <th>Available Days</th>
-                                    <th>Delivery Zones</th>
+                                    <th>Delivery Zone</th>
                                     <th>Option</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="item in items">
-                                    <td>{{item.name}}</td>
-                                    <td>{{item.username}}</td>
+                                    <td>{{item.deliverer_name}}</td>
+                                    <td>{{item.deliverer_user}}</td>
                                     <td>{{item.phone}}</td>
                                     <td>{{item.available_days}}</td>
-                                    <td>{{item.delivery_zones}}</td>
+                                    <td>{{item.delivery_zone}}</td>
                                     <td>
                                         <button class="btn btn-sm btn-primary" @click="selectItem(item)" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
                                         <button class="btn btn-sm btn-danger" @click="selectItem(item)" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
@@ -234,17 +316,21 @@ $results = [
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit</h5>
+                        <h5 class="modal-title">{{title}}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div>
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" v-model="selectedItem.name">
+                            <input type="text" class="form-control" id="name" v-model="selectedItem.deliverer_name">
                         </div>
                         <div>
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" v-model="selectedItem.username">
+                            <input type="text" class="form-control" id="username" v-model="selectedItem.deliverer_user">
+                        </div>
+                        <div>
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" v-model="selectedItem.password">
                         </div>
                         <div>
                             <label for="phone" class="form-label">Phone</label>
@@ -255,13 +341,13 @@ $results = [
                             <input type="number" class="form-control" id="availableDays" v-model="selectedItem.available_days">
                         </div>
                         <div>
-                            <label for="deliveryZones" class="form-label">Delivery Zones</label>
+                            <label for="deliveryZones" class="form-label">Delivery Zone</label>
                             <input type="tel" class="form-control" id="deliveryZones" v-model="selectedItem.delivery_zones">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-primary" @click="createOrEditItem()">Save</button>
                     </div>
                 </div>
             </div>
@@ -275,7 +361,7 @@ $results = [
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="confirmDelete()">Confirm</button>
+                        <button type="button" class="btn btn-primary" @click="confirmDelete()">Confirm</button>
                     </div>
                 </div>
             </div>
@@ -289,16 +375,59 @@ $results = [
         new Vue({
             el: '#main',
             data: {
+                title: '',
                 items: <?= json_encode($results) ?>,
                 selectedItem: {},
             },
             methods: {
                 selectItem(item) {
-                    this.selectedItem = item;
+                    this.selectedItem = {
+                        ...item,
+                        password: '',
+                    };
+                    this.title = 'Edit';
+                },
+                createItem() {
+                    this.selectedItem = {
+                        deliverer_name: '',
+                        deliverer_user: '',
+                        password: '',
+                        phone: '',
+                        available_days: '',
+                        delivery_zones: '',
+                    };
+                    this.title = 'Create';
                 },
                 confirmDelete() {
-                    console.log(this.selectedItem, 'has been deleted');
+                    let formData = new FormData();
+                    formData.append('btn-deliverer-delete', 1);
+                    formData.append('id', this.selectedItem.deliverer_id);
+                    axios.post('', formData).then(() => location.reload());
                 },
+                createOrEditItem() {
+                    if (this.title === 'Create') {
+                        let formData = new FormData();
+                        formData.append('btn-deliverer-post', 1);
+                        formData.append('name', this.selectedItem.deliverer_name);
+                        formData.append('phone', this.selectedItem.phone);
+                        formData.append('username', this.selectedItem.deliverer_user);
+                        formData.append('password', this.selectedItem.password);
+                        formData.append('availableDays', this.selectedItem.available_days);
+                        formData.append('delieveryZone', this.selectedItem.delivery_zones);
+                        axios.post('', formData).then(() => location.reload());
+                    } else {
+                        let formData = new FormData();
+                        formData.append('btn-deliverer-update', 1);
+                        formData.append('id', this.selectedItem.deliverer_id);
+                        formData.append('name', this.selectedItem.deliverer_name);
+                        formData.append('phone', this.selectedItem.phone);
+                        formData.append('username', this.selectedItem.deliverer_user);
+                        formData.append('password', this.selectedItem.password);
+                        formData.append('availableDays', this.selectedItem.available_days);
+                        formData.append('delieveryZone', this.selectedItem.delivery_zones);
+                        axios.post('', formData).then(() => location.reload());
+                    }
+                }
             }
         })
     </script>

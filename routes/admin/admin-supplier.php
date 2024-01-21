@@ -404,7 +404,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         formData.append('username', this.selectedItem.supplier_user);
                         formData.append('password', this.selectedItem.supplier_password);
                         formData.append('email', this.selectedItem.email);
-                        axios.post('', formData) //.then((res) => location.reload());
+                        axios.post('', formData).then((res) => location.reload());
                     }
                 },
             }

@@ -5,14 +5,8 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     exit;
 }
 
-if (!isset($_GET['id']) || !$_GET['id']) {
-    http_response_code(404);
-    require __DIR__ . '/404.php';
-    return;
-}
 $itemid = $_GET['id'];
-$itemid = trim($itemid, "'");
-$itemsql = sprintf("SELECT * FROM ao_item where item_id = '%s'", mysqli_real_escape_string($connect, $itemid));
+echo $itemsql = sprintf("SELECT * FROM ao_item where item_id = '%s'", mysqli_real_escape_string($connect, $itemid));
 $result = $connect->query($itemsql);
 $result = $result->fetch_all();
 $item = $result[0];

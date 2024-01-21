@@ -309,7 +309,7 @@ if (isset($_GET['film_id'])) {
                         </div>
                         <div class="col-md-5">
                             <p>
-                                <a href="/item-details?id=1">
+                                <a href="/item-details?id=<?= $item['item_id'] ?>">
                                     <span class="fw-bold"><?= $item['item_name'] ?></span>
                                 </a>
                                 <small>(<?= $item['release_date'] ?>)</small>

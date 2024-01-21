@@ -7,6 +7,18 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
 
 $cartItems = array_values($_SESSION['__cart'] ?? []);
 
+if (isset($_POST['btnremove'])) {
+    $newCartItems = [];
+    $cartItems = array_filter($cartItems, function ($cart) {
+        $id = $_POST['item_id'];
+        return $cart['id'] !== $id;
+    });
+    foreach ($cartItems as $cart) {
+        $newCartItems[$cart['id']] = $cart;
+    }
+    $_SESSION['__cart'] = $newCartItems;
+    exit("Success");
+}
 
 $paymentMethods = array("cash on delivery", "visa", "mastercard", "kpay", "wavepay");
 
@@ -252,6 +264,9 @@ if (isset($_POST['btncheckout'])) {
                     </div>
                     <div class="col-md-2">
                         <p class="fw-bold text-end">$ {{calcuateTotal(cart)}}</p>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-sm btn-danger" @click="removeItem(cart)">Remove</button>
+                        </div>
                     </div>
                 </div>
                 <hr v-if="i+1!==cartItems.length">
@@ -267,26 +282,24 @@ if (isset($_POST['btncheckout'])) {
 
         <div class="row">
             <div class="col-6">
-                <select class="form-select" name="deliveryMethod">
-                    <option selected>Delivery Method</option>
-                    <option value="1">One</option>
-                    <option value="2">Three</option>
+                <select class="form-select" v-model="deliverer">
+                    <option value="" disabled>Delivery Method</option>
+                    <option v-for="deliverer in deliverers" :value="deliverer">{{deliverer[0]}}</option>
                 </select>
             </div>
         </div>
 
         <div class="row mt-3">
             <div class="col-6">
-                <select class="form-select" name="paymentMethod">
-                    <option selected>Payment Method</option>
-                    <option value="1">Cash on delivery</option>
-                    <option value="2">Banking</option>
+                <select class="form-select" v-model="paymentMethod">
+                    <option value="" disabled>Payment Methods</option>
+                    <option v-for="paymentMethod in paymentMethods" :value="paymentMethod">{{paymentMethod}}</option>
                 </select>
             </div>
         </div>
 
         <div class="d-flex justify-content-end">
-            <button class="btn btn-lg btn-primary">
+            <button class="btn btn-lg btn-primary" @click="checkout()">
                 Checkout
             </button>
         </div>
@@ -322,16 +335,35 @@ if (isset($_POST['btncheckout'])) {
     </footer>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <!-- <script src="/js/vue.min.js"></script> -->
+    <script src="/js/axios.min.js"></script>
     <script>
         new Vue({
             el: '#main',
             data: {
+                deliverer: '',
+                paymentMethod: '',
                 cartItems: <?= json_encode($cartItems) ?>,
+                deliverers: <?= json_encode($deliverers) ?>,
+                paymentMethods: <?= json_encode($paymentMethods) ?>,
             },
             methods: {
                 calcuateTotal(item) {
                     return item.price * item.quantity;
+                },
+                removeItem(item) {
+                    let formData = new FormData();
+                    formData.append('btnremove', 1);
+                    formData.append('item_id', item.id);
+                    axios.post('', formData).then(() => {
+                        this.cartItems = this.cartItems.filter((cart) => cart.id !== item.id);
+                    });
+                },
+                checkout() {
+                    let formData = new FormData();
+                    formData.append('btncheckout', 1);
+                    alert('Checkout');
                 },
             },
             computed: {
@@ -341,7 +373,7 @@ if (isset($_POST['btncheckout'])) {
                         total += this.calcuateTotal(item);
                     });
                     return total;
-                }
+                },
             }
         })
     </script>

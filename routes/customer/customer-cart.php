@@ -5,6 +5,18 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     exit;
 }
 
+function updateItemQuantity($connect, $orderId)
+{
+    $query = sprintf("SELECT apd.item_id, apd.quantity from `ASSIGNMENT`.ao_order_detail apd where apd.order_id = '%s'", mysqli_real_escape_string($connect, $orderId));
+    $result = mysqli_query($connect, $query);
+    while ($row = mysqli_fetch_assoc($result)) {
+        $itemid = $row[0];
+        $quantity = $row[1];
+        $updatequery = sprintf("UPDATE `ASSIGNMENT`.ao_item SET stock_quantity = stock_quantity - '%s' where item_id = '%s'", mysqli_real_escape_string($connect, $quantity), mysqli_real_escape_string($connect, $itemid));
+        $connect->query($updatequery);
+    }
+}
+
 $cartItems = array_values($_SESSION['__cart'] ?? []);
 
 if (isset($_POST['btnremove'])) {
@@ -43,9 +55,8 @@ if (isset($_POST['btncheckout'])) {
     $query = sprintf("INSERT INTO ao_order(order_id, customer_id, order_status, order_date)
         VALUES ('%s','%s','%s', NOW())", mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $cid), mysqli_real_escape_string($connect, $orderstatus));
     $connect->query($query);
-    foreach ($cartItems[0] as $cartItem) {
+    foreach ($cartItems as $cartItem) {
         $orderdetailid = AutoID('ao_order_detail', 'order_detail_id', 'OD', 4);
-
         // from section
         $quantity = $cartItem['quantity'];
 
@@ -61,7 +72,7 @@ if (isset($_POST['btncheckout'])) {
         VALUES ('%s','%s','%s','%s','%s','%s')", mysqli_real_escape_string($connect, $orderdetailid), mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $itemid), mysqli_real_escape_string($connect, $quantity), mysqli_real_escape_string($connect, $unitprice), mysqli_real_escape_string($connect, $subtotal));
         $connect->query($query);
     }
-
+    updateItemQuantity($connect, $orderid);
     $paymentMethod = $_POST['paymentmethod'];
     $deliverername = $_POST['deliverer'];
     $delivererid = getDelivererId($connect, $deliverername);

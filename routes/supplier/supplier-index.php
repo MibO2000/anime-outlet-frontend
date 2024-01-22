@@ -4,6 +4,21 @@ if (($_SESSION['role'] ?? 0) !== ROLE_SUPPLIER) {
     header('Location: /supplier-login', true, 301);
     exit;
 }
+
+$optionarray = array("ACCEPTED", "DECLINED");
+
+function updateItemQuantity($connect, $purchaseId)
+{
+    $query = sprintf("SELECT apd.item_id, apd.quantity from `ASSIGNMENT`.ao_purchase_detail apd where apd.purchase_id = '%s'", mysqli_real_escape_string($connect, $purchaseId));
+    $result = mysqli_query($connect, $query);
+    while ($row = mysqli_fetch_assoc($result)) {
+        $itemid = $row[0];
+        $quantity = $row[1];
+        $updatequery = sprintf("UPDATE `ASSIGNMENT`.ao_item SET stock_quantity = stock_quantity + '%s' where item_id = '%s'", mysqli_real_escape_string($connect, $quantity), mysqli_real_escape_string($connect, $itemid));
+        $connect->query($updatequery);
+    }
+}
+
 if ($method === 'POST') {
     $option = $_POST['option'];
     // OPTIONS are ACCEPT and DECLINE
@@ -12,6 +27,9 @@ if ($method === 'POST') {
     $result = $connect->query($query);
     $result = $result->fetch_all();
     if ($result) {
+        if (strcmp($option, "ACCEPTED")) {
+            updateItemQuantity($connect, $pid);
+        }
         $query = sprintf("UPDATE ao_purchase SET purchase_status = '%s' where purchase_id='%s'", mysqli_real_escape_string($connect, $option), mysqli_real_escape_string($connect, $pid));
         $connect->query($query);
         // SUCCESS

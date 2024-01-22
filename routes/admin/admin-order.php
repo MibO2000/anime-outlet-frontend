@@ -4,6 +4,19 @@ if (($_SESSION['role'] ?? 0) !== ROLE_ADMIN) {
     header('Location: /admin-login', true, 301);
     exit;
 }
+// when pressed on each order, this will show in pop up
+function getOrderDetailPopUp($connect, $orderId)
+{
+    $results = [];
+    // image , name, unit price, quantity, sub total price
+    $query = sprintf("select ai.item_image_1, ai.item_name, aod.unit_price, aod.quantity, aod.sub_total  from `assignment`.ao_order_detail aod join `assignment`.ao_item ai on ai.item_id = aod.item_id where aod.order_id = '%s' order by aod.order_detail_id", mysqli_real_escape_string($connect, $orderId));
+    $result = mysqli_query($connect, $query);
+    while ($row = mysqli_fetch_assoc($result)) {
+        array_push($results, $row);
+    }
+    return $results;
+}
+
 $results = [];
 $query = "select ao.order_id, ac.full_name, ao.order_date, ao.order_status from `ASSIGNMENT`.ao_order ao join `ASSIGNMENT`.ao_customer ac on ao.customer_id = ac.customer_id order by ao.order_date desc";
 $result = mysqli_query($connect, $query);

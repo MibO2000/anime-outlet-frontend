@@ -34,8 +34,6 @@ function getDelivererId($connect, $deliverername)
     return $result[0][0];
 }
 
-if (isset($_POST['btndelete'])) {
-}
 if (isset($_POST['btncheckout'])) {
     // from section
     $itemidlist = array();
@@ -45,8 +43,8 @@ if (isset($_POST['btncheckout'])) {
     $query = sprintf("INSERT INTO ao_order(order_id, customer_id, order_status, order_date)
         VALUES ('%s','%s','%s', NOW())", mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $cid), mysqli_real_escape_string($connect, $orderstatus));
     $connect->query($query);
-    foreach ($itemidlist as $cartItem) {
-        $orderdetailid = AutoID('ao_order', 'order_id', 'O', 4);
+    foreach ($cartItems[0] as $cartItem) {
+        $orderdetailid = AutoID('ao_order_detail', 'order_detail_id', 'OD', 4);
 
         // from section
         $quantity = $cartItem['quantity'];
@@ -88,6 +86,7 @@ if (isset($_POST['btncheckout'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="https://scontent.frgn10-1.fna.fbcdn.net/v/t39.30808-6/273028440_4734065929980159_2213306540146619987_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=8DAVbr-s2rkAX8qzgRc&_nc_oc=AQlfsbZdD8sK9fExJlOIaeZQh576v7W5GFmAZ8yRDVlHm7EeL8UPY76iqfDuTlOwhPA&_nc_ht=scontent.frgn10-1.fna&oh=00_AfCkNdNmMA1O9LPRUo_CMwKAzytRNxHZWlGb4GQWmIRtZQ&oe=65B1794E">
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;

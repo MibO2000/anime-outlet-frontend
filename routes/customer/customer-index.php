@@ -159,6 +159,16 @@ function getCategoryList($connect)
             flex: 1;
         }
 
+        .max-w-4 {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .w-100 {
+            width: 100%;
+            height: auto;
+        }
+
         @media (min-width: 768px) {
             .flex-md-equal>* {
                 flex: 1;
@@ -208,66 +218,97 @@ function getCategoryList($connect)
 
     <main class="container mt-4">
         <div>
-            <form method="GET" action="/items">
-                <div>
-                    <input type="search" class="form-control" placeholder="Search" name="search">
-                </div>
-                <div class="mt-2 mb-2">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </div>
+            <form class="d-flex" role="search" method="GET" action="/items">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
 
-        <div class="d-flex flex-row">
+        <div class="d-flex flex-row mt-4">
             <div>
-                <img src="https://images.unsplash.com/photo-1705642373439-27963d4b9908?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8">
+                <img class="rounded float-start img-fluid" src="https://wallpaperaccess.com/full/3704375.jpg">
             </div>
-            <div class="m-2">
+            <div>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi explicabo aperiam, cum consectetur
-                    fuga sed ab assumenda, inventore esse adipisci veniam itaque facere provident pariatur. Vero sed
-                    minima architecto voluptatibus.
+                    Konoha is the first Otaku Store in Myanmar since 2013. You can get many things related from Anime
+                    and Comic.
+
+                    Since 2014, our Konoha Hobby House shop has been the first in Myanmar to exclusively sell anime and
+                    comic related items. Thank you very much to each and every one of you who have bought and supported
+                    us so far.
                 </p>
             </div>
         </div>
         <div class="d-flex flex-row mt-4">
             <div>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi explicabo aperiam, cum consectetur
-                    fuga sed ab assumenda, inventore esse adipisci veniam itaque facere provident pariatur. Vero sed
-                    minima architecto voluptatibus.
+                    The Konoha Hobby House, established in 2014, is a prominent hub in Myanmar for anime, comics, and
+                    related merchandise. Renowned for its diverse selection, including official figures, bootlegs, and
+                    third-party products, we cater to collectors and fans of various genres.
+
+                    We also provide a wide range of items such as Gundam model kits, official Bandai products,
+                    action figures, keychains, T-shirts, hoodies, and more. They collaborate with Zen Creations Studio
+                    and offer a platform for customers to access figures from well-known studios like Iron Studio and
+                    Prime 1 Studio.
                 </p>
             </div>
             <div class="m-2">
-                <img src="https://images.unsplash.com/photo-1705642373439-27963d4b9908?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8">
+                <img class="rounded float-end img-fluid" src="https://wallpaperaccess.com/full/3704384.jpg">
+            </div>
+        </div>
+        <div class="d-flex flex-row mt-4">
+            <div class="m-2">
+                <img class="rounded float-end img-fluid" src="https://wallpaperaccess.com/full/10989863.jpg">
+            </div>
+            <div>
+                <p>
+                    Konoha Hobby House emphasizes its commitment to customer satisfaction through its Shipping & After
+                    Sale Policy, ensuring a seamless purchasing experience. The policy covers various services and
+                    highlights the store's dedication to delivering quality products to its customers.
+
+                    In response to the global situation, the store encourages customers to stay at home and explore its
+                    offerings through online platforms. It provides links to various official websites and third-party
+                    sources, making it convenient for customers to access a diverse range of products.
+
+                    Overall, Konoha Hobby House has become a go-to destination for collectors and enthusiasts, offering
+                    a comprehensive selection of merchandise and prioritizing customer experience through its policies
+                    and collaborations.
+                </p>
+            </div>
+
+        </div>
+        <div class="d-flex flex-row justify-content-around mt-4">
+            <div class="mt-4">
+                <h2>Contact Us</h2>
+
+                <form method="POST">
+                    <div class="row">
+                        <div class="col">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" name="description" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div style="margin-top:20px;display:flex;align-items:center;justify-content:center;width:100%">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="max-w-4">
+                <img class="rounded float-start img-fluid w-100" src="https://w0.peakpx.com/wallpaper/73/844/HD-wallpaper-wano-flower-capital-flower-capital-luffy-one-piece.jpg">
             </div>
         </div>
 
-        <div class="mt-4">
-            <h2>Contact Us</h2>
 
-            <form method="POST">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" name="description" rows="5"></textarea>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div style="margin-top:20px;display:flex;align-items:center;justify-content:center;width:100%">
-                            <button class="btn btn-primary" type="submit">Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
 
     </main>
 
@@ -292,6 +333,8 @@ function getCategoryList($connect)
                     </a>
                 </div>
                 <div>
+                    <p><a href="https://www.facebook.com/523016474418480/posts/3255076131212487/">Terms and
+                            Conditions</a></p>
                     <small>Copyright &copy; <?= date('Y') ?>. All right reserved.</small>
                 </div>
             </div>

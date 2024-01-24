@@ -299,6 +299,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </a>
                 </div>
                 <div>
+                    <p><a href="https://www.facebook.com/523016474418480/posts/3255076131212487/">Terms and
+                            Conditions</a></p>
                     <small>Copyright &copy; <?= date('Y') ?>. All right reserved.</small>
                 </div>
             </div>

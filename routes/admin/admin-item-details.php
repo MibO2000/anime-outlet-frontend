@@ -30,8 +30,6 @@ if (isset($_POST['btn-film-save'])) {
 if (isset($_POST['btn-category-save'])) {
     $cid = AutoID('ao_category', 'category_id', 'C', 4);
     $cname = $_POST['cname'];
-    $cdesc = $_POST['cdescription'];
-    $image = $_POST['cimage'];
 
     $checkquery = sprintf("SELECT * from ao_category where category_name = '%s'", mysqli_real_escape_string($connect, $cname));
     $result = $connect->query($checkquery);
@@ -42,8 +40,8 @@ if (isset($_POST['btn-category-save'])) {
         echo $errorMessage;
         die;
     } else {
-        echo  $query = sprintf("INSERT INTO ao_category(category_id, category_name, category_image, category_description)
-        VALUES ('%s','%s','%s','%s')", mysqli_real_escape_string($connect, $cid), mysqli_real_escape_string($connect, $cname), mysqli_real_escape_string($connect, $image), mysqli_real_escape_string($connect, $cdesc));
+        echo  $query = sprintf("INSERT INTO ao_category(category_id, category_name)
+        VALUES ('%s','%s')", mysqli_real_escape_string($connect, $cid), mysqli_real_escape_string($connect, $cname));
         $connect->query($query);
         // SUCCESS
         header('Location: /admin-item-details');
@@ -127,18 +125,12 @@ if (isset($_POST['btn-category-update'])) {
     }
 
     $cname = $_POST['cname'];
-    $cdesc = $_POST['cdescription'];
-    $image = $_POST['cimage'];
 
     $update_query = sprintf(
         "UPDATE ao_category
-            SET category_name = '%s',
-                category_image = '%s',
-                category_description = '%s'
+            SET category_name = '%s'
             WHERE category_id = '%s'",
         mysqli_real_escape_string($connect, $cname),
-        mysqli_real_escape_string($connect, $image),
-        mysqli_real_escape_string($connect, $cdesc),
         mysqli_real_escape_string($connect, $cid)
     );
 
@@ -273,109 +265,110 @@ while ($row = mysqli_fetch_assoc($result)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Order</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="icon" type="image/x-icon" href="https://scontent.frgn10-1.fna.fbcdn.net/v/t39.30808-6/273028440_4734065929980159_2213306540146619987_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=8DAVbr-s2rkAX8qzgRc&_nc_oc=AQlfsbZdD8sK9fExJlOIaeZQh576v7W5GFmAZ8yRDVlHm7EeL8UPY76iqfDuTlOwhPA&_nc_ht=scontent.frgn10-1.fna&oh=00_AfCkNdNmMA1O9LPRUo_CMwKAzytRNxHZWlGb4GQWmIRtZQ&oe=65B1794E">
+    <link rel="icon" type="image/x-icon"
+        href="https://scontent.frgn10-1.fna.fbcdn.net/v/t39.30808-6/273028440_4734065929980159_2213306540146619987_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=8DAVbr-s2rkAX8qzgRc&_nc_oc=AQlfsbZdD8sK9fExJlOIaeZQh576v7W5GFmAZ8yRDVlHm7EeL8UPY76iqfDuTlOwhPA&_nc_ht=scontent.frgn10-1.fna&oh=00_AfCkNdNmMA1O9LPRUo_CMwKAzytRNxHZWlGb4GQWmIRtZQ&oe=65B1794E">
     <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
 
-        .bi {
-            vertical-align: -.125em;
-            fill: currentColor;
-        }
+    .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+    }
 
-        .nav-scroller {
-            position: relative;
-            z-index: 2;
-            height: 2.75rem;
-            overflow-y: hidden;
-        }
+    .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+    }
 
-        .nav-scroller .nav {
-            display: flex;
-            flex-wrap: nowrap;
-            padding-bottom: 1rem;
-            margin-top: -1px;
-            overflow-x: auto;
-            text-align: center;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-        }
+    .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
 
-        .btn-bd-primary {
-            --bd-violet-bg: #712cf9;
-            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+    .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
 
-            --bs-btn-font-weight: 600;
-            --bs-btn-color: var(--bs-white);
-            --bs-btn-bg: var(--bd-violet-bg);
-            --bs-btn-border-color: var(--bd-violet-bg);
-            --bs-btn-hover-color: var(--bs-white);
-            --bs-btn-hover-bg: #6528e0;
-            --bs-btn-hover-border-color: #6528e0;
-            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-            --bs-btn-active-color: var(--bs-btn-hover-color);
-            --bs-btn-active-bg: #5a23c8;
-            --bs-btn-active-border-color: #5a23c8;
-        }
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+    }
 
-        .bd-mode-toggle {
-            z-index: 1500;
-        }
+    .bd-mode-toggle {
+        z-index: 1500;
+    }
 
-        .bd-mode-toggle .dropdown-menu .active .bi {
-            display: block !important;
-        }
+    .bd-mode-toggle .dropdown-menu .active .bi {
+        display: block !important;
+    }
 
-        .bi {
-            display: inline-block;
-            width: 1rem;
-            height: 1rem;
-        }
+    .bi {
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+    }
 
-        /*
+    /*
  * Sidebar
  */
 
-        @media (min-width: 768px) {
-            .sidebar .offcanvas-lg {
-                position: -webkit-sticky;
-                position: sticky;
-                top: 48px;
-            }
-
-            .navbar-search {
-                display: block;
-            }
+    @media (min-width: 768px) {
+        .sidebar .offcanvas-lg {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 48px;
         }
 
-        .sidebar .nav-link {
-            font-size: .875rem;
-            font-weight: 500;
+        .navbar-search {
+            display: block;
         }
+    }
 
-        .sidebar .nav-link.active {
-            color: #2470dc;
-        }
+    .sidebar .nav-link {
+        font-size: .875rem;
+        font-weight: 500;
+    }
 
-        .sidebar-heading {
-            font-size: .75rem;
-        }
+    .sidebar .nav-link.active {
+        color: #2470dc;
+    }
 
-        .navbar-brand {
-            padding-top: .75rem;
-            padding-bottom: .75rem;
-            background-color: rgba(0, 0, 0, .25);
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
-        }
+    .sidebar-heading {
+        font-size: .75rem;
+    }
 
-        .navbar .form-control {
-            padding: .75rem 1rem;
-        }
+    .navbar-brand {
+        padding-top: .75rem;
+        padding-bottom: .75rem;
+        background-color: rgba(0, 0, 0, .25);
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+    }
+
+    .navbar .form-control {
+        padding: .75rem 1rem;
+    }
     </style>
 </head>
 
@@ -384,7 +377,8 @@ while ($row = mysqli_fetch_assoc($result)) {
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="/admin-items"><?= COMPANY_NAME ?></a>
         <div class="mx-4">
             <div class="dropdown fs-6">
-                <button class="btn dropdown-toggle text-white " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn dropdown-toggle text-white " type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
                     Welcome back, <?= $_SESSION['name'] ?>!
                 </button>
                 <ul class="dropdown-menu">
@@ -397,36 +391,43 @@ while ($row = mysqli_fetch_assoc($result)) {
     <div class="container-fluid" id="main">
         <div class="row">
             <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
-                <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+                <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu"
+                    aria-labelledby="sidebarMenuLabel">
                     <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-items">
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page"
+                                    href="/admin-items">
                                     Items
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-item-details">
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page"
+                                    href="/admin-item-details">
                                     Item Details
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-supplier">
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page"
+                                    href="/admin-supplier">
                                     Supplier
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-deliverer">
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page"
+                                    href="/admin-deliverer">
                                     Deliverer
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-order">
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page"
+                                    href="/admin-order">
                                     Order
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-purchase">
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page"
+                                    href="/admin-purchase">
                                     Purchase
                                 </a>
                             </li>
@@ -440,7 +441,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <div>
                     <div class="d-flex justify-content-between align-items-center">
                         <h1>Film</h1>
-                        <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal" data-bs-target="#editFilmModal">Create</button>
+                        <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal"
+                            data-bs-target="#editFilmModal">Create</button>
                     </div>
                     <table class="table table-responsive table-hover table-striped">
                         <thead>
@@ -461,8 +463,10 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <td>{{film.release_date}}</td>
                                 <td>{{film.film_description}}</td>
                                 <td>
-                                    <button class="btn btn-primary btn-sm" @click="selectItem(film,'FILM')" data-bs-toggle="modal" data-bs-target="#editFilmModal">Edit</button>
-                                    <button class="btn btn-danger btn-sm" @click="selectItem(film,'FILM')" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                                    <button class="btn btn-primary btn-sm" @click="selectItem(film,'FILM')"
+                                        data-bs-toggle="modal" data-bs-target="#editFilmModal">Edit</button>
+                                    <button class="btn btn-danger btn-sm" @click="selectItem(film,'FILM')"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -472,15 +476,14 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <div>
                     <div class="d-flex justify-content-between align-items-center">
                         <h1>Category</h1>
-                        <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal" data-bs-target="#editCategoryModal">Create</button>
+                        <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal"
+                            data-bs-target="#editCategoryModal">Create</button>
                     </div>
                     <table class="table table-responsive table-hover table-striped">
                         <thead>
                             <tr>
                                 <th>Category ID</th>
-                                <th>Category Nam</th>
-                                <th>Category Image</th>
-                                <th>Category Description</th>
+                                <th>Category Name</th>
                                 <th>Option</th>
                             </tr>
                         </thead>
@@ -488,11 +491,11 @@ while ($row = mysqli_fetch_assoc($result)) {
                             <tr v-for="category in categories">
                                 <td>{{category.category_id}}</td>
                                 <td>{{category.category_name}}</td>
-                                <td>{{category.category_image}}</td>
-                                <td>{{category.category_description}}</td>
                                 <td>
-                                    <button class="btn btn-primary btn-sm" @click="selectItem(category,'CATEGORY')" data-bs-toggle="modal" data-bs-target="#editCategoryModal">Edit</button>
-                                    <button class="btn btn-danger btn-sm" @click="selectItem(category,'CATEGORY')" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                                    <button class="btn btn-primary btn-sm" @click="selectItem(category,'CATEGORY')"
+                                        data-bs-toggle="modal" data-bs-target="#editCategoryModal">Edit</button>
+                                    <button class="btn btn-danger btn-sm" @click="selectItem(category,'CATEGORY')"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -502,7 +505,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <div>
                     <div class="d-flex justify-content-between align-items-center">
                         <h1>Brand</h1>
-                        <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal" data-bs-target="#editBrandModal">Create</button>
+                        <button class="btn btn-primary" @click="createItem()" data-bs-toggle="modal"
+                            data-bs-target="#editBrandModal">Create</button>
                     </div>
                     <table class="table table-responsive table-hover table-striped">
                         <thead>
@@ -521,8 +525,10 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <td>{{brand.brand_image}}</td>
                                 <td>{{brand.brand_description}}</td>
                                 <td>
-                                    <button class="btn btn-primary btn-sm" @click="selectItem(brand,'BRAND')" data-bs-toggle="modal" data-bs-target="#editBrandModal">Edit</button>
-                                    <button class="btn btn-danger btn-sm" @click="selectItem(brand,'BRAND')" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                                    <button class="btn btn-primary btn-sm" @click="selectItem(brand,'BRAND')"
+                                        data-bs-toggle="modal" data-bs-target="#editBrandModal">Edit</button>
+                                    <button class="btn btn-danger btn-sm" @click="selectItem(brand,'BRAND')"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -545,7 +551,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                         </div>
                         <div>
                             <label for="description" class="form-label">Description</label>
-                            <input type="text" class="form-control" id="category" v-model="selectedItem.film_description" />
+                            <input type="text" class="form-control" id="category"
+                                v-model="selectedItem.film_description" />
                         </div>
                         <div>
                             <label for="image" class="form-label">Image</label>
@@ -553,7 +560,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                         </div>
                         <div>
                             <label for="release_date" class="form-label">Released Date</label>
-                            <input type="date" class="form-control" id="release_date" v-model="selectedItem.release_date" />
+                            <input type="date" class="form-control" id="release_date"
+                                v-model="selectedItem.release_date" />
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -579,14 +587,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <div>
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="name" v-model="selectedItem.category_name" />
-                        </div>
-                        <div>
-                            <label for="description" class="form-label">Description</label>
-                            <input type="text" class="form-control" id="category" v-model="selectedItem.category_description" />
-                        </div>
-                        <div>
-                            <label for="image" class="form-label">Image</label>
-                            <input type="url" class="form-control" id="image" v-model="selectedItem.category_image" />
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -615,7 +615,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                         </div>
                         <div>
                             <label for="description" class="form-label">Description</label>
-                            <input type="text" class="form-control" id="category" v-model="selectedItem.brand_description" />
+                            <input type="text" class="form-control" id="category"
+                                v-model="selectedItem.brand_description" />
                         </div>
                         <div>
                             <label for="image" class="form-label">Image</label>
@@ -657,103 +658,99 @@ while ($row = mysqli_fetch_assoc($result)) {
     <script src="/js/vue.min.js"></script>
     <script src="/js/axios.min.js"></script>
     <script>
-        new Vue({
-            el: '#main',
-            data: {
-                films: <?= json_encode($films) ?>,
-                categories: <?= json_encode($categories) ?>,
-                brands: <?= json_encode($brands) ?>,
-                selectedItem: {},
-                selectedType: '',
+    new Vue({
+        el: '#main',
+        data: {
+            films: <?= json_encode($films) ?>,
+            categories: <?= json_encode($categories) ?>,
+            brands: <?= json_encode($brands) ?>,
+            selectedItem: {},
+            selectedType: '',
+        },
+        methods: {
+            createItem() {
+                this.selectedItem = {};
+                this.selectedType = ''
             },
-            methods: {
-                createItem() {
-                    this.selectedItem = {};
-                    this.selectedType = ''
-                },
-                selectItem(item, type) {
-                    this.selectedItem = {
-                        ...item
-                    };
-                    this.selectedType = type;
-                },
-                confirmDelete() {
-                    let formData = new FormData();
-                    switch (this.selectedType) {
-                        case 'FILM':
-                            formData.append('btn-film-delete', 1);
-                            formData.append('film_id', this.selectedItem.film_id);
-                            break;
-                        case 'CATEGORY':
-                            formData.append('btn-category-delete', 1);
-                            formData.append('category_id', this.selectedItem.category_id);
-                            break;
-                        case 'BRAND':
-                            formData.append('btn-brand-delete', 1);
-                            formData.append('brand_id', this.selectedItem.brand_id);
-                            break;
-                    }
-                    axios.post('', formData).then(() => location.reload());
-                },
-                submitCreateOrEditFilm() {
-                    if (this.selectedType === '') {
-                        let data = new FormData();
-                        data.append('btn-film-save', 1);
-                        data.append('fname', this.selectedItem.title);
-                        data.append('freleasedate', this.selectedItem.release_date);
-                        data.append('fdescription', this.selectedItem.film_description);
-                        data.append('fimage', this.selectedItem.film_image);
-                        axios.post('', data).then((res) => location.reload());
-                    } else {
-                        let data = new FormData();
-                        data.append('btn-film-update', 1);
-                        data.append('film_id', this.selectedItem.film_id);
-                        data.append('fname', this.selectedItem.title);
-                        data.append('freleasedate', this.selectedItem.release_date);
-                        data.append('fdescription', this.selectedItem.film_description);
-                        data.append('fimage', this.selectedItem.film_image);
-                        axios.post('', data).then((res) => location.reload());
-                    }
-                },
-                submitCreateOrEditCategory() {
-                    if (this.selectedType === '') {
-                        let data = new FormData();
-                        data.append('btn-category-save', 1);
-                        data.append('cname', this.selectedItem.category_name);
-                        data.append('cdescription', this.selectedItem.category_description);
-                        data.append('cimage', this.selectedItem.category_image);
-                        axios.post('', data).then((res) => location.reload());
-                    } else {
-                        let data = new FormData();
-                        data.append('btn-category-update', 1);
-                        data.append('category_id', this.selectedItem.category_id);
-                        data.append('cname', this.selectedItem.category_name);
-                        data.append('cdescription', this.selectedItem.category_description);
-                        data.append('cimage', this.selectedItem.category_image);
-                        axios.post('', data).then((res) => location.reload());
-                    }
-                },
-                submitCreateOrEditBrand() {
-                    if (this.selectedType === '') {
-                        let data = new FormData();
-                        data.append('btn-brand-save', 1);
-                        data.append('bname', this.selectedItem.brand_name);
-                        data.append('bdescription', this.selectedItem.brand_description);
-                        data.append('bimage', this.selectedItem.brand_image);
-                        axios.post('', data).then((res) => location.reload());
-                    } else {
-                        let data = new FormData();
-                        data.append('btn-brand-update', 1);
-                        data.append('brand_id', this.selectedItem.brand_id);
-                        data.append('bname', this.selectedItem.brand_name);
-                        data.append('bdescription', this.selectedItem.brand_description);
-                        data.append('bimage', this.selectedItem.brand_image);
-                        axios.post('', data).then((res) => location.reload());
-                    }
-                },
+            selectItem(item, type) {
+                this.selectedItem = {
+                    ...item
+                };
+                this.selectedType = type;
             },
+            confirmDelete() {
+                let formData = new FormData();
+                switch (this.selectedType) {
+                    case 'FILM':
+                        formData.append('btn-film-delete', 1);
+                        formData.append('film_id', this.selectedItem.film_id);
+                        break;
+                    case 'CATEGORY':
+                        formData.append('btn-category-delete', 1);
+                        formData.append('category_id', this.selectedItem.category_id);
+                        break;
+                    case 'BRAND':
+                        formData.append('btn-brand-delete', 1);
+                        formData.append('brand_id', this.selectedItem.brand_id);
+                        break;
+                }
+                axios.post('', formData).then(() => location.reload());
+            },
+            submitCreateOrEditFilm() {
+                if (this.selectedType === '') {
+                    let data = new FormData();
+                    data.append('btn-film-save', 1);
+                    data.append('fname', this.selectedItem.title);
+                    data.append('freleasedate', this.selectedItem.release_date);
+                    data.append('fdescription', this.selectedItem.film_description);
+                    data.append('fimage', this.selectedItem.film_image);
+                    axios.post('', data).then((res) => location.reload());
+                } else {
+                    let data = new FormData();
+                    data.append('btn-film-update', 1);
+                    data.append('film_id', this.selectedItem.film_id);
+                    data.append('fname', this.selectedItem.title);
+                    data.append('freleasedate', this.selectedItem.release_date);
+                    data.append('fdescription', this.selectedItem.film_description);
+                    data.append('fimage', this.selectedItem.film_image);
+                    axios.post('', data).then((res) => location.reload());
+                }
+            },
+            submitCreateOrEditCategory() {
+                if (this.selectedType === '') {
+                    let data = new FormData();
+                    data.append('btn-category-save', 1);
+                    data.append('cname', this.selectedItem.category_name);
+                    axios.post('', data).then((res) => location.reload());
+                } else {
+                    let data = new FormData();
+                    data.append('btn-category-update', 1);
+                    data.append('category_id', this.selectedItem.category_id);
+                    data.append('cname', this.selectedItem.category_name);
+                    axios.post('', data).then((res) => location.reload());
+                }
+            },
+            submitCreateOrEditBrand() {
+                if (this.selectedType === '') {
+                    let data = new FormData();
+                    data.append('btn-brand-save', 1);
+                    data.append('bname', this.selectedItem.brand_name);
+                    data.append('bdescription', this.selectedItem.brand_description);
+                    data.append('bimage', this.selectedItem.brand_image);
+                    axios.post('', data).then((res) => location.reload());
+                } else {
+                    let data = new FormData();
+                    data.append('btn-brand-update', 1);
+                    data.append('brand_id', this.selectedItem.brand_id);
+                    data.append('bname', this.selectedItem.brand_name);
+                    data.append('bdescription', this.selectedItem.brand_description);
+                    data.append('bimage', this.selectedItem.brand_image);
+                    axios.post('', data).then((res) => location.reload());
+                }
+            },
+        },
 
-        });
+    });
     </script>
 </body>
 

@@ -2,7 +2,7 @@
 
 session_start();
 
-define('COMPANY_NAME', 'MibO');
+define('COMPANY_NAME', 'Konoha Hobby House');
 
 define('ROLE_ADMIN', 1);
 define('ROLE_CUSTOMER', 2);

@@ -13,4 +13,8 @@ password: $2y$10$FzNkBdeL64lb2bFTe6c2qObW3QSFawdzvPZDZOaHflVGRAdQ.tnHy
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
 ```
 
-<!-- logo image url -> https://scontent.frgn10-1.fna.fbcdn.net/v/t39.30808-6/273028440_4734065929980159_2213306540146619987_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=8DAVbr-s2rkAX8qzgRc&_nc_oc=AQlfsbZdD8sK9fExJlOIaeZQh576v7W5GFmAZ8yRDVlHm7EeL8UPY76iqfDuTlOwhPA&_nc_ht=scontent.frgn10-1.fna&oh=00_AfCkNdNmMA1O9LPRUo_CMwKAzytRNxHZWlGb4GQWmIRtZQ&oe=65B1794E -->
+<!-- slide show photo 1 : https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/5298bac0-b8bf-4c80-af67-725c1272dbb0/dd55ja2-8ba5495d-00bf-4eff-91bf-8e55671aacb6.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzUyOThiYWMwLWI4YmYtNGM4MC1hZjY3LTcyNWMxMjcyZGJiMFwvZGQ1NWphMi04YmE1NDk1ZC0wMGJmLTRlZmYtOTFiZi04ZTU1NjcxYWFjYjYuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.pr7o7qeeKM6hPBlKfErM8-gL7z7N0EnHy0vXbjNhvVg -->
+
+<!-- slide show photo 2 : https://r4.wallpaperflare.com/wallpaper/838/806/561/satoru-gojo-one-piece-hd-wallpaper-c940388dd1aa5dbb86d7680f5011465d.jpg -->
+
+<!-- slide show photo 3 : https://r4.wallpaperflare.com/wallpaper/672/578/501/manga-naruto-shippuuden-uzumaki-naruto-uchiha-sasuke-wallpaper-2529c8a4eb464ddbb08f2ea400bde027.jpg -->

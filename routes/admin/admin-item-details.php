@@ -459,7 +459,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                             <tr v-for="film in films">
                                 <td>{{film.film_id}}</td>
                                 <td>{{film.title}}</td>
-                                <td>{{film.film_image}}</td>
+                                <td>
+                                    <img :src="film.film_image" style="width:100px;height:auto;" alt="film image">
+                                </td>
                                 <td>{{film.release_date}}</td>
                                 <td>{{film.film_description}}</td>
                                 <td>
@@ -522,7 +524,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                             <tr v-for="brand in brands">
                                 <td>{{brand.brand_id}}</td>
                                 <td>{{brand.brand_name}}</td>
-                                <td>{{brand.brand_image}}</td>
+                                <td><img :src="brand.brand_image" style="width:100px;height:auto;" alt="brand image">
+                                </td>
                                 <td>{{brand.brand_description}}</td>
                                 <td>
                                     <button class="btn btn-primary btn-sm" @click="selectItem(brand,'BRAND')"

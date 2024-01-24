@@ -59,8 +59,9 @@ if (isset($_POST['btncheckout'])) {
         $orderdetailid = AutoID('ao_order_detail', 'order_detail_id', 'OD', 4);
         // from section
         $quantity = $cartItem['quantity'];
+        $itemid = $cartItem['id'];
 
-        $itemsql = sprintf("SELECT * FROM ao_item where item_id = '%s'", mysqli_real_escape_string($connect, $cartItem['id']));
+        $itemsql = sprintf("SELECT * FROM ao_item where item_id = '%s'", mysqli_real_escape_string($connect, $itemid));
         $result = $connect->query($itemsql);
         $result = $result->fetch_all();
         $item = $result[0];

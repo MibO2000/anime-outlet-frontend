@@ -10,8 +10,8 @@ function updateItemQuantity($connect, $orderId)
     $query = sprintf("SELECT apd.item_id, apd.quantity from `ASSIGNMENT`.ao_order_detail apd where apd.order_id = '%s'", mysqli_real_escape_string($connect, $orderId));
     $result = mysqli_query($connect, $query);
     while ($row = mysqli_fetch_assoc($result)) {
-        $itemid = $row[0];
-        $quantity = $row[1];
+        $itemid = $row['item_id'];
+        $quantity = $row['quantity'];
         $updatequery = sprintf("UPDATE `ASSIGNMENT`.ao_item SET stock_quantity = stock_quantity - '%s' where item_id = '%s'", mysqli_real_escape_string($connect, $quantity), mysqli_real_escape_string($connect, $itemid));
         $connect->query($updatequery);
     }
@@ -78,10 +78,16 @@ if (isset($_POST['btncheckout'])) {
     $deliverername = $_POST['deliverer'];
     $delivererid = getDelivererId($connect, $deliverername);
     $paymentid = AutoID('ao_payment', 'payment_id', 'P', 4);
+    $deliveryid = AutoID('ao_delivery', 'delivery_id', 'D', 4);
+    $trackingcode = $deliverername . '-' . $delivererid;
 
     $paymentquery = sprintf("INSERT INTO ao_payment (payment_id, order_id, payment_method, payment_date)
         VALUES ('%s','%s','%s', NOW())", mysqli_real_escape_string($connect, $paymentid), mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $paymentMethod));
     $connect->query($paymentquery);
+
+    $deliveryquery = sprintf("INSERT INTO ao_delivery (delivery_id, deliverer_id, order_id, estimate_delivery_date, tracking_code, delivery_status)
+        VALUES ('%s','%s','%s', DATE_ADD(NOW(), INTERVAL 5 DAY), '%s', 'PENDING')", mysqli_real_escape_string($connect, $deliveryid), mysqli_real_escape_string($connect, $delivererid), mysqli_real_escape_string($connect, $orderid), mysqli_real_escape_string($connect, $trackingcode));
+    $connect->query($deliveryquery);
 
     $orderquery = sprintf("UPDATE ao_order SET order_status = 'SUCCESS', order_date = NOW() WHERE order_id = '%s'", mysqli_real_escape_string($connect, $orderid));
     $connect->query($orderquery);

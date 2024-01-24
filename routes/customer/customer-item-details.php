@@ -4,7 +4,6 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
     header('Location: /login', true, 301);
     exit;
 }
-
 $itemid = $_GET['id'];
 $itemsql = sprintf("SELECT * FROM ao_item where item_id = '%s'", mysqli_real_escape_string($connect, $itemid));
 $result = $connect->query($itemsql);
@@ -203,11 +202,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </li>
                         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="/items">Items</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/cart">
+                        <li class="nav-item position-relative">
+                            <a class="nav-link" href="/cart">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px;">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                    <?php if (!empty($_SESSION['__cart'])) : ?>
+                                        <?php
+                                        $totalQuantity = array_sum(array_column($_SESSION['__cart'], 'quantity'));
+                                        ?>
+                                        <circle cx="18" cy="6" r="6" fill="#FF3333"></circle>
+                                        <text x="18" y="9" font-size="10" fill="white" text-anchor="middle"><?= $totalQuantity ?></text>
+                                    <?php endif; ?>
                                 </svg>
-                            </a></li>
+                            </a>
+                        </li>
+
                         <li class="nav-item">
                             <div class="dropdown fs-6">
                                 <button class="btn dropdown-toggle text-white " type="button" data-bs-toggle="dropdown" aria-expanded="false">

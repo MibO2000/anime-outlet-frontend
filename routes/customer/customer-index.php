@@ -7,7 +7,7 @@ if (($_SESSION['role'] ?? 0) !== ROLE_CUSTOMER) {
 
 function getFilmList($connect)
 {
-    $film = sprintf("SELECT title FROM ao_film order by title");
+    $film = sprintf("SELECT title, film_id FROM ao_film order by title");
     $result = $connect->query($film);
     $result = $result->fetch_all();
     return $result;
@@ -15,7 +15,7 @@ function getFilmList($connect)
 
 function getBrandList($connect)
 {
-    $brand = sprintf("SELECT brand_name FROM ao_brand order by brand_name");
+    $brand = sprintf("SELECT brand_name, brand_id FROM ao_brand order by brand_name");
     $result = $connect->query($brand);
     $result = $result->fetch_all();
     return $result;
@@ -23,7 +23,7 @@ function getBrandList($connect)
 
 function getCategoryList($connect)
 {
-    $category = sprintf("SELECT category_name FROM ao_category order by category_name");
+    $category = sprintf("SELECT category_name, category_id FROM ao_category order by category_name");
     $result = $connect->query($category);
     $result = $result->fetch_all();
     return $result;
@@ -180,7 +180,7 @@ function getCategoryList($connect)
 
 <body>
     <nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
-        <div class="container">
+        <div class="container-md">
             <div class="offcanvas offcanvas-end" tabindex="-1" id="#offcanvas" aria-labelledby="#offcanvasLabel">
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="#offcanvasLabel">Aperture</h5>
@@ -195,11 +195,21 @@ function getCategoryList($connect)
                         </li>
                         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="/items">Items</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/cart">
+                        <li class="nav-item position-relative">
+                            <a class="nav-link" href="/cart">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px;">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                    <?php if (!empty($_SESSION['__cart'])) : ?>
+                                        <?php
+                                        $totalQuantity = array_sum(array_column($_SESSION['__cart'], 'quantity'));
+                                        ?>
+                                        <circle cx="18" cy="6" r="6" fill="#FF3333"></circle>
+                                        <text x="18" y="9" font-size="10" fill="white" text-anchor="middle"><?= $totalQuantity ?></text>
+                                    <?php endif; ?>
                                 </svg>
-                            </a></li>
+                            </a>
+                        </li>
+
                         <li class="nav-item">
                             <div class="dropdown fs-6">
                                 <button class="btn dropdown-toggle text-white " type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -215,14 +225,60 @@ function getCategoryList($connect)
             </div>
         </div>
     </nav>
-
-    <main class="container mt-4">
-        <div>
-            <form class="d-flex" role="search" method="GET" action="/items">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+    <nav class="navbar navbar-expand-md bg-light sticky-top border-bottom" data-bs-theme="light">
+        <div class="container-md">
+            <div class="collapse navbar-collapse" id="navbarNavDropdownSecondary">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="filmDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Film
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="filmDropdown">
+                            <?php
+                            $filmList = getFilmList($connect);
+                            foreach ($filmList as $film) {
+                                echo '<li><a class="dropdown-item" href="/items?film_id=' . urlencode($film[1]) . '">' . $film[0] . '</a></li>';
+                            }
+                            ?>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Category
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            <?php
+                            $categoryList = getCategoryList($connect);
+                            foreach ($categoryList as $category) {
+                                echo '<li><a class="dropdown-item" href="/items?category_id=' . urlencode($category[1]) . '">' . $category[0] . '</a></li>';
+                            }
+                            ?>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="brandDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Brand
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="brandDropdown">
+                            <?php
+                            $brandList = getBrandList($connect);
+                            foreach ($brandList as $brand) {
+                                echo '<li><a class="dropdown-item" href="/items?brand_id=' . urlencode($brand[1]) . '">' . $brand[0] . '</a></li>';
+                            }
+                            ?>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="col-md">
+                    <form class="d-flex" role="search" method="GET" action="/items">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
         </div>
+    </nav>
+    <main class="container mt-4">
 
         <div class="d-flex flex-row mt-4">
             <div>

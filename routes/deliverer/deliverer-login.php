@@ -7,7 +7,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $query = sprintf('SELECT `deliverer_name`,`deliverer_user`,`deliverer_password` FROM ao_deliverer WHERE deliverer_user=\'%s\'', mysqli_real_escape_string($connect, $username));
+    $query = sprintf('SELECT `deliverer_name`,`deliverer_user`,`deliverer_password`,`deliverer_id` FROM ao_deliverer WHERE deliverer_user=\'%s\'', mysqli_real_escape_string($connect, $username));
     $result = $connect->query($query);
     $result = $result->fetch_all();
     if (!$result) {
@@ -20,6 +20,7 @@ if ($method === 'POST') {
     } else {
         $_SESSION['name'] = $result[0][0];
         $_SESSION['username'] = $result[0][1];
+        $_SESSION['id'] = $result[0][3];
         $_SESSION['role'] = ROLE_DELIVERER;
         header('Location: /deliverer', true, 301);
         exit;

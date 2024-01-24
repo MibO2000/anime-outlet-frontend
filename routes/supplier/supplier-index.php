@@ -6,7 +6,7 @@ if (($_SESSION['role'] ?? 0) !== ROLE_SUPPLIER) {
 }
 
 $optionarray = array("ACCEPTED", "DECLINED");
-
+$supplierid = $_SESSION['id'];
 function updateItemQuantity($connect, $purchaseId)
 {
     $query = sprintf("SELECT apd.item_id, apd.quantity from `ASSIGNMENT`.ao_purchase_detail apd where apd.purchase_id = '%s'", mysqli_real_escape_string($connect, $purchaseId));
@@ -35,14 +35,14 @@ if (isset($_POST['btnchangestatus'])) {
     // OPTIONS are ACCEPT and DECLINE
     $pid = $_POST['id'];
     $checkquery = sprintf("SELECT * from ao_purchase where purchase_id = '%s'", mysqli_real_escape_string($connect, $pid));
-    $result = $connect->query($query);
+    $result = $connect->query($checkquery);
     $result = $result->fetch_all();
     if ($result) {
         if (strcmp($option, "ACCEPTED")) {
             updateItemQuantity($connect, $pid);
         }
-        $query = sprintf("UPDATE ao_purchase SET purchase_status = '%s' where purchase_id='%s'", mysqli_real_escape_string($connect, $option), mysqli_real_escape_string($connect, $pid));
-        $connect->query($query);
+        $updatequery = sprintf("UPDATE ao_purchase SET purchase_status = '%s' where purchase_id='%s'", mysqli_real_escape_string($connect, $option), mysqli_real_escape_string($connect, $pid));
+        $connect->query($updatequery);
         // SUCCESS
         header('Location: /supplier');
     } else {
@@ -52,7 +52,7 @@ if (isset($_POST['btnchangestatus'])) {
 }
 // purchased items
 $results = [];
-$query = "select ap.purchase_id, as2.supplier_name, aa.fullname, ap.purchase_date, ap.purchase_status, ap.total_amount from `ASSIGNMENT`.ao_purchase ap join `ASSIGNMENT`.ao_supplier as2 on as2.supplier_id = ap.supplier_id left join `ASSIGNMENT`.ao_admin aa on aa.admin_id = ap.admin_id";
+$query = "select ap.purchase_id, as2.supplier_name, aa.fullname, ap.purchase_date, ap.purchase_status, ap.total_amount from `ASSIGNMENT`.ao_purchase ap join `ASSIGNMENT`.ao_supplier as2 on as2.supplier_id = ap.supplier_id left join `ASSIGNMENT`.ao_admin aa on aa.admin_id = ap.admin_id where as2.supplier_id = '$supplierid'";
 $result = mysqli_query($connect, $query);
 while ($row = mysqli_fetch_assoc($result)) {
     array_push($results, $row);
@@ -208,7 +208,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>
             </div>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="min-height:100vh">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="min-height:100vh" id=main>
                 <div class="mt-4">
                     <!-- items -->
                     <div>
@@ -219,16 +219,32 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <div class="d-flex">
                                     <div style="margin-right:25px"><small><?= $purchase['purchase_date'] ?></small>
                                     </div>
-                                    <div style="margin-right:25px"><span
-                                            class="badge text-bg-success"><?= $purchase['purchase_status'] ?></span>
+                                    <div style="margin-right:25px">
+                                        <span
+                                            class="badge <?= ($purchase['purchase_status'] === 'ACCEPTED') ? 'text-bg-success' : 'text-bg-info' ?>">
+                                            <?= $purchase['purchase_status'] ?>
+                                        </span>
                                     </div>
                                     <div style="margin-right:25px">
                                         <p class="fw-bold">$<?= $purchase['total_amount'] ?></p>
                                     </div>
                                 </div>
-                                <div>
-                                    <button class="btn btn-sm btn-secondary">Edit</button>
+                                <?php if ($purchase['purchase_status'] !== 'ACCEPTED') : ?>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="editDropdown"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Edit
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="editDropdown">
+                                        <li><a class="dropdown-item" href="#"
+                                                @click.prevent="changeStatus('<?= $purchase['purchase_id'] ?>', 'ACCEPTED')">Accept</a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="#"
+                                                @click.prevent="changeStatus('<?= $purchase['purchase_id'] ?>', 'DECLINED')">Decline</a>
+                                        </li>
+                                    </ul>
                                 </div>
+                                <?php endif; ?>
                             </div>
 
                             <div class="mt-2">
@@ -256,6 +272,26 @@ while ($row = mysqli_fetch_assoc($result)) {
     </div>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <!-- <script src="/js/vue.min.js"></script> -->
+    <script src="/js/axios.min.js"></script>
+    <script>
+    new Vue({
+        el: '#main',
+        data: {},
+        methods: {
+            changeStatus(purchaseId, option) {
+                let formData = new FormData();
+                formData.append('btnchangestatus', 1);
+                formData.append('id', purchaseId);
+                formData.append('option', option);
+                axios.post('', formData).then(res => {
+                    location.reload();
+                });
+            },
+        }
+    })
+    </script>
 </body>
 
 </html>

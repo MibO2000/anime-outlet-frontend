@@ -254,6 +254,17 @@ while ($row = mysqli_fetch_assoc($result)) {
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/admin-purchase">
                                     Purchase
+                                    <?php
+                                    $totalQuantity = 0;
+                                    if (isset($_SESSION['__purchase'])) {
+                                        foreach ($_SESSION['__purchase'] as $item) {
+                                            $totalQuantity += $item['quantity'];
+                                        }
+                                    }
+                                    if ($totalQuantity > 0) {
+                                        echo '<span class="badge bg-danger rounded-circle">' . $totalQuantity . '</span>';
+                                    }
+                                    ?>
                                 </a>
                             </li>
                         </ul>
@@ -308,23 +319,23 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <div class="modal-body">
                         <div>
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" v-model="selectedItem.supplier_name">
+                            <input type="text" class="form-control" id="name" v-model="selectedItem.supplier_name" required>
                         </div>
                         <div>
                             <label for="phone" class="form-label">Phone</label>
-                            <input type="tel" class="form-control" id="phone" v-model="selectedItem.phone">
+                            <input type="tel" class="form-control" id="phone" v-model="selectedItem.phone" required>
                         </div>
                         <div>
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" v-model="selectedItem.email">
+                            <input type="email" class="form-control" id="email" v-model="selectedItem.email" required>
                         </div>
                         <div>
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" v-model="selectedItem.supplier_user">
+                            <input type="text" class="form-control" id="username" v-model="selectedItem.supplier_user" required>
                         </div>
                         <div>
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" v-model="selectedItem.supplier_password">
+                            <input type="password" class="form-control" id="password" v-model="selectedItem.supplier_password" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -386,6 +397,21 @@ while ($row = mysqli_fetch_assoc($result)) {
                     axios.post('', formData).then(() => location.reload());
                 },
                 submitCreateOrEditModal() {
+                    if (!this.selectedItem.supplier_name) {
+                        return alert('Choose supplier name!!');
+                    }
+                    if (!this.selectedItem.phone) {
+                        return alert('Choose supplier phone!!');
+                    }
+                    if (!this.selectedItem.supplier_user) {
+                        return alert('Choose supplier username!!');
+                    }
+                    if (!this.selectedItem.supplier_password) {
+                        return alert('Choose supplier password!!');
+                    }
+                    if (!this.selectedItem.email) {
+                        return alert('Choose supplier email!!');
+                    }
                     if (this.title === 'Create') {
                         let formData = new FormData()
                         formData.append('btn-supplier-save', 1);
@@ -396,6 +422,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                         formData.append('email', this.selectedItem.email);
                         axios.post('', formData).then((res) => location.reload());
                     } else {
+                        if (!this.selectedItem.supplier_id) {
+                            return alert('Supplier Id unavailable!!');
+                        }
                         let formData = new FormData()
                         formData.append('btn-supplier-update', 1);
                         formData.append('id', this.selectedItem.supplier_id);

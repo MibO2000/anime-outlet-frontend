@@ -39,9 +39,6 @@ switch ($path) {
     case '/admin-order':
         require __DIR__ . '/routes/admin/admin-order.php';
         break;
-    case '/admin-order-details':
-        require __DIR__ . '/routes/admin/admin-order-details.php';
-        break;
     case '/admin-purchase':
         require __DIR__ . '/routes/admin/admin-purchase.php';
         break;

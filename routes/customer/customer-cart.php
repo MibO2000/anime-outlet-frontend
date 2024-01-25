@@ -104,145 +104,182 @@ if (isset($_POST['btncheckout'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="icon" type="image/x-icon"
-        href="https://scontent.frgn10-1.fna.fbcdn.net/v/t39.30808-6/273028440_4734065929980159_2213306540146619987_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=8DAVbr-s2rkAX8qzgRc&_nc_oc=AQlfsbZdD8sK9fExJlOIaeZQh576v7W5GFmAZ8yRDVlHm7EeL8UPY76iqfDuTlOwhPA&_nc_ht=scontent.frgn10-1.fna&oh=00_AfCkNdNmMA1O9LPRUo_CMwKAzytRNxHZWlGb4GQWmIRtZQ&oe=65B1794E">
+    <link rel="icon" type="image/x-icon" href="https://scontent.frgn10-1.fna.fbcdn.net/v/t39.30808-6/273028440_4734065929980159_2213306540146619987_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=8DAVbr-s2rkAX8qzgRc&_nc_oc=AQlfsbZdD8sK9fExJlOIaeZQh576v7W5GFmAZ8yRDVlHm7EeL8UPY76iqfDuTlOwhPA&_nc_ht=scontent.frgn10-1.fna&oh=00_AfCkNdNmMA1O9LPRUo_CMwKAzytRNxHZWlGb4GQWmIRtZQ&oe=65B1794E">
     <style>
-    .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-    }
-
-    @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-            font-size: 3.5rem;
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
         }
-    }
 
-    .b-example-divider {
-        width: 100%;
-        height: 3rem;
-        background-color: rgba(0, 0, 0, .1);
-        border: solid rgba(0, 0, 0, .15);
-        border-width: 1px 0;
-        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-    }
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
 
-    .b-example-vr {
-        flex-shrink: 0;
-        width: 1.5rem;
-        height: 100vh;
-    }
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
 
-    .bi {
-        vertical-align: -.125em;
-        fill: currentColor;
-    }
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
 
-    .nav-scroller {
-        position: relative;
-        z-index: 2;
-        height: 2.75rem;
-        overflow-y: hidden;
-    }
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
 
-    .nav-scroller .nav {
-        display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 1rem;
-        margin-top: -1px;
-        overflow-x: auto;
-        text-align: center;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-    }
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
 
-    .btn-bd-primary {
-        --bd-violet-bg: #712cf9;
-        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
 
-        --bs-btn-font-weight: 600;
-        --bs-btn-color: var(--bs-white);
-        --bs-btn-bg: var(--bd-violet-bg);
-        --bs-btn-border-color: var(--bd-violet-bg);
-        --bs-btn-hover-color: var(--bs-white);
-        --bs-btn-hover-bg: #6528e0;
-        --bs-btn-hover-border-color: #6528e0;
-        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-        --bs-btn-active-color: var(--bs-btn-hover-color);
-        --bs-btn-active-bg: #5a23c8;
-        --bs-btn-active-border-color: #5a23c8;
-    }
+        .btn-bd-primary {
+            --bd-violet-bg: #712cf9;
+            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
 
-    .bd-mode-toggle {
-        z-index: 1500;
-    }
+            --bs-btn-font-weight: 600;
+            --bs-btn-color: var(--bs-white);
+            --bs-btn-bg: var(--bd-violet-bg);
+            --bs-btn-border-color: var(--bd-violet-bg);
+            --bs-btn-hover-color: var(--bs-white);
+            --bs-btn-hover-bg: #6528e0;
+            --bs-btn-hover-border-color: #6528e0;
+            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+            --bs-btn-active-color: var(--bs-btn-hover-color);
+            --bs-btn-active-bg: #5a23c8;
+            --bs-btn-active-border-color: #5a23c8;
+        }
 
-    .bd-mode-toggle .dropdown-menu .active .bi {
-        display: block !important;
-    }
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
 
-    .container {
-        max-width: 960px;
-    }
+        .bd-mode-toggle .dropdown-menu .active .bi {
+            display: block !important;
+        }
 
-    .icon-link>.bi {
-        width: .75em;
-        height: .75em;
-    }
+        .container {
+            max-width: 960px;
+        }
 
-    .product-device {
-        position: absolute;
-        right: 10%;
-        bottom: -30%;
-        width: 300px;
-        height: 540px;
-        background-color: #333;
-        border-radius: 21px;
-        transform: rotate(30deg);
-    }
+        .icon-link>.bi {
+            width: .75em;
+            height: .75em;
+        }
 
-    .product-device::before {
-        position: absolute;
-        top: 10%;
-        right: 10px;
-        bottom: 10%;
-        left: 10px;
-        content: "";
-        background-color: rgba(255, 255, 255, .1);
-        border-radius: 5px;
-    }
+        .product-device {
+            position: absolute;
+            right: 10%;
+            bottom: -30%;
+            width: 300px;
+            height: 540px;
+            background-color: #333;
+            border-radius: 21px;
+            transform: rotate(30deg);
+        }
 
-    .product-device-2 {
-        top: -25%;
-        right: auto;
-        bottom: 0;
-        left: 5%;
-        background-color: #e5e5e5;
-    }
+        .product-device::before {
+            position: absolute;
+            top: 10%;
+            right: 10px;
+            bottom: 10%;
+            left: 10px;
+            content: "";
+            background-color: rgba(255, 255, 255, .1);
+            border-radius: 5px;
+        }
 
-    .flex-equal>* {
-        flex: 1;
-    }
+        .product-device-2 {
+            top: -25%;
+            right: auto;
+            bottom: 0;
+            left: 5%;
+            background-color: #e5e5e5;
+        }
 
-    @media (min-width: 768px) {
-        .flex-md-equal>* {
+        .flex-equal>* {
             flex: 1;
         }
-    }
 
-    a {
-        text-decoration: none;
-    }
+        @media (min-width: 768px) {
+            .flex-md-equal>* {
+                flex: 1;
+            }
+        }
+
+        a {
+            text-decoration: none;
+        }
     </style>
 </head>
 
 
 <body>
     <nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
-        <div class="container">
+        <div class="container-md d-md-none">
+            <a class="navbar-brand d-md-none mx-2" href="/">
+                <?= COMPANY_NAME ?>
+            </a>
+            <button class="navbar-toggler" type="button" onclick="document.getElementById('navbars').classList.toggle('show')">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbars">
+                <ul class="navbar-nav me-auto mb-2">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/items">Items</a></li>
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="/cart">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                <?php if (!empty($_SESSION['__cart'])) : ?>
+                                    <?php
+                                    $totalQuantity = array_sum(array_column($_SESSION['__cart'], 'quantity'));
+                                    ?>
+                                    <circle cx="18" cy="6" r="6" fill="#FF3333"></circle>
+                                    <text x="18" y="9" font-size="10" fill="white" text-anchor="middle"><?= $totalQuantity ?></text>
+                                <?php endif; ?>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="dropdown fs-6">
+                            <button class="btn dropdown-toggle text-white " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Welcome back, <?= $_SESSION['name'] ?>!
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container-md">
             <div class="offcanvas offcanvas-end" tabindex="-1" id="#offcanvas" aria-labelledby="#offcanvasLabel">
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="#offcanvasLabel">Aperture</h5>
@@ -259,17 +296,14 @@ if (isset($_POST['btncheckout'])) {
                         <li class="nav-item"><a class="nav-link" href="/items">Items</a></li>
                         <li class="nav-item position-relative">
                             <a class="nav-link" href="/cart">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px;">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                                     <?php if (!empty($_SESSION['__cart'])) : ?>
-                                    <?php
+                                        <?php
                                         $totalQuantity = array_sum(array_column($_SESSION['__cart'], 'quantity'));
                                         ?>
-                                    <circle cx="18" cy="6" r="6" fill="#FF3333"></circle>
-                                    <text x="18" y="9" font-size="10" fill="white"
-                                        text-anchor="middle"><?= $totalQuantity ?></text>
+                                        <circle cx="18" cy="6" r="6" fill="#FF3333"></circle>
+                                        <text x="18" y="9" font-size="10" fill="white" text-anchor="middle"><?= $totalQuantity ?></text>
                                     <?php endif; ?>
                                 </svg>
                             </a>
@@ -277,8 +311,7 @@ if (isset($_POST['btncheckout'])) {
 
                         <li class="nav-item">
                             <div class="dropdown fs-6">
-                                <button class="btn dropdown-toggle text-white " type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+                                <button class="btn dropdown-toggle text-white " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Welcome back, <?= $_SESSION['name'] ?>!
                                 </button>
                                 <ul class="dropdown-menu">
@@ -356,7 +389,7 @@ if (isset($_POST['btncheckout'])) {
 
     <footer class="container py-5">
         <div class="row">
-            <div class="col-12 col-md">
+            <div class="col-6 col-md">
                 <h5><?= COMPANY_NAME ?></h5>
                 <p><b>Address</b><br>No.123, University Avenue Street,<br>Bahan Township, Yangon.</p>
                 <p><b>Telephone</b><br>0968686868</p>
@@ -388,54 +421,54 @@ if (isset($_POST['btncheckout'])) {
     <!-- <script src="/js/vue.min.js"></script> -->
     <script src="/js/axios.min.js"></script>
     <script>
-    new Vue({
-        el: '#main',
-        data: {
-            deliverer: '',
-            paymentMethod: '',
-            cartItems: <?= json_encode($cartItems) ?>,
-            deliverers: <?= json_encode($deliverers) ?>,
-            paymentMethods: <?= json_encode($paymentMethods) ?>,
-        },
-        methods: {
-            calcuateTotal(item) {
-                return item.price * item.quantity;
+        new Vue({
+            el: '#main',
+            data: {
+                deliverer: '',
+                paymentMethod: '',
+                cartItems: <?= json_encode($cartItems) ?>,
+                deliverers: <?= json_encode($deliverers) ?>,
+                paymentMethods: <?= json_encode($paymentMethods) ?>,
             },
-            removeItem(item) {
-                let formData = new FormData();
-                formData.append('btnremove', 1);
-                formData.append('item_id', item.id);
-                axios.post('', formData).then(() => {
-                    this.cartItems = this.cartItems.filter((cart) => cart.id !== item.id);
-                    location.reload();
-                });
+            methods: {
+                calcuateTotal(item) {
+                    return item.price * item.quantity;
+                },
+                removeItem(item) {
+                    let formData = new FormData();
+                    formData.append('btnremove', 1);
+                    formData.append('item_id', item.id);
+                    axios.post('', formData).then(() => {
+                        this.cartItems = this.cartItems.filter((cart) => cart.id !== item.id);
+                        location.reload();
+                    });
+                },
+                checkout() {
+                    if (!this.paymentMethod) {
+                        return alert('Choose payment method!!');
+                    }
+                    if (!this.deliverer) {
+                        return alert('Choose deliverer!!');
+                    }
+                    let formData = new FormData();
+                    formData.append('btncheckout', 1);
+                    formData.append('paymentmethod', this.paymentMethod);
+                    formData.append('deliverer', this.deliverer);
+                    axios.post('', formData).then(res => {
+                        location.reload();
+                    })
+                },
             },
-            checkout() {
-                if (!this.paymentMethod) {
-                    return alert('Choose payment method!!');
-                }
-                if (!this.deliverer) {
-                    return alert('Choose deliverer!!');
-                }
-                let formData = new FormData();
-                formData.append('btncheckout', 1);
-                formData.append('paymentmethod', this.paymentMethod);
-                formData.append('deliverer', this.deliverer);
-                axios.post('', formData).then(res => {
-                    location.reload();
-                })
-            },
-        },
-        computed: {
-            totalAmount() {
-                let total = 0;
-                this.cartItems.forEach(item => {
-                    total += this.calcuateTotal(item);
-                });
-                return total;
-            },
-        }
-    })
+            computed: {
+                totalAmount() {
+                    let total = 0;
+                    this.cartItems.forEach(item => {
+                        total += this.calcuateTotal(item);
+                    });
+                    return total;
+                },
+            }
+        })
     </script>
 </body>
 

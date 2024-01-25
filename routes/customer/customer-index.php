@@ -180,6 +180,44 @@ function getCategoryList($connect)
 
 <body>
     <nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
+        <div class="container-md d-md-none">
+            <a class="navbar-brand d-md-none mx-2" href="/">
+                <?= COMPANY_NAME ?>
+            </a>
+            <button class="navbar-toggler" type="button" onclick="document.getElementById('navbars').classList.toggle('show')">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbars">
+                <ul class="navbar-nav me-auto mb-2">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/items">Items</a></li>
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="/cart">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                <?php if (!empty($_SESSION['__cart'])) : ?>
+                                    <?php
+                                    $totalQuantity = array_sum(array_column($_SESSION['__cart'], 'quantity'));
+                                    ?>
+                                    <circle cx="18" cy="6" r="6" fill="#FF3333"></circle>
+                                    <text x="18" y="9" font-size="10" fill="white" text-anchor="middle"><?= $totalQuantity ?></text>
+                                <?php endif; ?>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="dropdown fs-6">
+                            <button class="btn dropdown-toggle text-white " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Welcome back, <?= $_SESSION['name'] ?>!
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div class="container-md">
             <div class="offcanvas offcanvas-end" tabindex="-1" id="#offcanvas" aria-labelledby="#offcanvasLabel">
                 <div class="offcanvas-header">
@@ -215,7 +253,7 @@ function getCategoryList($connect)
                                 <button class="btn dropdown-toggle text-white " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Welcome back, <?= $_SESSION['name'] ?>!
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu position-relative">
                                     <li><a class="dropdown-item" href="/logout">Log Out</a></li>
                                 </ul>
                             </div>
@@ -225,64 +263,66 @@ function getCategoryList($connect)
             </div>
         </div>
     </nav>
-    <nav class="navbar navbar-expand-md bg-light sticky-top border-bottom" data-bs-theme="light">
+
+    <nav class="navbar navbar-expand-md bg-light border-bottom" data-bs-theme="light">
         <div class="container-md">
-            <div class="collapse navbar-collapse" id="navbarNavDropdownSecondary">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="filmDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Film
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="filmDropdown">
-                            <?php
-                            $filmList = getFilmList($connect);
-                            foreach ($filmList as $film) {
-                                echo '<li><a class="dropdown-item" href="/items?film_id=' . urlencode($film[1]) . '">' . $film[0] . '</a></li>';
-                            }
-                            ?>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Category
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                            <?php
-                            $categoryList = getCategoryList($connect);
-                            foreach ($categoryList as $category) {
-                                echo '<li><a class="dropdown-item" href="/items?category_id=' . urlencode($category[1]) . '">' . $category[0] . '</a></li>';
-                            }
-                            ?>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="brandDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Brand
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="brandDropdown">
-                            <?php
-                            $brandList = getBrandList($connect);
-                            foreach ($brandList as $brand) {
-                                echo '<li><a class="dropdown-item" href="/items?brand_id=' . urlencode($brand[1]) . '">' . $brand[0] . '</a></li>';
-                            }
-                            ?>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="col-md">
-                    <form class="d-flex" role="search" method="GET" action="/items">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                </div>
-            </div>
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="filmDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Film
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="filmDropdown">
+                        <?php
+                        $filmList = getFilmList($connect);
+                        foreach ($filmList as $film) {
+                            echo '<li><a class="dropdown-item" href="/items?film_id=' . urlencode($film[1]) . '">' . $film[0] . '</a></li>';
+                        }
+                        ?>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Category
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                        <?php
+                        $categoryList = getCategoryList($connect);
+                        foreach ($categoryList as $category) {
+                            echo '<li><a class="dropdown-item" href="/items?category_id=' . urlencode($category[1]) . '">' . $category[0] . '</a></li>';
+                        }
+                        ?>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="brandDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Brand
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="brandDropdown">
+                        <?php
+                        $brandList = getBrandList($connect);
+                        foreach ($brandList as $brand) {
+                            echo '<li><a class="dropdown-item" href="/items?brand_id=' . urlencode($brand[1]) . '">' . $brand[0] . '</a></li>';
+                        }
+                        ?>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <div class="col-md">
+                        <form class="d-flex" role="search" method="GET" action="/items">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
         </div>
     </nav>
+
     <main class="container mt-4">
 
-        <div class="d-flex flex-row mt-4">
+        <div class="d-sm-flex flex-row mt-4">
             <div>
-                <img class="rounded float-start img-fluid" src="https://wallpaperaccess.com/full/3704375.jpg">
+                <img class="rounded float-start img-fluid" src="https://wallpaperaccess.com/full/3704375.jpg" style="width:100%;height:auto;padding:0 10px;">
             </div>
             <div>
                 <p>
@@ -295,7 +335,7 @@ function getCategoryList($connect)
                 </p>
             </div>
         </div>
-        <div class="d-flex flex-row mt-4">
+        <div class="d-sm-flex flex-row mt-4">
             <div>
                 <p>
                     The Konoha Hobby House, established in 2014, is a prominent hub in Myanmar for anime, comics, and
@@ -309,12 +349,12 @@ function getCategoryList($connect)
                 </p>
             </div>
             <div class="m-2">
-                <img class="rounded float-end img-fluid" src="https://wallpaperaccess.com/full/3704384.jpg">
+                <img class="rounded float-end img-fluid" src="https://wallpaperaccess.com/full/3704384.jpg" style="width:100%;height:auto;padding:0 10px;">
             </div>
         </div>
-        <div class="d-flex flex-row mt-4">
+        <div class="d-sm-flex flex-row mt-4">
             <div class="m-2">
-                <img class="rounded float-end img-fluid" src="https://wallpaperaccess.com/full/10989863.jpg">
+                <img class="rounded float-end img-fluid" src="https://wallpaperaccess.com/full/10989863.jpg" style="width:100%;height:auto;padding:0 10px;">
             </div>
             <div>
                 <p>
@@ -333,7 +373,7 @@ function getCategoryList($connect)
             </div>
 
         </div>
-        <div class="d-flex flex-row justify-content-around mt-4">
+        <div class="d-sm-flex flex-row justify-content-around mt-4">
             <div class="mt-4">
                 <h2>Contact Us</h2>
 
@@ -359,8 +399,8 @@ function getCategoryList($connect)
                     </div>
                 </form>
             </div>
-            <div class="max-w-4">
-                <img class="rounded float-start img-fluid w-100" src="https://w0.peakpx.com/wallpaper/73/844/HD-wallpaper-wano-flower-capital-flower-capital-luffy-one-piece.jpg">
+            <div>
+                <img class="rounded float-start img-fluid w-100" style="width:100%;height:auto;padding:0 10px;" src="https://w0.peakpx.com/wallpaper/73/844/HD-wallpaper-wano-flower-capital-flower-capital-luffy-one-piece.jpg">
             </div>
         </div>
 
@@ -370,7 +410,7 @@ function getCategoryList($connect)
 
     <footer class="container py-5">
         <div class="row">
-            <div class="col-12 col-md">
+            <div class="col-6 col-md">
                 <h5><?= COMPANY_NAME ?></h5>
                 <p><b>Address</b><br>No.123, University Avenue Street,<br>Bahan Township, Yangon.</p>
                 <p><b>Telephone</b><br>0968686868</p>

@@ -277,6 +277,17 @@ while ($row = mysqli_fetch_assoc($result)) {
                                     <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page"
                                         href="/admin-purchase">
                                         Purchase
+                                        <?php
+                                    $totalQuantity = 0;
+                                    if (isset($_SESSION['__purchase'])) {
+                                        foreach ($_SESSION['__purchase'] as $item) {
+                                            $totalQuantity += $item['quantity'];
+                                        }
+                                    }
+                                    if ($totalQuantity > 0) {
+                                        echo '<span class="badge bg-danger rounded-circle">' . $totalQuantity . '</span>';
+                                    }
+                                    ?>
                                     </a>
                                 </li>
                             </ul>

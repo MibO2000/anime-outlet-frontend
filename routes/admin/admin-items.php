@@ -442,16 +442,27 @@ while ($row = mysqli_fetch_assoc($result)) {
                         </div>
                         <div class="modal-body row">
                             <div class="col-6">
-                                <label for="brand" class="form-label">Brand</label>
-                                <input type="text" class="form-control" id="brand" v-model="selectedItem.brand">
+                                <label for="film" class="form-label">Film</label>
+                                <select class="form-select" id="film" v-model="selectedItem.film">
+                                    <option v-for="film in films" :value="film.film_id">{{ film.title }}</option>
+                                </select>
                             </div>
+
                             <div class="col-6">
                                 <label for="category" class="form-label">Category</label>
-                                <input type="text" class="form-control" id="category" v-model="selectedItem.category">
+                                <select class="form-select" id="category" v-model="selectedItem.category">
+                                    <option v-for="category in categories" :value="category.category_id">
+                                        {{ category.category_name }}
+                                    </option>
+                                </select>
                             </div>
+
                             <div class="col-6">
-                                <label for="film" class="form-label">Film</label>
-                                <input type="text" class="form-control" id="film" v-model="selectedItem.film">
+                                <label for="brand" class="form-label">Brand</label>
+                                <select class="form-select" id="brand" v-model="selectedItem.brand">
+                                    <option v-for="brand in brands" :value="brand.brand_id">{{ brand.brand_name }}
+                                    </option>
+                                </select>
                             </div>
                             <div class="col-6">
                                 <label for="item_description" class="form-label">Item Description</label>
@@ -536,6 +547,9 @@ while ($row = mysqli_fetch_assoc($result)) {
             data: {
                 title: '',
                 items: <?= json_encode($results) ?>,
+                films: <?= json_encode($films) ?>,
+                categories: <?= json_encode($categories) ?>,
+                brands: <?= json_encode($brands) ?>,
                 selectedItem: {},
             },
             methods: {

@@ -700,6 +700,18 @@ while ($row = mysqli_fetch_assoc($result)) {
                 axios.post('', formData).then(() => location.reload());
             },
             submitCreateOrEditFilm() {
+                if (!this.selectedItem.title) {
+                    return alert('Choose film title!!');
+                }
+                if (!this.selectedItem.release_date) {
+                    return alert('Choose film release date!!');
+                }
+                if (!this.selectedItem.film_description) {
+                    return alert('Choose film description!!');
+                }
+                if (!this.selectedItem.film_image) {
+                    return alert('Choose film image!!');
+                }
                 if (this.selectedType === '') {
                     let data = new FormData();
                     data.append('btn-film-save', 1);
@@ -709,6 +721,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                     data.append('fimage', this.selectedItem.film_image);
                     axios.post('', data).then((res) => location.reload());
                 } else {
+                    if (!this.selectedItem.film_id) {
+                        return alert('Film Id unavailable!!');
+                    }
                     let data = new FormData();
                     data.append('btn-film-update', 1);
                     data.append('film_id', this.selectedItem.film_id);
@@ -720,12 +735,18 @@ while ($row = mysqli_fetch_assoc($result)) {
                 }
             },
             submitCreateOrEditCategory() {
+                if (!this.selectedItem.category_name) {
+                    return alert('Choose category name!!');
+                }
                 if (this.selectedType === '') {
                     let data = new FormData();
                     data.append('btn-category-save', 1);
                     data.append('cname', this.selectedItem.category_name);
                     axios.post('', data).then((res) => location.reload());
                 } else {
+                    if (!this.selectedItem.category_id) {
+                        return alert('Category Id unavailable!!');
+                    }
                     let data = new FormData();
                     data.append('btn-category-update', 1);
                     data.append('category_id', this.selectedItem.category_id);
@@ -734,6 +755,15 @@ while ($row = mysqli_fetch_assoc($result)) {
                 }
             },
             submitCreateOrEditBrand() {
+                if (!this.selectedItem.brand_name) {
+                    return alert('Choose Brand Name!!');
+                }
+                if (!this.selectedItem.brand_description) {
+                    return alert('Choose Brand Description!!');
+                }
+                if (!this.selectedItem.brand_image) {
+                    return alert('Choose Brand Image!!');
+                }
                 if (this.selectedType === '') {
                     let data = new FormData();
                     data.append('btn-brand-save', 1);
@@ -742,6 +772,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                     data.append('bimage', this.selectedItem.brand_image);
                     axios.post('', data).then((res) => location.reload());
                 } else {
+                    if (!this.selectedItem.brand_id) {
+                        return alert('Brand Id unavailable!!');
+                    }
                     let data = new FormData();
                     data.append('btn-brand-update', 1);
                     data.append('brand_id', this.selectedItem.brand_id);

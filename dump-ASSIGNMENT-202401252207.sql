@@ -67,7 +67,7 @@ CREATE TABLE `ao_brand` (
 
 LOCK TABLES `ao_brand` WRITE;
 /*!40000 ALTER TABLE `ao_brand` DISABLE KEYS */;
-INSERT INTO `ao_brand` VALUES ('B0001','Prime 1 studio','https://upload.wikimedia.org/wikipedia/commons/a/ab/Prime_1_Studio_Logo_2.jpg','Prime 1 Studio is a specialty manufacturer of licensed and proprietary collectible products.'),('B0002','Tsume Art','https://tsumeart-1d733.kxcdn.com/web/image/website/1/logo/Tsume%20Art?unique=b4ac0c0','Created in 2010, Tsume is a Luxembourg brand specializing in the design and marketing of high-end collectible statues under official licenses, bearing the likeness of cult characters from the world of animation, manga, cinema and video game.'),('B0003','Iron Studio','https://titantoyz.com/cdn/shop/collections/ed79cb16-4c50-4b99-8df5-64a1e97d52af.png','Iron Studios is a Brazilian company based in São Paulo specializing in the manufacture of collectible statues.'),('B0004','AmiAmi','https://www.amiami.com/images/common/site_logo.png','AmiAmi is a anime related shop.');
+INSERT INTO `ao_brand` VALUES ('B0001','Prime 1 studio','https://upload.wikimedia.org/wikipedia/commons/a/ab/Prime_1_Studio_Logo_2.jpg','Prime 1 Studio is a specialty manufacturer of licensed and proprietary collectible products.'),('B0002','Tsume Art','https://upload.wikimedia.org/wikipedia/commons/f/f6/Tsume_Art_full_logo.png','Created in 2010, Tsume is a Luxembourg brand specializing in the design and marketing of high-end collectible statues under official licenses, bearing the likeness of cult characters from the world of animation, manga, cinema and video game.'),('B0003','Iron Studio','https://titantoyz.com/cdn/shop/collections/ed79cb16-4c50-4b99-8df5-64a1e97d52af.png','Iron Studios is a Brazilian company based in São Paulo specializing in the manufacture of collectible statues.'),('B0004','AmiAmi','https://www.amiami.com/images/common/site_logo.png','AmiAmi is a anime related shop.');
 /*!40000 ALTER TABLE `ao_brand` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -185,6 +185,7 @@ CREATE TABLE `ao_delivery` (
 
 LOCK TABLES `ao_delivery` WRITE;
 /*!40000 ALTER TABLE `ao_delivery` DISABLE KEYS */;
+INSERT INTO `ao_delivery` VALUES ('D0001','DR0001','O0001','2024-01-29','Royal Express-D0001','ACCEPTED'),('D0002','DR0001','O0002','2024-01-30','Royal Express-DR0001','PENDING');
 /*!40000 ALTER TABLE `ao_delivery` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -254,14 +255,7 @@ CREATE TABLE `ao_item` (
 
 LOCK TABLES `ao_item` WRITE;
 /*!40000 ALTER TABLE `ao_item` DISABLE KEYS */;
-INSERT INTO `ao_item` VALUES 
-('I0001','C0001','F0003','B0003',' Statue Thor Unleashed Deluxe','https://ironusa.vtexassets.com/arquivos/ids/198185-1536-2048','https://ironusa.vtexassets.com/arquivos/ids/198184-1536-2048','https://ironusa.vtexassets.com/arquivos/ids/198182-1536-2048','2024-01-01',' Statue Thor Unleashed Deluxe - Marvel - Art Scale 1/10 - Iron Studios','1:10',2,200),
-('I0002','C0001','F0003','B0003','Statue Kate Bishop','https://ironusa.vtexassets.com/arquivos/ids/197896-1536-2048','https://ironusa.vtexassets.com/arquivos/ids/197894-1536-2048','https://ironusa.vtexassets.com/arquivos/ids/197907-1536-2048','2024-01-01','Statue Kate Bishop - Hawkeye - Marvel - BDS Art Scale 1/10 - Iron Studios','1:10',2,150),
-('I0003','C0001','F0002','B0002','Yamato Ikigai','https://tsumeart-1d733.kxcdn.com/web/image/product.image/5278/image_1024','https://tsumeart-1d733.kxcdn.com/web/image/product.image/5279/image_1024','https://tsumeart-1d733.kxcdn.com/web/image/product.image/5299/image_1024','2024-01-03','Yamato Ikigai figure by Tsume Art','1:10',2,450),
-('I0004','C0004','F0002','B0004','UNO One Piece','https://img.amiami.com/images/product/main/121/TOY-IPN-3532.jpg','https://img.amiami.com/images/product/main/121/TOY-IPN-3532.jpg','https://img.amiami.com/images/product/main/121/TOY-IPN-3532.jpg','2023-11-15','Card Game UNO ONE PIECE New World Arc(Released)','1',3,7),
-('I0005','C0003','F0001','B0004','Sasuke Plush','https://img.amiami.com/images/product/main/234/GOODS-04381001.jpg','https://img.amiami.com/images/product/main/234/GOODS-04381001.jpg','https://img.amiami.com/images/product/main/234/GOODS-04381001.jpg','2023-09-07','NARUTO Chibi Plush Sasuke Uchiha Childhood Arc(Released)','1',2,15),
-('I0006','C0002','F0005','B0004','Frieren','https://img.amiami.com/images/product/main/234/FIGURE-164207.jpg','https://img.amiami.com/images/product/review/234/FIGURE-164207_07.jpg','https://img.amiami.com/images/product/review/234/FIGURE-164207_01.jpg','2024-01-24',`Nendoroid Frieren: Beyond Journey\'s End Frieren`,'1:10',2,37),
-('I0007','C0001','F0004','B0001','Batman versus Batman Who Laughs','https://www.prime1studio.com/on/demandware.static/-/Sites-p1s-master-catalog/default/dw21bc3732/images/UPMDCMT-01DXS/catalog/UPMDCMT-01DXS_a03.jpg','https://www.prime1studio.com/on/demandware.static/-/Sites-p1s-master-catalog/default/dw11b647ee/images/UPMDCMT-01DXS/catalog/UPMDCMT-01DXS_a01.jpg','https://www.prime1studio.com/on/demandware.static/-/Sites-p1s-master-catalog/default/dw26601548/images/UPMDCMT-01DXS/catalog/UPMDCMT-01DXS_a00-04.jpg','2023-12-01','Batman versus Batman Who Laughs favorite (Design by David Finch) DX Bonus Version','1:4',1,1499);
+INSERT INTO `ao_item` VALUES ('I0001','C0001','F0003','B0003',' Statue Thor Unleashed Deluxe','https://ironusa.vtexassets.com/arquivos/ids/198185-1536-2048','https://ironusa.vtexassets.com/arquivos/ids/198184-1536-2048','https://ironusa.vtexassets.com/arquivos/ids/198182-1536-2048','2024-01-01',' Statue Thor Unleashed Deluxe - Marvel - Art Scale 1/10 - Iron Studios','1:10',1,200),('I0002','C0001','F0003','B0003','Statue Kate Bishop','https://ironusa.vtexassets.com/arquivos/ids/197896-1536-2048','https://ironusa.vtexassets.com/arquivos/ids/197894-1536-2048','https://ironusa.vtexassets.com/arquivos/ids/197907-1536-2048','2024-01-01','Statue Kate Bishop - Hawkeye - Marvel - BDS Art Scale 1/10 - Iron Studios','1:10',0,150),('I0003','C0001','F0002','B0002','Yamato Ikigai','https://tsumeart-1d733.kxcdn.com/web/image/product.image/5278/image_1024','https://tsumeart-1d733.kxcdn.com/web/image/product.image/5279/image_1024','https://tsumeart-1d733.kxcdn.com/web/image/product.image/5299/image_1024','2024-01-03','Yamato Ikigai figure by Tsume Art','1:10',1,450),('I0004','C0004','F0002','B0004','UNO One Piece','https://img.amiami.com/images/product/main/121/TOY-IPN-3532.jpg','https://img.amiami.com/images/product/main/121/TOY-IPN-3532.jpg','https://img.amiami.com/images/product/main/121/TOY-IPN-3532.jpg','2023-11-15','Card Game UNO ONE PIECE New World Arc(Released)','1',3,7),('I0005','C0003','F0001','B0004','Sasuke Plush','https://img.amiami.com/images/product/main/234/GOODS-04381001.jpg','https://img.amiami.com/images/product/main/234/GOODS-04381001.jpg','https://img.amiami.com/images/product/main/234/GOODS-04381001.jpg','2023-09-07','NARUTO Chibi Plush Sasuke Uchiha Childhood Arc(Released)','1',2,15),('I0006','C0002','F0005','B0004','Frieren','https://img.amiami.com/images/product/main/234/FIGURE-164207.jpg','https://img.amiami.com/images/product/review/234/FIGURE-164207_07.jpg','https://img.amiami.com/images/product/review/234/FIGURE-164207_01.jpg','2024-01-24',`Nendoroid Frieren: Beyond Journey's End Frieren`,'1:10',2,37),('I0007','C0001','F0004','B0001','Batman versus Batman Who Laughs','https://www.prime1studio.com/on/demandware.static/-/Sites-p1s-master-catalog/default/dw21bc3732/images/UPMDCMT-01DXS/catalog/UPMDCMT-01DXS_a03.jpg','https://www.prime1studio.com/on/demandware.static/-/Sites-p1s-master-catalog/default/dw11b647ee/images/UPMDCMT-01DXS/catalog/UPMDCMT-01DXS_a01.jpg','https://www.prime1studio.com/on/demandware.static/-/Sites-p1s-master-catalog/default/dw26601548/images/UPMDCMT-01DXS/catalog/UPMDCMT-01DXS_a00-04.jpg','2023-12-01','Batman versus Batman Who Laughs favorite (Design by David Finch) DX Bonus Version','1:4',1,1499);
 /*!40000 ALTER TABLE `ao_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -290,6 +284,7 @@ CREATE TABLE `ao_order` (
 
 LOCK TABLES `ao_order` WRITE;
 /*!40000 ALTER TABLE `ao_order` DISABLE KEYS */;
+INSERT INTO `ao_order` VALUES ('O0001','65ac8e401f8fb','2024-01-24','SUCCESS'),('O0002','65ac8e401f8fb','2024-01-25','SUCCESS');
 /*!40000 ALTER TABLE `ao_order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -322,6 +317,7 @@ CREATE TABLE `ao_order_detail` (
 
 LOCK TABLES `ao_order_detail` WRITE;
 /*!40000 ALTER TABLE `ao_order_detail` DISABLE KEYS */;
+INSERT INTO `ao_order_detail` VALUES ('OD0001','O0001','I0001',1,200,200),('OD0002','O0001','I0002',1,150,150),('OD0003','O0002','I0001',1,200,200);
 /*!40000 ALTER TABLE `ao_order_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -350,6 +346,7 @@ CREATE TABLE `ao_payment` (
 
 LOCK TABLES `ao_payment` WRITE;
 /*!40000 ALTER TABLE `ao_payment` DISABLE KEYS */;
+INSERT INTO `ao_payment` VALUES ('P0001','O0001','kpay','2024-01-24'),('P0002','O0002','mastercard','2024-01-25');
 /*!40000 ALTER TABLE `ao_payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -382,7 +379,7 @@ CREATE TABLE `ao_purchase` (
 
 LOCK TABLES `ao_purchase` WRITE;
 /*!40000 ALTER TABLE `ao_purchase` DISABLE KEYS */;
-INSERT INTO `ao_purchase` VALUES ('P0001','S0004','AD001','2024-01-24','PENDING',52),('P0002','S0002','AD001','2024-01-24','PENDING',350),('P0003','S0003','AD001','2024-01-24','PENDING',450),('P0004','S0001','AD001','2024-01-24','PENDING',1499);
+INSERT INTO `ao_purchase` VALUES ('P0001','S0004','AD001','2024-01-24','ACCEPTED',52),('P0002','S0002','AD001','2024-01-24','ACCEPTED',350),('P0003','S0003','AD001','2024-01-24','PENDING',450),('P0004','S0001','AD001','2024-01-24','PENDING',1499);
 /*!40000 ALTER TABLE `ao_purchase` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -445,6 +442,10 @@ INSERT INTO `ao_supplier` VALUES ('S0001','Prime 1 Studio','prime','$2y$10$Fr35n
 UNLOCK TABLES;
 
 --
+-- Dumping events for database 'ASSIGNMENT'
+--
+
+--
 -- Dumping routines for database 'ASSIGNMENT'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -457,4 +458,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-24 19:21:29
+-- Dump completed on 2024-01-25 22:07:55
